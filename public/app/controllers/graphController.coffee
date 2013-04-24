@@ -37,7 +37,14 @@ define ["ural/controller", "app/models/menu"], (controller, menu) ->
             y : position.attributes.y.value
 
         grp_edges = edges.map (d) ->
-          source  :
+          attrs = {}
+          for cn in d.childNodes[3].childNodes
+            if cn.attributes
+              fr = d3.select(cn).attr("for")
+              if fr in ["family_rel", "private_rel", "prof_rel", "link"]
+                attrs[fr] = d3.select(cn).attr("value")
+          attrs : attrs
+          source :
             grp_nodes.filter((f) -> d3.select(d).attr("source") == f.attrs.id)[0]
           target:
             grp_nodes.filter((f) -> d3.select(d).attr("target") == f.attrs.id)[0]
@@ -55,7 +62,10 @@ define ["ural/controller", "app/models/menu"], (controller, menu) ->
           .data(grp_edges)
           .enter()
           .append("line")
-          .attr("class", "link")
+          .classed("link", true)
+          .classed("prof_rel", (d) -> d.attrs.prof_rel)
+          .classed("private_rel", (d) -> d.attrs.private_rel)
+          .classed("family_rel", (d) -> d.attrs.family_rel)
           .attr("x1", (d) -> xscale(d.source.attrs.x))
           .attr("y1", (d) -> yscale(d.source.attrs.y))
           .attr("x2", (d) -> xscale(d.target.attrs.x))

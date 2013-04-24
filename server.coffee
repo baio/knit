@@ -3,7 +3,12 @@ connect = require("connect")
 _router = (req, res, next) ->
   if req.url == "/"
     req.url = "/main.html"
-  next()
+    next()
+  else if req.url.match /^\/\w+\/\w+$/
+    res.writeHead(302, {'Location' : '/'})
+    res.end()
+  else
+    next()
 
 connect()
   .use(_router)

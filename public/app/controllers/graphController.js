@@ -54,7 +54,20 @@
             };
           });
           grp_edges = edges.map(function(d) {
+            var attrs, cn, fr, _i, _len, _ref;
+            attrs = {};
+            _ref = d.childNodes[3].childNodes;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              cn = _ref[_i];
+              if (cn.attributes) {
+                fr = d3.select(cn).attr("for");
+                if (fr === "family_rel" || fr === "private_rel" || fr === "prof_rel" || fr === "link") {
+                  attrs[fr] = d3.select(cn).attr("value");
+                }
+              }
+            }
             return {
+              attrs: attrs,
               source: grp_nodes.filter(function(f) {
                 return d3.select(d).attr("source") === f.attrs.id;
               })[0],
@@ -79,7 +92,13 @@
             })
           ]).range([200, 500]);
           svg = d3.select("#graph").append("svg").attr("height", 900);
-          link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").attr("x1", function(d) {
+          link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("prof_rel", function(d) {
+            return d.attrs.prof_rel;
+          }).classed("private_rel", function(d) {
+            return d.attrs.private_rel;
+          }).classed("family_rel", function(d) {
+            return d.attrs.family_rel;
+          }).attr("x1", function(d) {
             return xscale(d.source.attrs.x);
           }).attr("y1", function(d) {
             return yscale(d.source.attrs.y);

@@ -1,0 +1,43 @@
+body {
+    padding-top: 40px;
+    padding-left: 0px;
+}
+
+.graph-container {
+    position: relative;
+    background: #222;
+    height: 900px;
+    width: 100%;
+}
+
+.link {
+    stroke: #999;
+    stroke-opacity: .8
+}
+
+
+.node {
+    stroke: #999;
+    stroke-width: 1.5px;
+    fill: #222;
+}
+
+.text {
+    fill: lightgreen;
+    font-size: 15px;
+}
+
+.family_rel
+{
+    stroke: red;
+}
+
+.prof_rel
+{
+    stroke: #999;
+}
+
+.private_rel
+{
+    stroke: deepskyblue;
+}
