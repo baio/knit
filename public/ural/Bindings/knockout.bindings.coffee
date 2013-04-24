@@ -6,25 +6,33 @@ _updateAutocompleteFields = (viewModel, fields, item, isResetOnNull) ->
     else if isResetOnNull
       viewModel[fields[field]] null
 
+_filterFields = (viewModel, fields) ->
+  data = {}
+  for own field of fields
+      data[field] = viewModel[fields[field]]()
+  data
+
 ko.bindingHandlers.autocomplete =
 
   init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
     opts = allBindingsAccessor().autocompleteOpts
+    opts.allowNotInList = true if opts.allowNotInList == undefined
     $(element).autocomplete
       source: ( request, response ) ->
+        data = Term : $(element).val()
+        if opts.filterFields
+          data = $.extend false, data, _filterFields(viewModel, opts.filterFields)
         $.ajax
           url: opts.url
-          data:
-            Term: $(element).val()
+          data: data
           dataType: "json"
           success: (data) ->
-            response(
-              data.map (d) ->
-                data: d
-                label: if d.FullName then d.FullName else d.Name
-                value: d.Name
-                key: d.Name
-              )
+            m = data.map (d) ->
+              data: d
+              label: if d.FullName then d.FullName else d.Name
+              value: d.Name
+              key: d.Id
+            response m
           minLength: 2
       select: (event, ui) ->
         console.log "select " + ui.item
@@ -32,7 +40,9 @@ ko.bindingHandlers.autocomplete =
         _updateAutocompleteFields viewModel, opts.fields, ui.item, opts.resetRelatedFieldsOnNull
       change: (event, ui) ->
         console.log "change " + ui.item
-        valueAccessor() $(element).val()
+        observable = valueAccessor()
+        observable (if opts.allowNotInList or ui.item  then $(element).val() else null)
+        $(element).val observable()
         _updateAutocompleteFields viewModel, opts.fields, ui.item, opts.resetRelatedFieldsOnNull
 
   update: (element, valueAccessor, allBindingsAccessor) ->
@@ -44,7 +54,7 @@ ko.bindingHandlers.autocomplete =
 
 ko.bindingHandlers.datetime =
 
-  init: (element, valueAccessor) ->
+  init: (element, valueAccessor, allBindingsAccessor) ->
     #initialize datepicker with some optional options
     if valueAccessor().extend and valueAccessor().extend().rules
       dminRule = valueAccessor().extend().rules().filter((f) -> f.rule == "min")[0]
@@ -52,11 +62,16 @@ ko.bindingHandlers.datetime =
       dmaxRule = valueAccessor().extend().rules().filter((f) -> f.rule == "max")[0]
       maxDate = moment(dmaxRule.params).toDate() if dmaxRule
 
+    opts = allBindingsAccessor().datetimeOpts
+
+    dateFormat = if opts and opts.dateFormat then opts.dateFormat else "dd.mm.yy"
+
     $(element).datepicker
-       minDate: minDate
-       maxDate: maxDate
-       beforeShow: (el) ->
-         return if $(el).attr('readonly') then false else true
+        minDate: minDate
+        maxDate: maxDate
+        dateFormat: dateFormat
+        beforeShow: (el) ->
+          return if $(el).attr('readonly') then false else true
 
     #handle the field changing
     ko.utils.registerEventHandler element, "change", ->
@@ -126,20 +141,6 @@ ko.bindingHandlers.validation =
       for v in validation
         prop.extend v
 
-###
-ko.bindingHandlers.customError =
-
-  init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
-    if viewModel.customErrors
-      observable = valueAccessor()
-      prop = observable()
-      viewModel.customErrors.subscribe (val) ->
-        if !$(element).text()
-          err = viewModel.customErrors().filter((f) -> f.field == prop)[0]
-          if err
-            $(element).text err
-###
-
 ko.bindingHandlers.link =
   init: (element, valueAccessor, allBindingsAccessor) ->
     opts = allBindingsAccessor().linkOpts
@@ -149,3 +150,25 @@ ko.bindingHandlers.link =
       if value
         window.location = "/#{opts.resource}/#{value}"
       false
+
+ko.bindingHandlers.val =
+
+  init: (element, valueAccessor, allBindingsAccessor) ->
+    #http://stackoverflow.com/questions/12643455/knockout-js-extending-value-binding-with-interceptor
+    underlyingObservable = valueAccessor()
+    valOpts = allBindingsAccessor().valOpts
+    #type = if valOpts and valOpts.type then valOpts.type else "int"
+    #format = valOpts.format if valOpts and valOpts.type
+    $(element).inputmask('decimal', radixPoint : ',', autoUnmask : true, clearMaskOnLostFocus: true )
+    interceptor = ko.computed
+      read: =>
+        val = if ko.isObservable underlyingObservable then underlyingObservable() else underlyingObservable
+        if val
+          val = val.toString()
+          val.replace ".", ","
+      write: (val) =>
+        fmtVal = parseFloat val.replace ",", "."
+        underlyingObservable fmtVal
+      deferEvaluation : true
+    ko.applyBindingsToNode element, value : interceptor
+

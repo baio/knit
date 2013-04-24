@@ -9,12 +9,13 @@
       function Controller(viewModel) {
         var _this = this;
         this.viewModel = viewModel;
+        this.dataProvider = dataProvider.get();
         ko.applyBindings(viewModel, $("#body")[0]);
         pubSub.sub("crud", "start_create", function(item) {
           return _this.crudStartCreate(item);
         });
-        pubSub.sub("crud", "start_update", function(item) {
-          return _this.crudStartUpdate(item);
+        pubSub.sub("crud", "start_update", function(opts) {
+          return _this.crudStartUpdate(opts);
         });
         pubSub.sub("crud", "start_delete", function(item) {
           return _this.crudStartDelete(item);
@@ -25,40 +26,105 @@
         pubSub.sub("crud", "create", function(item) {
           return _this.crudCreate(item);
         });
-        pubSub.sub("crud", "update", function(item) {
-          return _this.crudUpdate(item);
+        pubSub.sub("crud", "update", function(opts) {
+          return _this.crudUpdate(opts);
         });
         pubSub.sub("crud", "delete", function(item) {
           return _this.crudDelete(item);
         });
-        pubSub.sub("crud", "details", function(item) {
-          return _this.crudDetails(item);
+        pubSub.sub("crud", "details", function(opts) {
+          return _this.crudDetails(opts);
         });
         pubSub.sub("crud", "cancel", function(opts) {
           return _this.crudCancel(opts);
+        });
+        pubSub.sub("crud", "start_action", function(opts) {
+          return _this.crudStartAction(opts);
         });
         pubSub.sub("crud", "action", function(opts) {
           return _this.crudAction(opts);
         });
       }
 
+      Controller.prototype.getActionParams = function(opts) {
+        var data, item, name, resource;
+        name = opts.name;
+        if (!opts.data) {
+          item = opts.item ? opts.item : this.viewModel;
+          resource = opts.resource ? opts.resource : item.resource;
+          data = item.toData();
+        } else {
+          resource = opts.resource;
+          data = opts.data;
+        }
+        return {
+          name: name,
+          item: item,
+          resource: resource,
+          data: data
+        };
+      };
+
+      Controller.prototype.getUpdateParams = function(opts) {
+        if (opts.item) {
+          return {
+            item: opts.item,
+            formType: opts.formType
+          };
+        } else {
+          return {
+            item: opts,
+            formType: "update"
+          };
+        }
+      };
+
+      Controller.prototype.crudStartAction = function(opts) {
+        var params;
+        params = this.getActionParams(opts);
+        if (!params.item) {
+          throw "opts should contain [item] field in order to execute crudStartAction";
+        }
+        return this.showForm(params.resource, params.name, params.item);
+      };
+
       Controller.prototype.crudAction = function(opts) {
-        var _this = this;
-        return dataProvider.action(opts.resource, opts.name, opts.data, function(err, data) {
-          _this.crudDone(null, err, "Выполнено успешно");
-          if (!err && opts.success) {
-            return opts.success(data);
+        var params,
+          _this = this;
+        params = this.getActionParams(opts);
+        if (params.item) {
+          if (!params.item.isValid()) {
+            this.crudDone(params.item, {
+              message: localization.controller.text.wrong_data
+            });
+            return;
+          }
+        }
+        return this.dataProvider.action(params.resource, params.name, params.data, function(err, data) {
+          _this.crudDone(null, err, localization.controller.text.success);
+          if (!err) {
+            if (params.item) {
+              _this.hideForm(params.resource, params.name);
+            }
+            if (opts.success) {
+              opts.success(data);
+            }
+            return _this.onCrudActionSuccess(params);
           }
         });
       };
 
-      Controller.prototype.crudDetails = function(item) {
-        return window.location = dataProvider.getUrl(item.resource, "details", item.toData());
+      Controller.prototype.onCrudActionSuccess = function(params) {};
+
+      Controller.prototype.crudDetails = function(opts) {
+        var params;
+        params = this.getActionParams(opts);
+        return window.location = this.dataProvider.getUrl(params.resource, "details", params.data);
       };
 
       Controller.prototype.crudGet = function(opts) {
         var _this = this;
-        return dataProvider.get(opts.resource, opts.filter, function(err, data) {
+        return this.dataProvider.get(opts.resource, opts.filter, function(err, data) {
           var prop, vm, _ref;
           vm = null;
           if (opts.resource === _this.viewModel.resource) {
@@ -86,7 +152,7 @@
       Controller.prototype.crudStartCreate = function(item) {
         var _this = this;
         if (item.useGetNewRemote) {
-          return dataProvider.getNew(item.resource, (item.parentItem ? item.parentItem.toData() : null), function(err, data) {
+          return this.dataProvider.getNew(item.resource, (item.parentItem ? item.parentItem.toData() : null), function(err, data) {
             if (err) {
               return _this.crudDone(err);
             } else {
@@ -100,8 +166,10 @@
         }
       };
 
-      Controller.prototype.crudStartUpdate = function(item) {
-        return this.showForm(item.resource, "update", item);
+      Controller.prototype.crudStartUpdate = function(opts) {
+        var params;
+        params = this.getUpdateParams(opts);
+        return this.showForm(params.item.resource, params.formType, params.item);
       };
 
       Controller.prototype.crudCancel = function(opts) {
@@ -111,8 +179,8 @@
       Controller.prototype.crudCreate = function(item) {
         var _this = this;
         if (item.isValid()) {
-          return dataProvider.create(item.resource, item.toData(true), function(err, data) {
-            _this.crudDone(item, err, "Создано успешно");
+          return this.dataProvider.create(item.resource, item.toData(true), function(err, data) {
+            _this.crudDone(item, err, localization.controller.text.created_success);
             if (!err) {
               if (!item.useRepeatCreate || !item.useRepeatCreate()) {
                 _this.hideForm(item.resource, "create");
@@ -125,32 +193,36 @@
           });
         } else {
           return this.crudDone(item, {
-            message: "Неправильные данные"
+            message: localization.controller.text.wrong_data
           });
         }
       };
 
-      Controller.prototype.crudUpdate = function(item) {
-        var _this = this;
+      Controller.prototype.crudUpdate = function(opts) {
+        var formType, item, params,
+          _this = this;
+        params = this.getUpdateParams(opts);
+        item = params.item;
+        formType = params.formType;
         if (item.isValid()) {
-          return dataProvider.update(item.resource, item.toData(true), function(err, data) {
-            _this.crudDone(item, err, "Сохранение успешно");
+          return this.dataProvider.update(item.resource, item.toData(), function(err, data) {
+            _this.crudDone(item, err, localization.controller.text.updated_success);
             if (!err) {
-              _this.hideForm(item.resource, "update");
+              _this.hideForm(item.resource, formType);
               return item.completeUpdate(data);
             }
           });
         } else {
           return this.crudDone(item, {
-            message: "Неправильные данные"
+            message: localization.controller.text.wrong_data
           });
         }
       };
 
       Controller.prototype.crudDelete = function(item) {
         var _this = this;
-        return dataProvider["delete"](item.resource, item.toData(true), function(err) {
-          _this.crudDone(item, err, "Удалено успешно");
+        return this.dataProvider["delete"](item.resource, item.toData(true), function(err) {
+          _this.crudDone(item, err, localization.controller.text.deleted_success);
           if (!err) {
             _this.hideForm(item.resource, "update");
             return pubSub.pub("crud", "complete_delete", item);
@@ -180,6 +252,9 @@
         }
         ko.applyBindings(item, form[0]);
         return form.modal("show").on("hidden", function() {
+          if (item != null) {
+            item.cleanUp();
+          }
           return ko.cleanNode(form[0]);
         });
       };

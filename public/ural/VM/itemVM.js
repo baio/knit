@@ -12,20 +12,20 @@
         this.useGetNewRemote = true;
       }
 
-      ViewModel.prototype.completeUpdate = function(data) {
+      ViewModel.prototype.completeUpdate = function(data, skipStratEdit) {
         if (this.src) {
-          return this.src.item.map(data);
+          return this.src.item.map(data, skipStratEdit);
         } else {
-          return this.map(data);
+          return this.map(data, skipStratEdit);
         }
       };
 
       ViewModel.prototype.completeCreate = function(data) {
         this.setSrc(null, null);
-        return this.map(data);
+        return this.map(data, keepEdit);
       };
 
-      ViewModel.prototype.map = function(data) {
+      ViewModel.prototype.map = function(data, skipStratEdit) {
         var d, dataIndexVM, prop;
         if ($.isArray()) {
           data = data[0];
@@ -50,7 +50,10 @@
           if (!__hasProp.call(dataIndexVM, prop)) continue;
           this[prop].map(dataIndexVM[prop]);
         }
-        return this.errors = ko.validation.group(this);
+        this.errors = ko.validation.group(this);
+        if (!skipStratEdit) {
+          return this.startEdit();
+        }
       };
 
       ViewModel.prototype.tryDate = function(str) {
@@ -134,7 +137,20 @@
       ViewModel.prototype.details = function(item, event) {
         if (this.confirmEvent(event, "details")) {
           event.preventDefault();
-          return pubSub.pub("crud", "details", this.clone("details"));
+          return pubSub.pub("crud", "details", {
+            item: this.clone("details")
+          });
+        }
+      };
+
+      ViewModel.prototype.startEdit = function() {
+        return this.stored_data = this.toData();
+      };
+
+      ViewModel.prototype.cancelEdit = function(item, event) {
+        event.preventDefault();
+        if (this.stored_data) {
+          return this.map(this.stored_data);
         }
       };
 
@@ -167,7 +183,17 @@
       };
 
       ViewModel.prototype.toData = function() {
-        return ko.mapping.toJS(this);
+        var data, prop;
+        data = ko.mapping.toJS(this);
+        for (prop in this) {
+          if (!__hasProp.call(this, prop)) continue;
+          if (prop.indexOf("_") !== 0 && this[prop] && this[prop].list) {
+            data[prop] = this[prop].list().map(function(m) {
+              return m.toData();
+            });
+          }
+        }
+        return data;
       };
 
       return ViewModel;

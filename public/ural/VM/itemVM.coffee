@@ -5,19 +5,19 @@ define ["Ural/Modules/pubSub"], (pubSub) ->
     constructor: (@resource, @parentItem) ->
       @useGetNewRemote = true
 
-    completeUpdate: (data) ->
+    completeUpdate: (data, skipStratEdit) ->
       if @src
         #item was in edit mode
-        @src.item.map (data)
+        @src.item.map data, skipStratEdit
       else
         #direct update
-        @map data
+        @map data, skipStratEdit
 
     completeCreate: (data) ->
       @setSrc null, null
-      @map data
+      @map data, keepEdit
 
-    map: (data) ->
+    map: (data, skipStratEdit) ->
 
       data = data[0] if $.isArray()
       dataIndexVM = {}
@@ -41,6 +41,9 @@ define ["Ural/Modules/pubSub"], (pubSub) ->
         @[prop].map dataIndexVM[prop]
 
       @errors = ko.validation.group @
+
+      if !skipStratEdit
+        @startEdit()
 
     tryDate: (str) ->
       if str and typeof str == "string"
@@ -98,7 +101,15 @@ define ["Ural/Modules/pubSub"], (pubSub) ->
     details: (item, event) ->
       if @confirmEvent event, "details"
         event.preventDefault()
-        pubSub.pub "crud", "details", @clone "details"
+        pubSub.pub "crud", "details", item : @clone "details"
+
+    startEdit: ->
+      @stored_data = @toData()
+
+    cancelEdit: (item, event) ->
+      event.preventDefault()
+      if @stored_data
+        @map @stored_data
 
     setErrors: (errs) ->
       for err in errs
@@ -117,7 +128,11 @@ define ["Ural/Modules/pubSub"], (pubSub) ->
               err.message
 
     toData: ->
-      ko.mapping.toJS @
-
-
-		
+      data = ko.mapping.toJS @
+      #map children list properties
+      for own prop of @
+        #TO DO: change property check to instanceof ItemVM (Circular Dependencies problem)
+        #if property name starts with _, this is private property, don't map (recursive index <-> item problem)
+        if prop.indexOf("_") != 0 and @[prop] and @[prop].list
+          data[prop] = @[prop].list().map (m) -> m.toData()
+      data

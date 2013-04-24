@@ -10,11 +10,15 @@ define ["Ural/VM/itemVM", "Ural/Modules/pubSub"], (itemVM, pubSub) ->
     completeDelete: (item) ->
       if item.resource == @resource
         @list.remove item.src.item
+      if @parentItem
+        @parentItem.startEdit()
 
     completeCreate: (item) ->
       if item.resource == @resource
         item.setSrc null, null
         @list.push item
+      if @parentItem
+        @parentItem.startEdit()
 
     map: (data) ->
       underlyingArray = @list()

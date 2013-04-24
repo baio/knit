@@ -20,14 +20,20 @@
 
       ViewModel.prototype.completeDelete = function(item) {
         if (item.resource === this.resource) {
-          return this.list.remove(item.src.item);
+          this.list.remove(item.src.item);
+        }
+        if (this.parentItem) {
+          return this.parentItem.startEdit();
         }
       };
 
       ViewModel.prototype.completeCreate = function(item) {
         if (item.resource === this.resource) {
           item.setSrc(null, null);
-          return this.list.push(item);
+          this.list.push(item);
+        }
+        if (this.parentItem) {
+          return this.parentItem.startEdit();
         }
       };
 
