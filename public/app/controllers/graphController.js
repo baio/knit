@@ -92,12 +92,12 @@
             })
           ]).range([200, 500]);
           svg = d3.select("#graph").append("svg").attr("height", 900);
-          link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("prof_rel", function(d) {
-            return d.attrs.prof_rel;
-          }).classed("private_rel", function(d) {
-            return d.attrs.private_rel;
-          }).classed("family_rel", function(d) {
+          link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("family_rel", function(d) {
             return d.attrs.family_rel;
+          }).classed("private_rel", function(d) {
+            return !d.attrs.family_rel && d.attrs.private_rel;
+          }).classed("prof_rel", function(d) {
+            return !(d.attrs.family_rel || d.attrs.private_rel) && d.attrs.prof_rel;
           }).attr("x1", function(d) {
             return xscale(d.source.attrs.x);
           }).attr("y1", function(d) {
