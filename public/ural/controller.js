@@ -11,7 +11,7 @@
         this.viewModel = viewModel;
         this.dataProvider = dataProvider.get();
         if (viewModel) {
-          ko.applyBindings(viewModel, $("#body")[0]);
+          ko.applyBindings(viewModel, $("#_body")[0]);
         }
         pubSub.sub("crud", "start_create", function(item) {
           return _this.crudStartCreate(item);

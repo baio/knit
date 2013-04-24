@@ -70,18 +70,18 @@
 <body>
 
 <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="navbar-inner">
+    <div class="navbar-inner" id="_nav">
         <div class="container">
             <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" href="#">Knit</a>
-
+            <a class="brand" href="#/" data-bind="link : null">Knit</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li data-bind="css : {active : active() == '/graph/panel'}"><a href="#/graph/panel" data-bind="link : null">Panel</a></li>
+                    <li data-bind="css : {active : active() == '/graph/send'}"><a href="#/graph/send" data-bind="link : null">Send</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->

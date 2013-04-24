@@ -1,7 +1,7 @@
 require.config
   baseUrl: "/"
 
-require ["ural/Localization/localizationManager", "ural/router"],
+require ["ural/Localization/localizationManager", "ural/router", "ural/bindings/_all"],
   (localManager, router) ->
     localManager.setup "En"
 

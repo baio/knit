@@ -3,19 +3,25 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/controller"], function(controller) {
+  define(["ural/controller", "app/models/menu"], function(controller, menu) {
     var GraphController;
     GraphController = (function(_super) {
 
       __extends(GraphController, _super);
 
       function GraphController() {
-        return GraphController.__super__.constructor.apply(this, arguments);
+        var nav;
+        nav = new menu.Menu();
+        ko.applyBindings(nav, $("#_nav")[0]);
+        GraphController.__super__.constructor.apply(this, arguments);
       }
 
       GraphController.prototype.panel = function() {
-        console.log("index");
         return this.view("app/views/graph/panel.html");
+      };
+
+      GraphController.prototype.send = function() {
+        return this.view("app/views/graph/send.html");
       };
 
       return GraphController;

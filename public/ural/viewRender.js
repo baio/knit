@@ -18,6 +18,7 @@
           }
         ], function(err, bodyHtml) {
           if (!err) {
+            $("#_body").empty();
             $("#_body").append(bodyHtml);
           }
           if (done) {

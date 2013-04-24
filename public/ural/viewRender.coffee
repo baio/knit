@@ -11,7 +11,9 @@ define ->
         , (bodyHtml, ck) ->
           ViewRender._renderPartialViews bodyHtml, ck
       ], (err, bodyHtml) ->
-        if !err then $("#_body").append bodyHtml
+        if !err
+          $("#_body").empty()
+          $("#_body").append bodyHtml
         if done then done err
 
     @_renderPartialViews: (html, callback) ->

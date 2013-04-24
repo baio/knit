@@ -1,19 +1,28 @@
-define ->
+define ["ural/modules/pubSub"], (pubSub) ->
 
   class Router
 
     constructor: (@controllerDirectory) ->
+      @_controllers = []
+      pubSub.sub "href", "change", (data) =>
+        @_hash data.href
 
     @StartRouting:(controllerDirectory, routes) ->
       router = new Router controllerDirectory
       for route in routes
         router.addRoute route.url, (controller, action, index)=>
-          if controller
-            router.onRoute controller, action, index
-          else
+          if !controller
             defaultRoute = routes.filter((f) -> f.url == "/")[0]
             if defaultRoute
-              router.onRoute defaultRoute.path.controller, defaultRoute.path.action, defaultRoute.path.arg
+              controller = defaultRoute.path.controller
+              action = defaultRoute.path.action
+              index = defaultRoute.path.arg
+          if controller
+            router.onRoute controller, action, index, ->
+              pubSub.pub "href", "changed",
+                controller : controller,
+                action : action,
+                index : index,
       router.startRouting()
 
     _hash: (val, silent) ->
@@ -36,8 +45,14 @@ define ->
 
     onRoute: (controller, action, index, callback) ->
       controllerName = "#{controller}Controller"
-      require ["#{@controllerDirectory}/#{controllerName}"], (controllerModule) =>
-        ctl = eval "new controllerModule.Controller()"
+      ctl = @_controllers[controllerName]
+      if !ctl
+        require ["#{@controllerDirectory}/#{controllerName}"], (controllerModule) =>
+          ctl = eval "new controllerModule.Controller()"
+          ctl[action] index
+          @_controllers[controllerName] = ctl
+          if callback then callback()
+      else
         ctl[action] index
         if callback then callback()
 

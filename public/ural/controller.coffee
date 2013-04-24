@@ -7,7 +7,7 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
       @dataProvider = dataProvider.get()
 
       if viewModel
-        ko.applyBindings viewModel, $("#body")[0]
+        ko.applyBindings viewModel, $("#_body")[0]
 
       pubSub.sub "crud", "start_create", (item) => @crudStartCreate item
       pubSub.sub "crud", "start_update", (opts) => @crudStartUpdate opts
