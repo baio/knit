@@ -41,3 +41,24 @@ body {
 {
     stroke: deepskyblue;
 }
+
+.graph-panel
+{
+    background-color: lightgray;
+    z-index: 1;
+    color: #000000;
+    margin-left: 20px;
+    margin-top: 20px;
+    background-color: #fff;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    /*
+    width: 200px;
+    padding-left: 50px;
+    padding-top: 10px;
+    */
+}
