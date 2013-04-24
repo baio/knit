@@ -1,4 +1,4 @@
-define ["Ural/Modules/pubSub", "Ural/Modules/dataProvider"], (pubSub, dataProvider) ->
+define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], (viewRender, pubSub, dataProvider) ->
 
   class Controller
 
@@ -6,7 +6,8 @@ define ["Ural/Modules/pubSub", "Ural/Modules/dataProvider"], (pubSub, dataProvid
 
       @dataProvider = dataProvider.get()
 
-      ko.applyBindings viewModel, $("#body")[0]
+      if viewModel
+        ko.applyBindings viewModel, $("#body")[0]
 
       pubSub.sub "crud", "start_create", (item) => @crudStartCreate item
       pubSub.sub "crud", "start_update", (opts) => @crudStartUpdate opts
@@ -164,3 +165,7 @@ define ["Ural/Modules/pubSub", "Ural/Modules/dataProvider"], (pubSub, dataProvid
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       form.modal "hide"
 
+    view: (path) ->
+      viewRender.ViewRender.Render(path, ->)
+
+  Controller : Controller

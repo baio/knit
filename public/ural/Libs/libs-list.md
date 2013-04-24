@@ -12,6 +12,11 @@
 + toastr
 + momentjs
 + async
++ textjs - require js module, must be ural/Libs module
+### For routing ###
+
++ signalsjs
++ crossroadsjs
 
 ### Ural Libs ###
 

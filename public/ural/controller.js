@@ -2,15 +2,17 @@
 (function() {
   var __hasProp = {}.hasOwnProperty;
 
-  define(["Ural/Modules/pubSub", "Ural/Modules/dataProvider"], function(pubSub, dataProvider) {
+  define(["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], function(viewRender, pubSub, dataProvider) {
     var Controller;
-    return Controller = (function() {
+    Controller = (function() {
 
       function Controller(viewModel) {
         var _this = this;
         this.viewModel = viewModel;
         this.dataProvider = dataProvider.get();
-        ko.applyBindings(viewModel, $("#body")[0]);
+        if (viewModel) {
+          ko.applyBindings(viewModel, $("#body")[0]);
+        }
         pubSub.sub("crud", "start_create", function(item) {
           return _this.crudStartCreate(item);
         });
@@ -265,9 +267,16 @@
         return form.modal("hide");
       };
 
+      Controller.prototype.view = function(path) {
+        return viewRender.ViewRender.Render(path, function() {});
+      };
+
       return Controller;
 
     })();
+    return {
+      Controller: Controller
+    };
   });
 
 }).call(this);
