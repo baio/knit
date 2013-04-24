@@ -267,8 +267,8 @@
         return form.modal("hide");
       };
 
-      Controller.prototype.view = function(path) {
-        return viewRender.ViewRender.Render(path, function() {});
+      Controller.prototype.view = function(path, done) {
+        return viewRender.ViewRender.Render(path, done);
       };
 
       return Controller;

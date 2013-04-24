@@ -17,7 +17,7 @@ define ->
         if done then done err
 
     @_renderPartialViews: (html, callback) ->
-      #html = "<div>#{html}</div>"
+      html = "<div>#{html}</div>"
       ViewRender.__renderPartialViews html, (err, renderedHtml) ->
         if renderedHtml then renderedHtml = $(renderedHtml).html()
         callback err, renderedHtml
@@ -43,7 +43,7 @@ define ->
             $.templates pvt : partialHtml
             partialHtml = $.render.pvt jViewBag
             $pratialViewTag.html partialHtml
-            #html = "<div>#{html}</div>"
+            html = "<div>#{html}</div>"
           async.forEachSeries partialHtmls
           ,(ph, ck) ->
             ControllerBase.__renderPartialViews html, (err, renderedHtml) ->

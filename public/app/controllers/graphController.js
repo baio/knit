@@ -17,11 +17,90 @@
       }
 
       GraphController.prototype.panel = function() {
-        return this.view("app/views/graph/panel.html");
+        var _this = this;
+        return this.view("app/views/graph/panel.html", function() {
+          return _this._loadPanel();
+        });
       };
 
       GraphController.prototype.send = function() {
         return this.view("app/views/graph/send.html");
+      };
+
+      GraphController.prototype._loadPanel = function() {
+        return d3.xml("/data/main.gexf", "application/xml", function(gexf) {
+          var color, edges, grp_edges, grp_nodes, link, node, nodes, svg, text, xscale, yscale;
+          color = d3.scale.category20();
+          console.log(gexf);
+          nodes = d3.select(gexf).selectAll("node")[0];
+          edges = d3.select(gexf).selectAll("edge")[0];
+          grp_nodes = nodes.map(function(d) {
+            var cn, position, _i, _len, _ref;
+            _ref = d.childNodes;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              cn = _ref[_i];
+              if (cn.localName === "position") {
+                position = cn;
+                break;
+              }
+            }
+            return {
+              attrs: {
+                id: d.attributes.id.value,
+                label: d.attributes.label.value,
+                x: position.attributes.x.value,
+                y: position.attributes.y.value
+              }
+            };
+          });
+          grp_edges = edges.map(function(d) {
+            return {
+              source: grp_nodes.filter(function(f) {
+                return d3.select(d).attr("source") === f.attrs.id;
+              })[0],
+              target: grp_nodes.filter(function(f) {
+                return d3.select(d).attr("target") === f.attrs.id;
+              })[0],
+              weight: 1
+            };
+          });
+          xscale = d3.scale.linear().domain([
+            d3.min(grp_nodes, function(d) {
+              return d.attrs.x;
+            }), d3.max(grp_nodes, function(d) {
+              return d.attrs.x;
+            })
+          ]).range([400, 900]);
+          yscale = d3.scale.linear().domain([
+            d3.min(grp_nodes, function(d) {
+              return d.attrs.y;
+            }), d3.max(grp_nodes, function(d) {
+              return d.attrs.y;
+            })
+          ]).range([200, 500]);
+          svg = d3.select("#graph").append("svg").attr("height", 900);
+          link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").attr("x1", function(d) {
+            return xscale(d.source.attrs.x);
+          }).attr("y1", function(d) {
+            return yscale(d.source.attrs.y);
+          }).attr("x2", function(d) {
+            return xscale(d.target.attrs.x);
+          }).attr("y2", function(d) {
+            return yscale(d.target.attrs.y);
+          });
+          node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
+            return xscale(d.attrs.x);
+          }).attr("cy", function(d) {
+            return yscale(d.attrs.y);
+          });
+          return text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
+            return d.attrs.label;
+          }).attr("x", function(d) {
+            return xscale(d.attrs.x);
+          }).attr("y", function(d) {
+            return yscale(d.attrs.y - 10);
+          });
+        });
       };
 
       return GraphController;

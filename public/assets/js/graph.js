@@ -2,7 +2,7 @@
 (function() {
 
   $(function() {
-    return d3.xml("data/main.gexf", "application/xml", function(gexf) {
+    return d3.xml("http:/localhost:8005/data/main.gexf", "application/xml", function(gexf) {
       var color, edges, grp_edges, grp_nodes, link, node, nodes, svg, text, xscale, yscale;
       console.log(gexf);
       nodes = d3.select(gexf).selectAll("node")[0];

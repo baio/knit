@@ -28,6 +28,7 @@
       };
 
       ViewRender._renderPartialViews = function(html, callback) {
+        html = "<div>" + html + "</div>";
         return ViewRender.__renderPartialViews(html, function(err, renderedHtml) {
           if (renderedHtml) {
             renderedHtml = $(renderedHtml).html();
@@ -68,6 +69,7 @@
               });
               partialHtml = $.render.pvt(jViewBag);
               $pratialViewTag.html(partialHtml);
+              html = "<div>" + html + "</div>";
             }
             return async.forEachSeries(partialHtmls, function(ph, ck) {
               return ControllerBase.__renderPartialViews(html, function(err, renderedHtml) {

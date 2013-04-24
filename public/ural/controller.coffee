@@ -165,7 +165,7 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       form.modal "hide"
 
-    view: (path) ->
-      viewRender.ViewRender.Render(path, ->)
+    view: (path, done) ->
+      viewRender.ViewRender.Render(path, done)
 
   Controller : Controller
