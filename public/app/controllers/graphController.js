@@ -56,7 +56,7 @@
           grp_edges = edges.map(function(d) {
             var attrs, cn, fr, _i, _len, _ref;
             attrs = {};
-            _ref = d.childNodes[3].childNodes;
+            _ref = d.childNodes[1].childNodes;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               cn = _ref[_i];
               if (cn.attributes) {

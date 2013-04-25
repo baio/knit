@@ -38,7 +38,7 @@ define ["ural/controller", "app/models/menu"], (controller, menu) ->
 
         grp_edges = edges.map (d) ->
           attrs = {}
-          for cn in d.childNodes[3].childNodes
+          for cn in d.childNodes[1].childNodes
             if cn.attributes
               fr = d3.select(cn).attr("for")
               if fr in ["family_rel", "private_rel", "prof_rel", "link"]
