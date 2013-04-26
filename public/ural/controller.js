@@ -46,7 +46,18 @@
         pubSub.sub("crud", "action", function(opts) {
           return _this.crudAction(opts);
         });
+        pubSub.sub("msg", "display", function(opts) {
+          return _this.displayMsg(opts);
+        });
       }
+
+      Controller.prototype.displayMsg = function(opts) {
+        if (opts.type === "success") {
+          return toastr.success(opts.msg);
+        } else if (opts.type === "error") {
+          return toastr.error(opts.msg);
+        }
+      };
 
       Controller.prototype.getActionParams = function(opts) {
         var data, item, name, resource;
@@ -267,8 +278,49 @@
         return form.modal("hide");
       };
 
-      Controller.prototype.view = function(path, done) {
-        return viewRender.ViewRender.Render(path, done);
+      "Load data, render view\n======================\nData and model loading are going in parallel\nIf `path` is presented, view loaded from file and then added to html layout (`_body` tag)\nIf `path` is not presnted, skip view loading\nIf `model` presented\n  + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`\n  + check if it contains `render` method, if so invoke `model.render( data )`\nIf `model` is not presnted, skip model loading\nIf `model` doesn't contain `load` method, consider it simple `object` model (just `data`)\n`[apply]` - not required parameter, if presented and `true` then `data` will be applied to the view via `ko binding`\n`[done]` - not required, if presented will be invoked as `done(err, data)`";
+
+
+      Controller.prototype.view = function(path, model, isApplay, done) {
+        if ($.isFunction(isApplay)) {
+          done = isApplay;
+        }
+        return async.parallel([
+          function(ck) {
+            if (path) {
+              return viewRender.ViewRender.Render(path, ck);
+            } else {
+              return ck(null);
+            }
+          }, function(ck) {
+            if (model && $.isFunction(model.load)) {
+              return model.load(ck);
+            } else {
+              return ck(null, model);
+            }
+          }
+        ], function(err, res) {
+          var data;
+          data = res[1];
+          if (!err) {
+            if ($.isFunction(model.render)) {
+              model.render(data);
+            }
+            if (model && isApplay) {
+              ko.applyBindings(model, $("#_body")[0]);
+            }
+          }
+          if (done) {
+            return done(err, data);
+          }
+        });
+      };
+
+      "Shortcut for view(path, model, `True`, done)";
+
+
+      Controller.prototype.view_apply = function(path, model, done) {
+        return this.view(path, model, true, done);
       };
 
       return Controller;

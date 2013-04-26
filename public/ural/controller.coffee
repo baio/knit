@@ -21,6 +21,14 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
       pubSub.sub "crud", "start_action", (opts) => @crudStartAction opts
       pubSub.sub "crud", "action", (opts) => @crudAction opts
 
+      pubSub.sub "msg", "display", (opts) => @displayMsg opts
+
+    displayMsg: (opts) ->
+      if opts.type == "success"
+        toastr.success opts.msg
+      else if opts.type == "error"
+        toastr.error opts.msg
+
     getActionParams: (opts) ->
       #if opts.data isn't defined, consider viewModel as data source for this action data
       #opts.name - name of the action, only abrigatory parameter others: ([item], [resource])|(data, resource)
@@ -165,7 +173,46 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       form.modal "hide"
 
-    view: (path, done) ->
-      viewRender.ViewRender.Render(path, done)
+    """
+    Load data, render view
+    ======================
+    Data and model loading are going in parallel
+    If `path` is presented, view loaded from file and then added to html layout (`_body` tag)
+    If `path` is not presnted, skip view loading
+    If `model` presented
+      + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`
+      + check if it contains `render` method, if so invoke `model.render( data )`
+    If `model` is not presnted, skip model loading
+    If `model` doesn't contain `load` method, consider it simple `object` model (just `data`)
+    `[apply]` - not required parameter, if presented and `true` then `data` will be applied to the view via `ko binding`
+    `[done]` - not required, if presented will be invoked as `done(err, data)`
+    """
+    view: (path, model, isApplay, done) ->
+      done = isApplay if $.isFunction(isApplay)
+      async.parallel [
+        (ck) ->
+          if path
+            viewRender.ViewRender.Render(path, ck)
+          else
+            ck null
+        (ck) ->
+          if model and $.isFunction(model.load)
+            model.load ck
+          else
+            ck null, model
+        ], (err, res) ->
+            data = res[1]
+            if !err
+              if $.isFunction(model.render)
+                model.render data
+              if model and isApplay
+                ko.applyBindings model, $("#_body")[0]
+            if done then done err, data
+
+    """
+    Shortcut for view(path, model, `True`, done)
+    """
+    view_apply: (path, model, done) ->
+      @view path, model, true, done
 
   Controller : Controller
