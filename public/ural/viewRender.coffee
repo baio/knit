@@ -1,7 +1,17 @@
-#### loads and generate views ###
-#Default render engine, use jsrender templates to generate partial views
+#Default render engine, use `jsrender` templates to generate partial views
 define ->
 
+  #**render (path, done)**#
+  #
+  #Render html, by the template defined in file with path `path`
+  #
+  #+ Partial views could be included
+  #+ Any element with `data-partial-view='path-to-partial-view'` will be considered as container for partial view
+  #+ Partial view containers also could define parameters via `data-partial-view-bag='{json-stingifyed}'`
+  #these parameters will be used while generating elements values/attributes via `jsrender` engine
+  #+ Partial views are loaded asyncronously from server via `requirejs`.
+  #+ After all partial views loaded and genrated (each partial view is appended as nested element to its container)
+  # `done` method is invoked such as `done (err, html)`, where html is generated html.
   render = (bodyPath, done) ->
     async.waterfall [
       (ck) ->
