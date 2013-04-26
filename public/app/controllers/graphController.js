@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/controller", "app/models/menu", "app/models/graph/panel", "app/models/graph/send"], function(controller, menu, panel, send) {
+  define(["ural/controller", "app/models/menu", "app/models/graph/panel", "app/models/graph/send", "app/config"], function(controller, menu, panel, send, config) {
     var GraphController;
     GraphController = (function(_super) {
 
@@ -21,6 +21,9 @@
       };
 
       GraphController.prototype.send = function() {
+        this.viewBag = {
+          download_gexf_href: config.links.gexf_download
+        };
         return this.view("app/views/graph/send.html", new send.Send());
       };
 

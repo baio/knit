@@ -3,7 +3,7 @@ define ->
 
   class ViewRender
 
-    @Render: (bodyPath, done) ->
+    @Render: (bodyPath, viewBag, done) ->
       async.waterfall [
         (ck) ->
           require ["Ural/Libs/text!#{bodyPath}"], (bodyHtml) ->
@@ -12,6 +12,9 @@ define ->
           ViewRender._renderPartialViews bodyHtml, ck
       ], (err, bodyHtml) ->
         if !err
+          if viewBag
+            $.templates pvt : bodyHtml
+            bodyHtml = $.render.pvt viewBag
           $("#_body").empty()
           $("#_body").append bodyHtml
         if done then done err

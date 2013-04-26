@@ -282,13 +282,14 @@
 
 
       Controller.prototype.view = function(path, model, isApplay, done) {
+        var _this = this;
         if ($.isFunction(isApplay)) {
           done = isApplay;
         }
         return async.parallel([
           function(ck) {
             if (path) {
-              return viewRender.ViewRender.Render(path, ck);
+              return viewRender.ViewRender.Render(path, _this.viewBag, ck);
             } else {
               return ck(null);
             }

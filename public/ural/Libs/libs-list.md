@@ -22,8 +22,11 @@
 
 + Bindings/*
 
-#### Only if use rus localization ###
+### Only if use rus localization ###
 
 + datepicker-ru
 + knockout.validation.ru-RU
 + moment.ru
+
+### if use templates (view-bags) ###
++ jsrender

@@ -22,7 +22,6 @@
       };
 
       Send.prototype.render = function() {
-        $("#download_gexf_button")[0].href = config.links.gexf_download;
         $("#upload_data_button").click(function(e) {
           var txt;
           e.preventDefault();

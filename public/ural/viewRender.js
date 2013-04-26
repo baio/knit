@@ -7,7 +7,7 @@
 
       function ViewRender() {}
 
-      ViewRender.Render = function(bodyPath, done) {
+      ViewRender.Render = function(bodyPath, viewBag, done) {
         return async.waterfall([
           function(ck) {
             return require(["Ural/Libs/text!" + bodyPath], function(bodyHtml) {
@@ -18,6 +18,12 @@
           }
         ], function(err, bodyHtml) {
           if (!err) {
+            if (viewBag) {
+              $.templates({
+                pvt: bodyHtml
+              });
+              bodyHtml = $.render.pvt(viewBag);
+            }
             $("#_body").empty();
             $("#_body").append(bodyHtml);
           }

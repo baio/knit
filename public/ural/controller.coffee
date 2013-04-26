@@ -190,9 +190,9 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
     view: (path, model, isApplay, done) ->
       done = isApplay if $.isFunction(isApplay)
       async.parallel [
-        (ck) ->
+        (ck) =>
           if path
-            viewRender.ViewRender.Render(path, ck)
+            viewRender.ViewRender.Render(path, @viewBag, ck)
           else
             ck null
         (ck) ->
