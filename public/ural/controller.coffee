@@ -1,4 +1,7 @@
-define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], (viewRender, pubSub, dataProvider) ->
+define ["ural/viewEngine",
+        "ural/Modules/pubSub",
+        "ural/Modules/dataProvider"],
+(viewEngine, pubSub, dataProvider) ->
 
   class Controller
 
@@ -190,9 +193,9 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
     view: (path, model, isApplay, done) ->
       done = isApplay if $.isFunction(isApplay)
       async.parallel [
-        (ck) =>
+        (ck) ->
           if path
-            viewRender.ViewRender.Render(path, @viewBag, ck)
+            viewEngine.render(path, ck)
           else
             ck null
         (ck) ->
@@ -200,13 +203,13 @@ define ["ural/viewRender", "Ural/Modules/pubSub", "Ural/Modules/dataProvider"], 
             model.load ck
           else
             ck null, model
-        ], (err, res) ->
-            data = res[1]
+        ], (err, res) =>
             if !err
+              html = res[0]
+              data = res[1]
+              viewEngine.applyData(html, data, @viewBag, isApplay)
               if $.isFunction(model.render)
                 model.render data
-              if model and isApplay
-                ko.applyBindings model, $("#_body")[0]
             if done then done err, data
 
     """

@@ -10,8 +10,6 @@ define ["app/config", "ural/modules/pubSub"], (config, pubSub) ->
 
     render: ->
 
-      #$("#download_gexf_button")[0].href = config.links.gexf_download
-
       $("#upload_data_button").click (e) ->
         e.preventDefault()
         #upload data to server

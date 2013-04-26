@@ -1,10 +1,10 @@
-define ->
+define ["app/config"], (config) ->
 
   class Panel
 
     load: (done) ->
 
-      d3.xml "/data/main.gexf", "application/xml", (gexf) ->
+      d3.xml config.links.panel_gexf_url, "application/xml", (gexf) ->
 
         console.log gexf
 
