@@ -1,4 +1,4 @@
-define ["Ural/Modules/pubSub"], (pubSub) ->
+define ["ural/modules/pubSub"], (pubSub) ->
 
   class ViewModel
 

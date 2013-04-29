@@ -2,7 +2,7 @@
 (function() {
   var __hasProp = {}.hasOwnProperty;
 
-  define(["ural/viewEngine", "ural/Modules/pubSub", "ural/Modules/dataProvider"], function(viewEngine, pubSub, dataProvider) {
+  define(["ural/viewEngine", "ural/modules/pubSub", "ural/modules/dataProvider"], function(viewEngine, pubSub, dataProvider) {
     var Controller;
 
     Controller = (function() {

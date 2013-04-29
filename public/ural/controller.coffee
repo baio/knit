@@ -1,6 +1,6 @@
 define ["ural/viewEngine",
-        "ural/Modules/pubSub",
-        "ural/Modules/dataProvider"],
+        "ural/modules/pubSub",
+        "ural/modules/dataProvider"],
 (viewEngine, pubSub, dataProvider) ->
 
   class Controller

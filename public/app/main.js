@@ -5,7 +5,7 @@
   });
 
   require(["ural/localization/localizationManager", "ural/router", "ural/bindings/_all"], function(localManager, router) {
-    localManager.setup("En");
+    localManager.setup("en");
     return router.Router.StartRouting("app/controllers", [
       {
         url: "/",

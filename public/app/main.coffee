@@ -3,7 +3,7 @@ require.config
 
 require ["ural/localization/localizationManager", "ural/router", "ural/bindings/_all"],
   (localManager, router) ->
-    localManager.setup "En"
+    localManager.setup "en"
     router.Router.StartRouting "app/controllers",
       [
         { url: "/", path : {controller : "graph", action : "panel"} }
