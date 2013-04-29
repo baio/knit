@@ -1,7 +1,17 @@
 define ->
 
-  links :
-    panel_gexf_url : "/data/main.gexf"
-    data_upload : "http://localhost:8080/links"
-    gexf_download : "http://localhost:8080/gexf"
-    gexf_upload : "http://localhost:8080/gexf"
+  _dev =
+    links :
+      panel_gexf_url : "/data/main.gexf"
+      data_upload : "http://localhost:8080/links"
+      gexf_download : "http://localhost:8080/gexf"
+      gexf_upload : "http://localhost:8080/gexf"
+
+  _prod =
+    links :
+      panel_gexf_url : "http://baio-links.herokuapp.com/gexf"
+      data_upload : "http://baio-links.herokuapp.com/links"
+      gexf_download : "http://baio-links.herokuapp.com/gexf"
+      gexf_upload : "http://baio-links.herokuapp.com/gexf"
+
+  _prod

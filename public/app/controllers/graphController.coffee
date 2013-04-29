@@ -13,7 +13,7 @@ define ["ural/controller",
       super
 
     panel: ->
-      @view "app/views/graph/panel.html", new panel.Panel()
+      @view_apply "app/views/graph/panel.html", new panel.Panel()
 
     send: ->
       @viewBag =

@@ -1,12 +1,12 @@
 
 <div class="affix graph-panel">
     <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
-        <li>Name A</li>
-        <li>Name B</li>
+        <li><a href="#" data-bind="attr : {href : url_src}, text : name_src" target="_blank"></a></li>
+        <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
         <li class="divider"></li>
-        <li>Relation A</li>
-        <li>Relation B</li>
-        <li>Relation C</li>
+        <!-- ko foreach : tags -->
+            <li><a href="#" data-bind="attr : {href : url}, text : val" target="_blank"></a></li>
+        <!-- /ko -->
     </ul>
 </div>
 

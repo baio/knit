@@ -318,7 +318,7 @@
           if (!err) {
             html = res[0];
             data = res[1];
-            viewEngine.applyData(html, data, _this.viewBag, isApply);
+            viewEngine.applyData(html, model, _this.viewBag, isApply);
             if ($.isFunction(model.render)) {
               model.render(data);
             }

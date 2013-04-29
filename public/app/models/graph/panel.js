@@ -4,7 +4,19 @@
     var Panel;
 
     Panel = (function() {
-      function Panel() {}
+      function Panel() {
+        var _this = this;
+
+        this.name_src = ko.observable();
+        this.name_tgt = ko.observable();
+        this.url_src = ko.computed(function() {
+          return "https://www.google.ru/search?q=" + (_this.name_src());
+        });
+        this.url_tgt = ko.computed(function() {
+          return "https://www.google.ru/search?q=" + (_this.name_tgt());
+        });
+        this.tags = ko.observableArray();
+      }
 
       Panel.prototype.load = function(done) {
         return d3.xml(config.links.panel_gexf_url, "application/xml", function(gexf) {
@@ -34,16 +46,20 @@
             };
           });
           grp_edges = edges.map(function(d) {
-            var attrs, cn, fr, _i, _len, _ref;
+            var attrs, cn, fr, node, _i, _j, _len, _len1, _ref, _ref1;
 
             attrs = {};
-            _ref = d.childNodes[1].childNodes;
+            _ref = d.childNodes;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              cn = _ref[_i];
-              if (cn.attributes) {
-                fr = d3.select(cn).attr("for");
-                if (fr === "family_rel" || fr === "private_rel" || fr === "prof_rel" || fr === "link") {
-                  attrs[fr] = d3.select(cn).attr("value");
+              node = _ref[_i];
+              _ref1 = node.childNodes;
+              for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+                cn = _ref1[_j];
+                if (cn.attributes) {
+                  fr = d3.select(cn).attr("for");
+                  if (fr === "family_rel" || fr === "private_rel" || fr === "prof_rel" || fr === "url") {
+                    attrs[fr] = d3.select(cn).attr("value");
+                  }
                 }
               }
             }
@@ -66,7 +82,8 @@
       };
 
       Panel.prototype.render = function(model) {
-        var color, grp_edges, grp_nodes, link, node, svg, text, xscale, yscale;
+        var color, grp_edges, grp_nodes, link, node, svg, text, xscale, yscale,
+          _this = this;
 
         color = d3.scale.category20();
         grp_nodes = model.nodes;
@@ -100,6 +117,34 @@
           return xscale(d.target.attrs.x);
         }).attr("y2", function(d) {
           return yscale(d.target.attrs.y);
+        }).on("mouseover", function(d) {
+          var tgs;
+
+          _this.name_src(d.source.attrs.label);
+          _this.name_tgt(d.target.attrs.label);
+          tgs = [];
+          if (d.attrs.family_rel) {
+            tgs.push({
+              type: "family",
+              val: d.attrs.family_rel,
+              url: d.attrs.url
+            });
+          }
+          if (d.attrs.private_rel) {
+            tgs.push({
+              type: "private",
+              val: d.attrs.private_rel,
+              url: d.attrs.url
+            });
+          }
+          if (d.attrs.prof_rel) {
+            tgs.push({
+              type: "prof",
+              val: d.attrs.prof_rel,
+              url: d.attrs.url
+            });
+          }
+          return _this.tags(tgs);
         });
         node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
           return xscale(d.attrs.x);

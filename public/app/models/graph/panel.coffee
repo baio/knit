@@ -2,6 +2,14 @@ define ["app/config"], (config) ->
 
   class Panel
 
+    constructor: ->
+
+      @name_src = ko.observable()
+      @name_tgt = ko.observable()
+      @url_src = ko.computed => "https://www.google.ru/search?q=#{@name_src()}"
+      @url_tgt = ko.computed => "https://www.google.ru/search?q=#{@name_tgt()}"
+      @tags = ko.observableArray()
+
     load: (done) ->
 
       d3.xml config.links.panel_gexf_url, "application/xml", (gexf) ->
@@ -24,11 +32,12 @@ define ["app/config"], (config) ->
 
         grp_edges = edges.map (d) ->
           attrs = {}
-          for cn in d.childNodes[1].childNodes
-            if cn.attributes
-              fr = d3.select(cn).attr("for")
-              if fr in ["family_rel", "private_rel", "prof_rel", "link"]
-                attrs[fr] = d3.select(cn).attr("value")
+          for node in d.childNodes
+            for cn in node.childNodes
+              if cn.attributes
+                fr = d3.select(cn).attr("for")
+                if fr in ["family_rel", "private_rel", "prof_rel", "url"]
+                  attrs[fr] = d3.select(cn).attr("value")
           attrs : attrs
           source : grp_nodes.filter((f) -> d3.select(d).attr("source") == f.attrs.id)[0]
           target : grp_nodes.filter((f) -> d3.select(d).attr("target") == f.attrs.id)[0]
@@ -63,6 +72,18 @@ define ["app/config"], (config) ->
         .attr("y1", (d) -> yscale(d.source.attrs.y))
         .attr("x2", (d) -> xscale(d.target.attrs.x))
         .attr("y2", (d) -> yscale(d.target.attrs.y))
+        .on("mouseover", (d) =>
+          @name_src d.source.attrs.label
+          @name_tgt d.target.attrs.label
+          tgs = []
+          if d.attrs.family_rel
+            tgs.push type : "family", val : d.attrs.family_rel, url : d.attrs.url
+          if d.attrs.private_rel
+            tgs.push type : "private", val : d.attrs.private_rel, url : d.attrs.url
+          if d.attrs.prof_rel
+            tgs.push type : "prof", val : d.attrs.prof_rel, url : d.attrs.url
+          @tags(tgs)
+        )
 
       node = svg.selectAll("node")
         .data(grp_nodes)
