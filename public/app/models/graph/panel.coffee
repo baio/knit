@@ -27,8 +27,8 @@ define ["app/config"], (config) ->
           attrs :
             id : d.attributes.id.value
             label : d.attributes.label.value
-            x : position.attributes.x.value
-            y : position.attributes.y.value
+            x : if position.attributes.x then position.attributes.x.value else 10
+            y : if position.attributes.x then position.attributes.y.value else 10
 
         grp_edges = edges.map (d) ->
           attrs = {}
