@@ -15,7 +15,7 @@ define ->
   render = (bodyPath, done) ->
     async.waterfall [
       (ck) ->
-        require ["Ural/Libs/text!#{bodyPath}"], (bodyHtml) ->
+        require ["ural/libs/text!#{bodyPath}"], (bodyHtml) ->
           ck null, bodyHtml
       , (bodyHtml, ck) ->
         _renderPartialViews bodyHtml, ck

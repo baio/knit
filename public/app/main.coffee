@@ -1,7 +1,7 @@
 require.config
   baseUrl: "/"
 
-require ["ural/Localization/localizationManager", "ural/router", "ural/bindings/_all"],
+require ["ural/localization/localizationManager", "ural/router", "ural/bindings/_all"],
   (localManager, router) ->
     localManager.setup "En"
     router.Router.StartRouting "app/controllers",

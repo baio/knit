@@ -6,7 +6,7 @@
     render = function(bodyPath, done) {
       return async.waterfall([
         function(ck) {
-          return require(["Ural/Libs/text!" + bodyPath], function(bodyHtml) {
+          return require(["ural/libs/text!" + bodyPath], function(bodyHtml) {
             return ck(null, bodyHtml);
           });
         }, function(bodyHtml, ck) {

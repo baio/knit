@@ -2,7 +2,7 @@ define ->
 
   setup : (local, done) ->
 
-    require ["Ural/Localization/#{local}/controller.text"], (controllerText) ->
+    require ["ural/localization/#{local}/controller.text"], (controllerText) ->
       window.localization =
         controller :
           text : controllerText
