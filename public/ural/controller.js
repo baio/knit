@@ -292,12 +292,10 @@
         return form.modal("hide");
       };
 
-      "Load data, render view\n======================\nData and model loading are going in parallel\nIf `path` is presented, view loaded from file and then added to html layout (`_body` tag)\nIf `path` is not presnted, skip view loading\nIf `model` presented\n  + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`\n  + check if it contains `render` method, if so invoke `model.render( data )`\nIf `model` is not presnted, skip model loading\nIf `model` doesn't contain `load` method, consider it simple `object` model (just `data`)\n`[apply]` - not required parameter, if presented and `true` then `data` will be applied to the view via `ko binding`\n`[done]` - not required, if presented will be invoked as `done(err, data)`";
-
-      Controller.prototype.view = function(path, model, isApplay, done) {
+      Controller.prototype.view = function(path, model, isApply, done) {
         var _this = this;
 
-        if ($.isFunction(isApplay)) {
+        if ($.isFunction(isApply)) {
           done = isApplay;
         }
         return async.parallel([
@@ -320,7 +318,7 @@
           if (!err) {
             html = res[0];
             data = res[1];
-            viewEngine.applyData(html, data, _this.viewBag, isApplay);
+            viewEngine.applyData(html, data, _this.viewBag, isApply);
             if ($.isFunction(model.render)) {
               model.render(data);
             }
@@ -330,8 +328,6 @@
           }
         });
       };
-
-      "Shortcut for view(path, model, `True`, done)";
 
       Controller.prototype.view_apply = function(path, model, done) {
         return this.view(path, model, true, done);

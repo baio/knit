@@ -176,22 +176,22 @@ define ["ural/viewEngine",
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       form.modal "hide"
 
-    """
-    Load data, render view
-    ======================
-    Data and model loading are going in parallel
-    If `path` is presented, view loaded from file and then added to html layout (`_body` tag)
-    If `path` is not presnted, skip view loading
-    If `model` presented
-      + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`
-      + check if it contains `render` method, if so invoke `model.render( data )`
-    If `model` is not presnted, skip model loading
-    If `model` doesn't contain `load` method, consider it simple `object` model (just `data`)
-    `[apply]` - not required parameter, if presented and `true` then `data` will be applied to the view via `ko binding`
-    `[done]` - not required, if presented will be invoked as `done(err, data)`
-    """
-    view: (path, model, isApplay, done) ->
-      done = isApplay if $.isFunction(isApplay)
+
+    #**Load data, render view**
+    #
+    # Data and model loading are going in parallel
+    #
+    #+ If `path` is presented, view loaded from file and then added to html layout (`_body` tag)
+    #+ If `path` is not presnted, skip view loading
+    #+ If `model` presented
+    #  + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`
+    #  + check if it contains `render` method, if so invoke `model.render( data )`
+    #+ If `model` is not presnted, skip model loading
+    #+ If `model` doesn't contain `load` method, consider it simple `object` model (just `data`)
+    #`[isApply]` - not required, if presented and `true` then `data` will be applied to the view (see `viewEngine.applyData)
+    #`[done]` - not required, if presented will be invoked as `done(err, data)`
+    view: (path, model, isApply, done) ->
+      done = isApplay if $.isFunction(isApply)
       async.parallel [
         (ck) ->
           if path
@@ -207,14 +207,13 @@ define ["ural/viewEngine",
             if !err
               html = res[0]
               data = res[1]
-              viewEngine.applyData(html, data, @viewBag, isApplay)
+              viewEngine.applyData(html, data, @viewBag, isApply)
               if $.isFunction(model.render)
                 model.render data
             if done then done err, data
 
-    """
-    Shortcut for view(path, model, `True`, done)
-    """
+
+    #Shortcut for view(path, model, `True`, done)
     view_apply: (path, model, done) ->
       @view path, model, true, done
 

@@ -6,14 +6,14 @@
     render = function(path, done) {
       return viewRender.render(path, done);
     };
-    applyData = function(bodyHtml, model, viewBag, isApplay) {
+    applyData = function(bodyHtml, model, viewBag, isApply) {
       $.templates({
         pvt: bodyHtml
       });
       bodyHtml = $.render.pvt(viewBag);
       $("#_body").empty();
       $("#_body").append(bodyHtml);
-      if (model && isApplay) {
+      if (model && isApply) {
         return ko.applyBindings(model, $("#_body")[0]);
       }
     };

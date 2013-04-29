@@ -12,12 +12,13 @@ define ["ural/viewRender"], (viewRender) ->
   #
   #This is default view engine
   #+ All viewbag data will be bound to `bodyHtml` jsrender template values
-  #+ All model data will be bound to element with id `_body` via `knockout` binding, if isApply is defined
+  #+ `bodyHtml` html will be appended to the container element with `id=_body`
+  #+ All model data will be bound to element with `id=_body` via `knockout` binding, if `isApply` is defined
   #
   #This abstraction level needed because binding is depended on view engine used,
-  # also you could choose diffrent procedures to bind data, for example -bind model to jsrander templates values instead
-  # of knockout ones, or before applying values to html template merge model and viewBag data.
-  applyData = (bodyHtml, model, viewBag, isApplay) ->
+  #also you could choose diffrent procedures to bind data, for example - bind model to jsrender templates values instead
+  #of knockout ones, or before applying values to html template merge model and viewBag data.
+  applyData = (bodyHtml, model, viewBag, isApply) ->
 
     $.templates pvt : bodyHtml
     bodyHtml = $.render.pvt viewBag
@@ -25,7 +26,7 @@ define ["ural/viewRender"], (viewRender) ->
     $("#_body").empty()
     $("#_body").append bodyHtml
 
-    if model and isApplay
+    if model and isApply
       ko.applyBindings model, $("#_body")[0]
 
   render : render
