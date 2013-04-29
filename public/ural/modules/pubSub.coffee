@@ -1,2 +1,2 @@
-define ["ural/Modules/PubSub/amplifyPubSub"], (pubSub) ->
+define ["ural/modules/pubSub/amplifyPubSub"], (pubSub) ->
   pubSub
