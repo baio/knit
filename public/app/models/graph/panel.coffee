@@ -85,15 +85,6 @@ define ["app/config"], (config) ->
           @tags(tgs)
         )
 
-      node = svg.selectAll("node")
-        .data(grp_nodes)
-        .enter()
-        .append("circle")
-        .attr("r", 5)
-        .attr("class", "node")
-        .attr("cx", (d) -> xscale(d.attrs.x))
-        .attr("cy", (d) -> yscale(d.attrs.y))
-
       text = svg.selectAll("text")
         .data(grp_nodes)
         .enter()
@@ -103,5 +94,24 @@ define ["app/config"], (config) ->
         .text((d) -> d.attrs.label)
         .attr("x", (d) -> xscale(d.attrs.x))
         .attr("y", (d) -> yscale(d.attrs.y) - 10)
+
+      node = svg.selectAll("node")
+        .data(grp_nodes)
+        .enter()
+        .append("circle")
+        .attr("r", 5)
+        .attr("class", "node")
+        .attr("cx", (d) -> xscale(d.attrs.x))
+        .attr("cy", (d) -> yscale(d.attrs.y))
+        .call(d3.behavior.drag()
+          .origin((d) -> d)
+          .on("drag", (d) ->
+            x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
+            y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
+            d3.select(@).attr("cx", x).attr("cy", y)
+            link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
+            link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
+            text.filter((t) -> t.attrs.id == d.attrs.id).attr("x", x).attr("y", y - 10)
+          ))
 
   Panel : Panel

@@ -141,18 +141,34 @@
           }
           return _this.tags(tgs);
         });
-        node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
-          return xscale(d.attrs.x);
-        }).attr("cy", function(d) {
-          return yscale(d.attrs.y);
-        });
-        return text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
+        text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
           return d.attrs.label;
         }).attr("x", function(d) {
           return xscale(d.attrs.x);
         }).attr("y", function(d) {
           return yscale(d.attrs.y) - 10;
         });
+        return node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
+          return xscale(d.attrs.x);
+        }).attr("cy", function(d) {
+          return yscale(d.attrs.y);
+        }).call(d3.behavior.drag().origin(function(d) {
+          return d;
+        }).on("drag", function(d) {
+          var x, y;
+          x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
+          y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
+          d3.select(this).attr("cx", x).attr("cy", y);
+          link.filter(function(l) {
+            return l.source === d;
+          }).attr("x1", x).attr("y1", y);
+          link.filter(function(l) {
+            return l.target === d;
+          }).attr("x2", x).attr("y2", y);
+          return text.filter(function(t) {
+            return t.attrs.id === d.attrs.id;
+          }).attr("x", x).attr("y", y - 10);
+        }));
       };
 
       return Panel;
