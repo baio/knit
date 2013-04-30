@@ -102,6 +102,6 @@ define ["app/config"], (config) ->
         .attr("text-anchor", "middle")
         .text((d) -> d.attrs.label)
         .attr("x", (d) -> xscale(d.attrs.x))
-        .attr("y", (d) -> yscale(d.attrs.y - 10))
+        .attr("y", (d) -> yscale(d.attrs.y) - 10)
 
   Panel : Panel
