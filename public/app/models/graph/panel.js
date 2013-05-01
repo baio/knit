@@ -40,8 +40,8 @@
               attrs: {
                 id: d.attributes.id.value,
                 label: d.attributes.label.value,
-                x: position.attributes.x ? position.attributes.x.value : 10,
-                y: position.attributes.x ? position.attributes.y.value : 10
+                x: position ? position.attributes.x.value : 10,
+                y: position ? position.attributes.y.value : 10
               }
             };
           });
