@@ -26,7 +26,7 @@
       };
 
       ViewModel.prototype.map = function(data, skipStratEdit) {
-        var d, dataIndexVM, prop;
+        var d, dataIndexVM, prop, _ref;
 
         if ($.isArray()) {
           data = data[0];
@@ -51,7 +51,7 @@
           if (!__hasProp.call(dataIndexVM, prop)) continue;
           this[prop].map(dataIndexVM[prop]);
         }
-        this.errors = ko.validation.group(this);
+        this.errors = (_ref = ko.validation) != null ? _ref.group(this) : void 0;
         if (!skipStratEdit) {
           return this.startEdit();
         }

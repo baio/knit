@@ -30,6 +30,32 @@
         ]);
       };
 
+      IndexVM.prototype.render = function() {
+        var _this = this;
+
+        return Mousetrap.bind(['tab'], function(e) {
+          var idx, item;
+
+          idx = $("#items_list>:first-child").index($(e.target).closest(".row-fluid"));
+          if (idx === 0) {
+            item = _this.list()[0];
+            if (item.name()) {
+              _this.add({
+                id: null,
+                name: null,
+                family_rel: null,
+                private_rel: null,
+                prof_rel: null
+              });
+              $("#items_list .name-input:eq(0)").focus();
+            }
+            return false;
+          } else {
+            return true;
+          }
+        });
+      };
+
       return IndexVM;
 
     })(indexVM);

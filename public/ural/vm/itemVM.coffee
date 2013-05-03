@@ -40,7 +40,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of dataIndexVM
         @[prop].map dataIndexVM[prop]
 
-      @errors = ko.validation.group @
+      @errors = ko.validation?.group @
 
       if !skipStratEdit
         @startEdit()

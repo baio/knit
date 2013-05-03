@@ -20,6 +20,11 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       if @parentItem
         @parentItem.startEdit()
 
+    add: (data, idx) ->
+      item = @createItem data
+      idx = @list().length - 1 if idx is not undefined
+      @list.splice idx, 0, item
+
     map: (data) ->
       underlyingArray = @list()
       underlyingArray.splice 0, underlyingArray.length

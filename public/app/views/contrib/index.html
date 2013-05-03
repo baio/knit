@@ -11,22 +11,22 @@
                         <a id="save_button" class="btn btn-primary btn-large">Save</a>
                     </div>
                 </div>
-                <!-- ko foreach : list -->
-                <div class="row-fluid">
-                    <div class="span4">
-                        <input type="text" class="input-xarge" data-bind="value: name"/>
-                    </div>
-                    <div class="span2">
-                        <input type="text" class="input-small" data-bind="value: family_rel"/>
-                    </div>
-                    <div class="span2">
-                        <input type="text" class="input-small" data-bind="value: private_rel"/>
-                    </div>
-                    <div class="span2">
-                        <input type="text" class="input-small" data-bind="value: prof_rel"/>
+                <div id="items_list" data-bind="foreach: list">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <input type="text" class="input-xarge name-input" data-bind="value: name"/>
+                        </div>
+                        <div class="span2">
+                            <input type="text" class="input-small" data-bind="value: family_rel"/>
+                        </div>
+                        <div class="span2">
+                            <input type="text" class="input-small" data-bind="value: private_rel"/>
+                        </div>
+                        <div class="span2">
+                            <input type="text" class="input-small mousetrap" data-bind="value: prof_rel"/>
+                        </div>
                     </div>
                 </div>
-                <!-- /ko -->
             </div>
             <div class="span2">
                 menu

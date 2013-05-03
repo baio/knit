@@ -37,6 +37,16 @@
         }
       };
 
+      ViewModel.prototype.add = function(data, idx) {
+        var item;
+
+        item = this.createItem(data);
+        if (idx === !void 0) {
+          idx = this.list().length - 1;
+        }
+        return this.list.splice(idx, 0, item);
+      };
+
       ViewModel.prototype.map = function(data) {
         var d, underlyingArray, _i, _len;
 
