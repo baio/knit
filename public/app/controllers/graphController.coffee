@@ -1,7 +1,7 @@
 define ["ural/controller",
- "app/models/menu",
- "app/models/graph/panel",
- "app/models/graph/send",
+ "app/vm/menu",
+ "app/vm/graph/panel",
+ "app/vm/graph/send",
  "app/config"],
 (controller, menu, panel, send, config) ->
 

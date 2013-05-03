@@ -1,0 +1,36 @@
+<div>
+    <div class="container-fluid" style="margin-top: 30px">
+        <div class="row-fluid">
+            <div class="span10">
+                <div class="row-fluid">
+                    <h2>Modify contrib</h2>
+                </div>
+                <div class="row-fluid">
+                    <div class="span10">
+                        Contrib Name : <input type="text">
+                        <a id="save_button" class="btn btn-primary btn-large">Save</a>
+                    </div>
+                </div>
+                <!-- ko foreach : list -->
+                <div class="row-fluid">
+                    <div class="span4">
+                        <input type="text" class="input-xarge" data-bind="value: name"/>
+                    </div>
+                    <div class="span2">
+                        <input type="text" class="input-small" data-bind="value: family_rel"/>
+                    </div>
+                    <div class="span2">
+                        <input type="text" class="input-small" data-bind="value: private_rel"/>
+                    </div>
+                    <div class="span2">
+                        <input type="text" class="input-small" data-bind="value: prof_rel"/>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="span2">
+                menu
+            </div>
+        </div>
+    </div>
+</div>

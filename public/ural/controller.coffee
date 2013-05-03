@@ -208,7 +208,7 @@ define ["ural/viewEngine",
               html = res[0]
               data = res[1]
               viewEngine.applyData(html, model, @viewBag, isApply)
-              if $.isFunction(model.render)
+              if model and $.isFunction(model.render)
                 model.render data
             if done then done err, data
 

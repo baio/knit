@@ -26,6 +26,15 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       underlyingArray.push(@createItem(d)) for d in data
       @list.valueHasMutated()
 
+    load: (done) ->
+      @onLoad (err, data) =>
+        if !err
+          @map data
+        done err, @
+
+    onLoad: (done) ->
+      done null, []
+
     createItem: (data, status) ->
       vm = @onCreateItem()
       if data

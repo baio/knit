@@ -6,6 +6,6 @@ require ["ural/localization/localizationManager", "ural/router", "ural/bindings/
     localManager.setup "en"
     router.Router.StartRouting "app/controllers",
       [
-        { url: "/", path : {controller : "graph", action : "panel"} }
+        { url: "/", path : {controller : "contrib", action : "index"} }
         { url: "{controller}/{action}" }
       ]
