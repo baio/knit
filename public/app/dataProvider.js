@@ -107,11 +107,11 @@
         var res;
 
         if (action) {
-          return res = "/" + resource + "/" + action;
+          res = "/" + resource + "/" + action;
         } else {
           res = "/" + resource;
-          return this.onGetBaseUrl() + res;
         }
+        return this.onGetBaseUrl() + res;
       };
 
       DataProvider.prototype.onGetError = function(resp, res) {
@@ -133,6 +133,21 @@
         var _this = this;
 
         return $.get(this.onGetUrl(resource), filter).always(function(resp, res) {
+          var err;
+
+          err = _this.onGetError(resp, res);
+          if (!err) {
+            _this.json2date(resp);
+          }
+          return done(err, resp);
+        });
+      };
+
+      DataProvider.prototype.update = function(resource, data, done) {
+        var _this = this;
+
+        this.date2json(data);
+        return $.post(this.onGetUrl(resource), JSON.stringify(data)).always(function(resp, res) {
           var err;
 
           err = _this.onGetError(resp, res);

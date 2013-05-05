@@ -40,6 +40,21 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     onLoad: (done) ->
       done null, []
 
+    save: ->
+      @update ->
+
+    update: (done) ->
+      res = []
+      for item in @list()
+        if item.toData
+          res.push item.toData()
+        else
+          res.push item
+      @onUpdate res, done
+
+    onUpdate: (data, done) ->
+      done null
+
     createItem: (data, status) ->
       vm = @onCreateItem()
       if data

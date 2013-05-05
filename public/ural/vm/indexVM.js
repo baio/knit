@@ -74,6 +74,30 @@
         return done(null, []);
       };
 
+      ViewModel.prototype.save = function() {
+        return this.update(function() {});
+      };
+
+      ViewModel.prototype.update = function(done) {
+        var item, res, _i, _len, _ref;
+
+        res = [];
+        _ref = this.list();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          if (item.toData) {
+            res.push(item.toData());
+          } else {
+            res.push(item);
+          }
+        }
+        return this.onUpdate(res, done);
+      };
+
+      ViewModel.prototype.onUpdate = function(data, done) {
+        return done(null);
+      };
+
       ViewModel.prototype.createItem = function(data, status) {
         var vm;
 

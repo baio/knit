@@ -37,6 +37,17 @@
         });
       };
 
+      IndexVM.prototype.onUpdate = function(data, done) {
+        var d;
+
+        d = {
+          name: "data-gov-1",
+          url: this.url(),
+          data: data
+        };
+        return dataProvider.update("contribs", d, done);
+      };
+
       IndexVM.prototype.render = function() {
         var _this = this;
 

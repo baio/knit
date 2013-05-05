@@ -25,6 +25,13 @@ define ["ural/vm/indexVM",
         else
           done null
 
+    onUpdate: (data, done) ->
+      d =
+        name: "data-gov-1"
+        url: @url()
+        data: data
+      dataProvider.update "contribs", d, done
+
     render: ->
       Mousetrap.bind ['tab'], (e) =>
         #more handy would make this via handler

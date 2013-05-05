@@ -49,7 +49,7 @@ define ->
       else
         res = "/#{resource}"
 
-        @onGetBaseUrl() + res
+      @onGetBaseUrl() + res
 
     onGetError: (resp, res) ->
       if res == "error"
@@ -59,6 +59,15 @@ define ->
 
     get: (resource, filter, done) ->
       $.get(@onGetUrl(resource), filter)
+        .always (resp, res) =>
+          err = @onGetError(resp, res)
+          if !err
+            @json2date resp
+          done err, resp
+
+    update: (resource, data, done) ->
+      @date2json(data)
+      $.post(@onGetUrl(resource), JSON.stringify(data))
         .always (resp, res) =>
           err = @onGetError(resp, res)
           if !err
