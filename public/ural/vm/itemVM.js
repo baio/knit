@@ -152,7 +152,8 @@
       };
 
       ViewModel.prototype.startEdit = function() {
-        return this.stored_data = this.toData();
+        this.stored_data = this.toData();
+        return this.isModifyed(false);
       };
 
       ViewModel.prototype.cancelEdit = function(item, event) {

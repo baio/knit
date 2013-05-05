@@ -110,6 +110,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     startEdit: ->
       @stored_data = @toData()
+      @isModifyed false
 
     cancelEdit: (item, event) ->
       event.preventDefault()

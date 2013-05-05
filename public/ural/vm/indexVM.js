@@ -83,19 +83,30 @@
       };
 
       ViewModel.prototype.update = function(done) {
-        var item, res, _i, _len, _ref;
+        var item, list, res, _i, _len;
 
         res = [];
-        _ref = this.list();
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          item = _ref[_i];
+        list = this._isModifyedActivated ? this.getModifyedItems() : this.list();
+        for (_i = 0, _len = list.length; _i < _len; _i++) {
+          item = list[_i];
           if (item.toData) {
             res.push(item.toData());
           } else {
             res.push(item);
           }
         }
-        return this.onUpdate(res, done);
+        return this.onUpdate(res, function(err) {
+          var _j, _len1, _results;
+
+          if (!err) {
+            _results = [];
+            for (_j = 0, _len1 = list.length; _j < _len1; _j++) {
+              item = list[_j];
+              _results.push(item.startEdit());
+            }
+            return _results;
+          }
+        });
       };
 
       ViewModel.prototype.onUpdate = function(data, done) {
@@ -151,6 +162,20 @@
           }
         }
         return false;
+      };
+
+      ViewModel.prototype.getModifyedItems = function() {
+        var item, res, _i, _len, _ref;
+
+        res = [];
+        _ref = this.list();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          if (item.isModifyed()) {
+            res.push(item);
+          }
+        }
+        return res;
       };
 
       return ViewModel;

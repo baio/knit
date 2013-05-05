@@ -49,12 +49,17 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     update: (done) ->
       res = []
-      for item in @list()
+      list = if @_isModifyedActivated then @getModifyedItems() else @list()
+      for item in list
         if item.toData
           res.push item.toData()
         else
           res.push item
-      @onUpdate res, done
+      @onUpdate res, (err) ->
+        if !err
+          for item in list
+            item.startEdit()
+
 
     onUpdate: (data, done) ->
       done null
@@ -85,3 +90,10 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
         if item.isModifyed()
           return true
       return false
+
+    getModifyedItems: ->
+      res = []
+      for item in @list()
+        if item.isModifyed()
+          res.push item
+      res
