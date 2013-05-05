@@ -1,15 +1,29 @@
-define ["ural/vm/indexVM", "app/vm/contrib/itemVM"], (indexVM, itemVM) ->
+define ["ural/vm/indexVM",
+  "app/vm/contrib/itemVM",
+  "app/dataProvider"
+]
+, (indexVM, itemVM, dataProvider) ->
 
   class IndexVM extends indexVM
 
-    onCreateItem: ->
+    constructor: ->
+      @name = ko.observable()
+      @date = ko.observable()
+      @url = ko.observable()
+      super
 
+    onCreateItem: ->
       new itemVM()
 
     onLoad: (done)->
-
-      done null,
-        [{id : 'elena_skrinnik_viktor_hristenko', name_1 : 'elena skrinnik', name_2 : 'viktor hristenko', family_rel : "father", private_rel : null, prof_rel : "employee" }]
+      dataProvider.get "contribs",  contrib : "gov-ru", (err, data) =>
+        if !err
+          @name data.name
+          @date data.date
+          @url data.url
+          done err, data.data
+        else
+          done null
 
     render: ->
       Mousetrap.bind ['tab'], (e) =>

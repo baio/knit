@@ -3,15 +3,17 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/indexVM", "app/vm/contrib/itemVM"], function(indexVM, itemVM) {
-    var IndexVM, _ref;
+  define(["ural/vm/indexVM", "app/vm/contrib/itemVM", "app/dataProvider"], function(indexVM, itemVM, dataProvider) {
+    var IndexVM;
 
     return IndexVM = (function(_super) {
       __extends(IndexVM, _super);
 
       function IndexVM() {
-        _ref = IndexVM.__super__.constructor.apply(this, arguments);
-        return _ref;
+        this.name = ko.observable();
+        this.date = ko.observable();
+        this.url = ko.observable();
+        IndexVM.__super__.constructor.apply(this, arguments);
       }
 
       IndexVM.prototype.onCreateItem = function() {
@@ -19,16 +21,20 @@
       };
 
       IndexVM.prototype.onLoad = function(done) {
-        return done(null, [
-          {
-            id: 'elena_skrinnik_viktor_hristenko',
-            name_1: 'elena skrinnik',
-            name_2: 'viktor hristenko',
-            family_rel: "father",
-            private_rel: null,
-            prof_rel: "employee"
+        var _this = this;
+
+        return dataProvider.get("contribs", {
+          contrib: "gov-ru"
+        }, function(err, data) {
+          if (!err) {
+            _this.name(data.name);
+            _this.date(data.date);
+            _this.url(data.url);
+            return done(err, data.data);
+          } else {
+            return done(null);
           }
-        ]);
+        });
       };
 
       IndexVM.prototype.render = function() {
