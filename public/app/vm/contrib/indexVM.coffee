@@ -10,6 +10,7 @@ define ["ural/vm/indexVM",
       @name = ko.observable()
       @date = ko.observable()
       @url = ko.observable()
+      @isModifyed = ko.observable()
       super
 
     onCreateItem: ->

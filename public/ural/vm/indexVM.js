@@ -56,7 +56,11 @@
           d = data[_i];
           underlyingArray.push(this.createItem(d));
         }
-        return this.list.valueHasMutated();
+        this.list.valueHasMutated();
+        if (ko.isObservable(this.isModifyed) && !this._isModifyedActivated) {
+          this.activateIsModifyed();
+          return this._isModifyedActivated = true;
+        }
       };
 
       ViewModel.prototype.load = function(done) {
@@ -118,6 +122,35 @@
       ViewModel.prototype.startCreate = function(some, event) {
         event.preventDefault();
         return pubSub.pub("crud", "start_create", this.createItem(null, "create"));
+      };
+
+      ViewModel.prototype.activateIsModifyed = function() {
+        var item, _i, _len, _ref, _results,
+          _this = this;
+
+        _ref = this.list();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          item.activateIsModifyed();
+          _results.push(item.isModifyed.subscribe(function(val) {
+            return _this.isModifyed(val || _this.getIsModifyed());
+          }));
+        }
+        return _results;
+      };
+
+      ViewModel.prototype.getIsModifyed = function() {
+        var item, _i, _len, _ref;
+
+        _ref = this.list();
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          item = _ref[_i];
+          if (item.isModifyed()) {
+            return true;
+          }
+        }
+        return false;
       };
 
       return ViewModel;

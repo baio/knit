@@ -8,7 +8,7 @@
                 <div class="row-fluid">
                     <div class="span11">
                         Contrib Name : <input type="text" data-bind="value: name">
-                        <a id="save_button" class="btn btn-primary btn-large" data-bind="click: save">Save</a>
+                        <a id="save_button" class="btn btn-primary btn-large" data-bind="click: save, css : {disabled : !isModifyed()}">Save</a>
                     </div>
                 </div>
                 <div id="items_list" data-bind="foreach: list">

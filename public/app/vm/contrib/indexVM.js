@@ -13,6 +13,7 @@
         this.name = ko.observable();
         this.date = ko.observable();
         this.url = ko.observable();
+        this.isModifyed = ko.observable();
         IndexVM.__super__.constructor.apply(this, arguments);
       }
 

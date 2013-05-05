@@ -45,6 +45,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if !skipStratEdit
         @startEdit()
 
+      #activate isModifyed behaviour after first map
+      if ko.isObservable(@isModifyed) and !@_isModifyedActivated
+        @activateIsModifyed()
+        @_isModifyedActivated = true
+
     tryDate: (str) ->
       if str and typeof str == "string"
         match = /\/Date\((\d+)\)\//.exec str
@@ -136,3 +141,15 @@ define ["ural/modules/pubSub"], (pubSub) ->
         if prop.indexOf("_") != 0 and @[prop] and @[prop].list
           data[prop] = @[prop].list().map (m) -> m.toData()
       data
+
+    activateIsModifyed: ->
+      for own prop of @
+        if ko.isObservable @[prop]
+          @[prop].subscribe =>
+            @isModifyed @getIsModifyed()
+
+    getIsModifyed: ->
+      if !@stored_data then return false
+      for own prop of @stored_data
+        if ko.utils.unwrapObservable(@[prop]) != @stored_data[prop] then return true
+      return false

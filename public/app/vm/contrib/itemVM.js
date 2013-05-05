@@ -34,6 +34,7 @@
             params: [this.family_rel, this.prof_rel, this.priv_rel]
           }
         });
+        this.isModifyed = ko.observable();
       }
 
       return ItemVM;

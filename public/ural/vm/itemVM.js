@@ -53,7 +53,11 @@
         }
         this.errors = (_ref = ko.validation) != null ? _ref.group(this) : void 0;
         if (!skipStratEdit) {
-          return this.startEdit();
+          this.startEdit();
+        }
+        if (ko.isObservable(this.isModifyed) && !this._isModifyedActivated) {
+          this.activateIsModifyed();
+          return this._isModifyedActivated = true;
         }
       };
 
@@ -201,6 +205,40 @@
           }
         }
         return data;
+      };
+
+      ViewModel.prototype.activateIsModifyed = function() {
+        var prop, _results,
+          _this = this;
+
+        _results = [];
+        for (prop in this) {
+          if (!__hasProp.call(this, prop)) continue;
+          if (ko.isObservable(this[prop])) {
+            _results.push(this[prop].subscribe(function() {
+              return _this.isModifyed(_this.getIsModifyed());
+            }));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      };
+
+      ViewModel.prototype.getIsModifyed = function() {
+        var prop, _ref;
+
+        if (!this.stored_data) {
+          return false;
+        }
+        _ref = this.stored_data;
+        for (prop in _ref) {
+          if (!__hasProp.call(_ref, prop)) continue;
+          if (ko.utils.unwrapObservable(this[prop]) !== this.stored_data[prop]) {
+            return true;
+          }
+        }
+        return false;
       };
 
       return ViewModel;

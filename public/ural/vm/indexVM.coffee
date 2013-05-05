@@ -30,6 +30,10 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       underlyingArray.splice 0, underlyingArray.length
       underlyingArray.push(@createItem(d)) for d in data
       @list.valueHasMutated()
+      #activate isModifyed behaviour after first map
+      if ko.isObservable(@isModifyed) and !@_isModifyedActivated
+        @activateIsModifyed()
+        @_isModifyedActivated = true
 
     load: (done) ->
       @onLoad (err, data) =>
@@ -69,3 +73,15 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     startCreate: (some, event) ->
       event.preventDefault()
       pubSub.pub "crud", "start_create", @createItem(null, "create")
+
+    activateIsModifyed: ->
+      for item in @list()
+        item.activateIsModifyed()
+        item.isModifyed.subscribe (val) =>
+          @isModifyed(val or @getIsModifyed())
+
+    getIsModifyed: ->
+      for item in @list()
+        if item.isModifyed()
+          return true
+      return false

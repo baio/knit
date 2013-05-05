@@ -14,3 +14,4 @@ define ["ural/vm/itemVM"], (itemVM) ->
             @family_rel() or @private_rel() or @prof_rel()
           message : "One of the relations, should be defined."
           params : [@family_rel, @prof_rel, @priv_rel]
+      @isModifyed = ko.observable()
