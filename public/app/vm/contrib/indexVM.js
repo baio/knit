@@ -21,8 +21,9 @@
       IndexVM.prototype.onLoad = function(done) {
         return done(null, [
           {
-            id: 'elena_skrinnik',
-            name: 'elena skrinnik',
+            id: 'elena_skrinnik_viktor_hristenko',
+            name_1: 'elena skrinnik',
+            name_2: 'viktor hristenko',
             family_rel: "father",
             private_rel: null,
             prof_rel: "employee"
@@ -39,20 +40,20 @@
           idx = $("#items_list>:first-child").index($(e.target).closest(".row-fluid"));
           if (idx === 0) {
             item = _this.list()[0];
-            if (item.name()) {
+            if (item.name_1() && item.name_2()) {
               _this.add({
                 id: null,
-                name: null,
+                name_1: null,
+                name_2: null,
                 family_rel: null,
                 private_rel: null,
                 prof_rel: null
               });
               $("#items_list .name-input:eq(0)").focus();
+              return false;
             }
-            return false;
-          } else {
-            return true;
           }
+          return true;
         });
       };
 
