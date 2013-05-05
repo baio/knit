@@ -1,3 +1,7 @@
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+
 body {
     padding-top: 40px;
     padding-left: 0px;

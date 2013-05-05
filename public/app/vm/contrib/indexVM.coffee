@@ -18,7 +18,7 @@ define ["ural/vm/indexVM", "app/vm/contrib/itemVM"], (indexVM, itemVM) ->
         idx = $("#items_list>:first-child").index($(e.target).closest(".row-fluid"))
         if idx == 0
           item = @list()[0]
-          if item.name_1() and item.name_2()
+          if item.isValid() #item.name_1() and item.name_2()
             @add id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
             $("#items_list .name-input:eq(0)").focus()
             return false

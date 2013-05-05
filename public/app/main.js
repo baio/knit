@@ -6,6 +6,10 @@
 
   require(["ural/localization/localizationManager", "ural/router", "ural/bindings/_all"], function(localManager, router) {
     localManager.setup("en");
+    ko.validation.configure({
+      messagesOnModified: true,
+      insertMessages: false
+    });
     return router.Router.StartRouting("app/controllers", [
       {
         url: "/",

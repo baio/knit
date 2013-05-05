@@ -9,7 +9,32 @@
     return ItemVM = (function(_super) {
       __extends(ItemVM, _super);
 
-      function ItemVM() {}
+      function ItemVM() {
+        var _this = this;
+
+        this.name_1 = ko.observable().extend({
+          required: {
+            message: "name_1 is required."
+          }
+        });
+        this.name_2 = ko.observable().extend({
+          required: {
+            message: "name_2 is required."
+          }
+        });
+        this.family_rel = ko.observable();
+        this.private_rel = ko.observable();
+        this.prof_rel = ko.observable();
+        this.id = ko.observable().extend({
+          validation: {
+            validator: function() {
+              return _this.family_rel() || _this.private_rel() || _this.prof_rel();
+            },
+            message: "One of the relations, should be defined.",
+            params: [this.family_rel, this.prof_rel, this.priv_rel]
+          }
+        });
+      }
 
       return ItemVM;
 

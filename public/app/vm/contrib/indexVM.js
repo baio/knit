@@ -40,7 +40,7 @@
           idx = $("#items_list>:first-child").index($(e.target).closest(".row-fluid"));
           if (idx === 0) {
             item = _this.list()[0];
-            if (item.name_1() && item.name_2()) {
+            if (item.isValid()) {
               _this.add({
                 id: null,
                 name_1: null,
