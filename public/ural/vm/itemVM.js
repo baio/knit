@@ -9,7 +9,21 @@
       function ViewModel(resource, parentItem) {
         this.resource = resource;
         this.parentItem = parentItem;
+        this.init();
       }
+
+      ViewModel.prototype.init = function() {
+        var data, prop;
+
+        data = {};
+        for (prop in this) {
+          if (!__hasProp.call(this, prop)) continue;
+          if (ko.isObservable(this[prop])) {
+            data[prop] = null;
+          }
+        }
+        return ko.mapping.fromJS(data, {}, this);
+      };
 
       ViewModel.prototype.completeUpdate = function(data, skipStratEdit) {
         if (this.src) {
@@ -127,12 +141,17 @@
         }
       };
 
-      ViewModel.prototype.update = function(item, event) {
-        if (this.confirmEvent(event, "update")) {
-          event.preventDefault();
-          return pubSub.pub("crud", "update", this);
-        }
+      ViewModel.prototype.onCreate = function(data, done) {
+        return done(null);
       };
+
+      /*
+      update: (item, event) ->
+        if @confirmEvent event, "update"
+          event.preventDefault()
+          pubSub.pub "crud", "update", @
+      */
+
 
       ViewModel.prototype.remove = function(item, event) {
         if (this.confirmEvent(event, "remove")) {
@@ -239,6 +258,24 @@
           }
         }
         return false;
+      };
+
+      ViewModel.prototype.save = function() {
+        if (this.src.status === "create") {
+          return this.create(function() {});
+        } else if (this.src.status === "update") {
+          return this.update(function() {});
+        } else {
+          throw new Error("Item nt in edit state");
+        }
+      };
+
+      ViewModel.prototype.create = function(done) {
+        return this.onCreate(done);
+      };
+
+      ViewModel.prototype.onCreate = function(done) {
+        return done();
       };
 
       return ViewModel;

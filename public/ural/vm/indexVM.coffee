@@ -59,7 +59,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
         if !err
           for item in list
             item.startEdit()
-
+        done err
 
     onUpdate: (data, done) ->
       done null

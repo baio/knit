@@ -16,6 +16,13 @@
         Contrib.__super__.constructor.call(this, "contrib");
       }
 
+      Contrib.prototype.onCreate = function(done) {
+        var data;
+
+        data = this.toData();
+        return dataProvider.create("contribs", data, done);
+      };
+
       return Contrib;
 
     })(itemVM);

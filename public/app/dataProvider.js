@@ -147,6 +147,21 @@
         var _this = this;
 
         this.date2json(data);
+        return $.put(this.onGetUrl(resource), JSON.stringify(data)).always(function(resp, res) {
+          var err;
+
+          err = _this.onGetError(resp, res);
+          if (!err) {
+            _this.json2date(resp);
+          }
+          return done(err, resp);
+        });
+      };
+
+      DataProvider.prototype.create = function(resource, data, done) {
+        var _this = this;
+
+        this.date2json(data);
         return $.post(this.onGetUrl(resource), JSON.stringify(data)).always(function(resp, res) {
           var err;
 

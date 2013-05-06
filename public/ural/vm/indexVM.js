@@ -96,16 +96,15 @@
           }
         }
         return this.onUpdate(res, function(err) {
-          var _j, _len1, _results;
+          var _j, _len1;
 
           if (!err) {
-            _results = [];
             for (_j = 0, _len1 = list.length; _j < _len1; _j++) {
               item = list[_j];
-              _results.push(item.startEdit());
+              item.startEdit();
             }
-            return _results;
           }
+          return done(err);
         });
       };
 

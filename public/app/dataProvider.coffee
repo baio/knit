@@ -67,6 +67,15 @@ define ->
 
     update: (resource, data, done) ->
       @date2json(data)
+      $.put(@onGetUrl(resource), JSON.stringify(data))
+        .always (resp, res) =>
+          err = @onGetError(resp, res)
+          if !err
+            @json2date resp
+          done err, resp
+
+    create: (resource, data, done) ->
+      @date2json(data)
       $.post(@onGetUrl(resource), JSON.stringify(data))
         .always (resp, res) =>
           err = @onGetError(resp, res)

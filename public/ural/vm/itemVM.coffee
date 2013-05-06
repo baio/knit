@@ -3,6 +3,15 @@ define ["ural/modules/pubSub"], (pubSub) ->
   class ViewModel
 
     constructor: (@resource, @parentItem) ->
+      @init()
+
+    init: ->
+      # `ko.mapping.toJS` - works only after `ko.mapping.fromJS` was executed
+      data = {}
+      for own prop of @
+        if ko.isObservable @[prop]
+          data[prop] = null
+      ko.mapping.fromJS data, {}, @
 
     completeUpdate: (data, skipStratEdit) ->
       if @src
@@ -92,10 +101,15 @@ define ["ural/modules/pubSub"], (pubSub) ->
         event.preventDefault()
         pubSub.pub "crud", "create", @
 
+    onCreate: (data, done) ->
+      done null
+
+    ###
     update: (item, event) ->
       if @confirmEvent event, "update"
         event.preventDefault()
         pubSub.pub "crud", "update", @
+    ###
 
     remove: (item, event) ->
       if @confirmEvent event, "remove"
@@ -153,3 +167,17 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of @stored_data
         if ko.utils.unwrapObservable(@[prop]) != @stored_data[prop] then return true
       return false
+
+    save: ->
+      if @src.status == "create"
+        @create ->
+      else if @src.status == "update"
+        @update ->
+      else
+        throw new Error("Item nt in edit state")
+
+    create: (done) ->
+      @onCreate done
+
+    onCreate: (done) ->
+      done()

@@ -11,6 +11,11 @@ define ["ural/vm/indexVM",
       @name = ko.observable()
       @url = ko.observable()
       super "contrib"
+      #@map id : null, name : null, url : null
+
+    onCreate: (done) ->
+      data = @toData()
+      dataProvider.create "contribs", data, done
 
   class Contribs extends indexVM
 
