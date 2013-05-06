@@ -77,7 +77,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     startCreate: (some, event) ->
       event.preventDefault()
-      pubSub.pub "crud", "start_create", @createItem(null, "create")
+      pubSub.pub "crud", "start_create", @createItem(@resource, "create")
 
     activateIsModifyed: ->
       for item in @list()

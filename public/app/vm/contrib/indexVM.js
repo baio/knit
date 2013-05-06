@@ -14,7 +14,7 @@
         this.date = ko.observable();
         this.url = ko.observable();
         this.isModifyed = ko.observable();
-        IndexVM.__super__.constructor.apply(this, arguments);
+        IndexVM.__super__.constructor.call(this, "contrib");
       }
 
       IndexVM.prototype.onCreateItem = function() {

@@ -9,7 +9,6 @@
       function ViewModel(resource, parentItem) {
         this.resource = resource;
         this.parentItem = parentItem;
-        this.useGetNewRemote = true;
       }
 
       ViewModel.prototype.completeUpdate = function(data, skipStratEdit) {
@@ -153,7 +152,7 @@
 
       ViewModel.prototype.startEdit = function() {
         this.stored_data = this.toData();
-        return this.isModifyed(false);
+        return typeof this === "function" ? this(isModifyed(false)) : void 0;
       };
 
       ViewModel.prototype.cancelEdit = function(item, event) {

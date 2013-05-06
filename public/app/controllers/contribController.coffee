@@ -1,7 +1,7 @@
 define ["ural/controller",
   "app/vm/menu",
-  "app/vm/contrib/indexVM"],
-(controller, menu, indexVM) ->
+  "app/vm/user/user"],
+(controller, menu, user) ->
 
   class ContribController extends controller.Controller
 
@@ -11,6 +11,6 @@ define ["ural/controller",
       super
 
     index: ->
-      @view_apply "app/views/contrib/index.html", new indexVM()
+      @view_apply "app/views/contrib/start.html", new user()
 
   Controller : ContribController

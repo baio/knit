@@ -132,7 +132,7 @@
 
       ViewModel.prototype.startCreate = function(some, event) {
         event.preventDefault();
-        return pubSub.pub("crud", "start_create", this.createItem(null, "create"));
+        return pubSub.pub("crud", "start_create", this.createItem(this.resource, "create"));
       };
 
       ViewModel.prototype.activateIsModifyed = function() {

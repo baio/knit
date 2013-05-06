@@ -170,21 +170,7 @@
       };
 
       Controller.prototype.crudStartCreate = function(item) {
-        var _this = this;
-
-        if (item.useGetNewRemote) {
-          return this.dataProvider.getNew(item.resource, (item.parentItem ? item.parentItem.toData() : null), function(err, data) {
-            if (err) {
-              return _this.crudDone(err);
-            } else {
-              item.map(data);
-              item.errors.showAllMessages(false);
-              return _this.showForm(item.resource, "create", item);
-            }
-          });
-        } else {
-          return this.showForm(item.resource, "create", item);
-        }
+        return this.showForm(item.resource, "create", item);
       };
 
       Controller.prototype.crudStartUpdate = function(opts) {
@@ -278,7 +264,7 @@
         }
         ko.applyBindings(item, form[0]);
         return form.modal("show").on("hidden", function() {
-          if (item != null) {
+          if (typeof item.cleanUp === "function") {
             item.cleanUp();
           }
           return ko.cleanNode(form[0]);

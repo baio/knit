@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/controller", "app/vm/menu", "app/vm/contrib/indexVM"], function(controller, menu, indexVM) {
+  define(["ural/controller", "app/vm/menu", "app/vm/user/user"], function(controller, menu, user) {
     var ContribController;
 
     ContribController = (function(_super) {
@@ -18,7 +18,7 @@
       }
 
       ContribController.prototype.index = function() {
-        return this.view_apply("app/views/contrib/index.html", new indexVM());
+        return this.view_apply("app/views/contrib/start.html", new user());
       };
 
       return ContribController;

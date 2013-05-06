@@ -35,6 +35,7 @@
           }
         });
         this.isModifyed = ko.observable();
+        ItemVM.__super__.constructor.call(this, "contrib");
       }
 
       return ItemVM;

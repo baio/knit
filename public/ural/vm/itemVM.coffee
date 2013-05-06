@@ -3,7 +3,6 @@ define ["ural/modules/pubSub"], (pubSub) ->
   class ViewModel
 
     constructor: (@resource, @parentItem) ->
-      @useGetNewRemote = true
 
     completeUpdate: (data, skipStratEdit) ->
       if @src
@@ -110,7 +109,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     startEdit: ->
       @stored_data = @toData()
-      @isModifyed false
+      @?isModifyed false
 
     cancelEdit: (item, event) ->
       event.preventDefault()

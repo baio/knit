@@ -23,8 +23,8 @@ define ["ural/viewRender"], (viewRender) ->
     $.templates pvt : bodyHtml
     bodyHtml = $.render.pvt viewBag
 
-    $("#_body").empty()
-    $("#_body").append bodyHtml
+    $("#_layout").empty()
+    $("#_layout").append bodyHtml
 
     if model and isApply
       ko.applyBindings model, $("#_body")[0]

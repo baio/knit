@@ -101,16 +101,8 @@ define ["ural/viewEngine",
       @showForm item.resource, "delete", item
 
     crudStartCreate: (item) ->
-      if item.useGetNewRemote
-        @dataProvider.getNew item.resource, (if item.parentItem then item.parentItem.toData() else null), (err, data) =>
-          if err
-            @crudDone err
-          else
-            item.map data
-            item.errors.showAllMessages false
-            @showForm item.resource, "create", item
-      else
-        @showForm item.resource, "create", item
+      #item.errors.showAllMessages false
+      @showForm item.resource, "create", item
 
     crudStartUpdate: (opts) ->
       params = @getUpdateParams opts
@@ -169,7 +161,7 @@ define ["ural/viewEngine",
       ko.applyBindings item, form[0]
       form.modal("show").on("hidden", ->
           #looks like cleanNode doesn't delete list-binded items, bug?
-          item?.cleanUp()
+          item.cleanUp?()
           ko.cleanNode form[0])
 
     hideForm: (resource, formType) ->

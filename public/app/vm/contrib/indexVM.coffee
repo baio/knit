@@ -11,7 +11,7 @@ define ["ural/vm/indexVM",
       @date = ko.observable()
       @url = ko.observable()
       @isModifyed = ko.observable()
-      super
+      super "contrib"
 
     onCreateItem: ->
       new itemVM()
