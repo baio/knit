@@ -11,7 +11,6 @@ define ["ural/vm/indexVM",
       @name = ko.observable()
       @url = ko.observable()
       super "contrib"
-      #@map id : null, name : null, url : null
 
     onCreate: (done) ->
       data = @toData()

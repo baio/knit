@@ -15,7 +15,7 @@
       }
 
       User.prototype.onLoad = function(done) {
-        return done(null, this);
+        return dataProvider.get("users", {}, done);
       };
 
       return User;

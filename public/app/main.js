@@ -15,7 +15,7 @@
         url: "/",
         path: {
           controller: "contrib",
-          action: "index"
+          action: "start"
         }
       }, {
         url: "{controller}/{action}"

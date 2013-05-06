@@ -278,6 +278,21 @@
         return done();
       };
 
+      ViewModel.prototype.load = function(done) {
+        var _this = this;
+
+        return this.onLoad(function(err, data) {
+          if (!err) {
+            _this.map(data);
+          }
+          return done(err, _this);
+        });
+      };
+
+      ViewModel.prototype.onLoad = function(done) {
+        return done(null, []);
+      };
+
       return ViewModel;
 
     })();

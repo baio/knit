@@ -1,7 +1,9 @@
 define ["ural/controller",
   "app/vm/menu",
-  "app/vm/user/user"],
-(controller, menu, user) ->
+  "app/vm/user/user",
+  "app/vm/contrib/indexVM"
+],
+(controller, menu, user, contrib) ->
 
   class ContribController extends controller.Controller
 
@@ -10,7 +12,10 @@ define ["ural/controller",
       ko.applyBindings(nav, $("#_nav")[0])
       super
 
-    index: ->
+    start: ->
       @view_apply "app/views/contrib/start.html", new user()
+
+    item: (id) ->
+      @view_apply "app/views/contrib/item.html", new contrib(), {id : id}
 
   Controller : ContribController

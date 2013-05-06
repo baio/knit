@@ -3,7 +3,13 @@
         <div class="row-fluid">
             <div class="span12">
                 <div class="row-fluid" data-bind="with: contribs">
-                    <h2>Hi <span data-bind="text: $parent.name"></span>, click <a data-bind="click: startCreate">here</a> to start create new contrib</h2>
+                    <h2>Hi <span data-bind="text: $parent.name"></span>, click <a href="#" data-bind="click: startCreate">here</a> to start create new contrib</h2>
+                    <h2>Or choose one to edit</h2>
+                    <!-- ko foreach: list -->
+                    <h3>
+                        <a href="#/contrib/item" data-bind="link: id"><span data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
+                    </h3>
+                    <!-- /ko -->
                 </div>
             </div>
         </div>
