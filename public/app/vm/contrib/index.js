@@ -45,7 +45,9 @@
           id: this.ref(),
           items: data
         };
-        return dataProvider.ajax("contribs", "patch", d, done);
+        return dataProvider.ajax("contribs", "patch", d, function(err, data) {
+          return done(err);
+        });
       };
 
       IndexVM.prototype.render = function() {

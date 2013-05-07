@@ -112,7 +112,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
     startEdit: ->
       @stored_data = @toData()
       if ko.isObservable(@isModifyed)
-        @isModifyed @getIsModifyed()
+        @isModifyed(false)
         if !@_isModifyedActivated
           @activateIsModifyed()
           @_isModifyedActivated = true
@@ -150,7 +150,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     activateIsModifyed: ->
       for own prop of @
-        if ko.isObservable @[prop]
+        if prop != "isModifyed" and ko.isObservable @[prop]
           @[prop].subscribe =>
             @isModifyed @isValid() and @getIsModifyed()
 
@@ -169,7 +169,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       else if @src.status == "update"
         @update ->
       else
-        throw new Error("Item nt in edit state")
+        throw new Error("Item not in edit state")
 
     create: (done) ->
       @onCreate done

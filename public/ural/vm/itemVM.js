@@ -160,7 +160,7 @@
       ViewModel.prototype.startEdit = function() {
         this.stored_data = this.toData();
         if (ko.isObservable(this.isModifyed)) {
-          this.isModifyed(this.getIsModifyed());
+          this.isModifyed(false);
           if (!this._isModifyedActivated) {
             this.activateIsModifyed();
             return this._isModifyedActivated = true;
@@ -227,7 +227,7 @@
         _results = [];
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
-          if (ko.isObservable(this[prop])) {
+          if (prop !== "isModifyed" && ko.isObservable(this[prop])) {
             _results.push(this[prop].subscribe(function() {
               return _this.isModifyed(_this.isValid() && _this.getIsModifyed());
             }));
@@ -264,7 +264,7 @@
         } else if (this.src.status === "update") {
           return this.update(function() {});
         } else {
-          throw new Error("Item nt in edit state");
+          throw new Error("Item not in edit state");
         }
       };
 
