@@ -168,6 +168,26 @@ define ["ural/viewEngine",
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       form.modal "hide"
 
+    _loadLayoutModel: (layoutModel, done) ->
+      if $.isFunction(layoutModel.load)
+        layoutModel.load null, done
+      else if layoutModel.loader
+        layoutModel.loader.load layoutModel.filter, done
+      else
+        done null, layoutModel
+
+    _loadLayoutModels: (layoutModels, done) ->
+      lms = []
+      layouts = []
+      for own prop of layoutModels
+        layouts.push prop
+        lms.push layoutModels[prop]
+      async.map lms, @_loadLayoutModel, (err, data) ->
+        lmd = []
+        if !err
+          for i in [0..lms.length-1]
+            lmd.push layout : layouts[i], lm : lms[i], data : data[i]
+        done err, lmd
 
     #**Load data, render view**
     #
@@ -190,25 +210,18 @@ define ["ural/viewEngine",
             viewEngine.render(path, ck)
           else
             ck null
-        (ck) ->
-          if model
-            if $.isFunction(model.load)
-              model.load null, ck
-            else if model.loader
-              model.loader.load model.filter, ck
-            else
-              ck null, model
-          else
-            ck null, model
+        (ck) =>
+          layoutModels = if model._layouts then model._layouts else _body : model
+          @_loadLayoutModels layoutModels, ck
         ], (err, res) =>
             if !err
               html = res[0]
-              data = res[1]
-              viewEngine.applyData(html, model, @viewBag, isApply)
-              if model and $.isFunction(model.render)
-                model.render data
-            if done then done err, data
-
+              layoutModelsData = res[1]
+              viewEngine.applyData(html, layoutModelsData, @viewBag, isApply)
+              for lmd in layoutModelsData
+                if lmd.lm and $.isFunction(lmd.lm.render)
+                  lmd.lm.render lmd.data
+            if done then done err
 
     #Shortcut for view(path, model, `True`, done)
     view_apply: (path, model, done) ->

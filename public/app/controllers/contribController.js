@@ -10,22 +10,29 @@
       __extends(ContribController, _super);
 
       function ContribController() {
-        var nav;
-
-        nav = new menu.Menu();
-        ko.applyBindings(nav, $("#_nav")[0]);
+        this.nav = new menu.Menu();
         ContribController.__super__.constructor.apply(this, arguments);
       }
 
       ContribController.prototype.start = function() {
-        return this.view_apply("app/views/contrib/start.html", new user());
+        return this.view_apply("app/views/contrib/start.html", {
+          _layouts: {
+            _body: new user(),
+            _nav: this.nav
+          }
+        });
       };
 
       ContribController.prototype.item = function(id) {
         return this.view_apply("app/views/contrib/item.html", {
-          loader: new contrib(),
-          filter: {
-            id: id
+          _layouts: {
+            _body: {
+              loader: new contrib(),
+              filter: {
+                id: id
+              }
+            },
+            _nav: this.nav
           }
         });
       };

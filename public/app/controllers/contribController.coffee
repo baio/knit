@@ -8,14 +8,19 @@ define ["ural/controller",
   class ContribController extends controller.Controller
 
     constructor: ->
-      nav = new menu.Menu()
-      ko.applyBindings(nav, $("#_nav")[0])
+      @nav = new menu.Menu()
       super
 
     start: ->
-      @view_apply "app/views/contrib/start.html", new user()
+      @view_apply "app/views/contrib/start.html",
+        _layouts:
+          _body: new user()
+          _nav:  @nav
 
     item: (id) ->
-      @view_apply "app/views/contrib/item.html", {loader : new contrib(), filter : {id : id}}
+      @view_apply "app/views/contrib/item.html",
+        _layouts:
+          _body: {loader : new contrib(), filter : {id : id}}
+          _nav:  @nav
 
   Controller : ContribController

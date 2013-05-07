@@ -278,6 +278,43 @@
         return form.modal("hide");
       };
 
+      Controller.prototype._loadLayoutModel = function(layoutModel, done) {
+        if ($.isFunction(layoutModel.load)) {
+          return layoutModel.load(null, done);
+        } else if (layoutModel.loader) {
+          return layoutModel.loader.load(layoutModel.filter, done);
+        } else {
+          return done(null, layoutModel);
+        }
+      };
+
+      Controller.prototype._loadLayoutModels = function(layoutModels, done) {
+        var layouts, lms, prop;
+
+        lms = [];
+        layouts = [];
+        for (prop in layoutModels) {
+          if (!__hasProp.call(layoutModels, prop)) continue;
+          layouts.push(prop);
+          lms.push(layoutModels[prop]);
+        }
+        return async.map(lms, this._loadLayoutModel, function(err, data) {
+          var i, lmd, _i, _ref;
+
+          lmd = [];
+          if (!err) {
+            for (i = _i = 0, _ref = lms.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+              lmd.push({
+                layout: layouts[i],
+                lm: lms[i],
+                data: data[i]
+              });
+            }
+          }
+          return done(err, lmd);
+        });
+      };
+
       Controller.prototype.view = function(path, model, isApply, done) {
         var _this = this;
 
@@ -292,31 +329,29 @@
               return ck(null);
             }
           }, function(ck) {
-            if (model) {
-              if ($.isFunction(model.load)) {
-                return model.load(null, ck);
-              } else if (model.loader) {
-                return model.loader.load(model.filter, ck);
-              } else {
-                return ck(null, model);
-              }
-            } else {
-              return ck(null, model);
-            }
+            var layoutModels;
+
+            layoutModels = model._layouts ? model._layouts : {
+              _body: model
+            };
+            return _this._loadLayoutModels(layoutModels, ck);
           }
         ], function(err, res) {
-          var data, html;
+          var html, layoutModelsData, lmd, _i, _len;
 
           if (!err) {
             html = res[0];
-            data = res[1];
-            viewEngine.applyData(html, model, _this.viewBag, isApply);
-            if (model && $.isFunction(model.render)) {
-              model.render(data);
+            layoutModelsData = res[1];
+            viewEngine.applyData(html, layoutModelsData, _this.viewBag, isApply);
+            for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
+              lmd = layoutModelsData[_i];
+              if (lmd.lm && $.isFunction(lmd.lm.render)) {
+                lmd.lm.render(lmd.data);
+              }
             }
           }
           if (done) {
-            return done(err, data);
+            return done(err);
           }
         });
       };

@@ -18,7 +18,7 @@ define ["ural/viewRender"], (viewRender) ->
   #This abstraction level needed because binding is depended on view engine used,
   #also you could choose diffrent procedures to bind data, for example - bind model to jsrender templates values instead
   #of knockout ones, or before applying values to html template merge model and viewBag data.
-  applyData = (bodyHtml, model, viewBag, isApply) ->
+  applyData = (bodyHtml, layoutModelsData, viewBag, isApply) ->
 
     $.templates pvt : bodyHtml
     bodyHtml = $.render.pvt viewBag
@@ -26,8 +26,9 @@ define ["ural/viewRender"], (viewRender) ->
     $("#_layout").empty()
     $("#_layout").append bodyHtml
 
-    if model and isApply
-      ko.applyBindings model, $("#_body")[0]
+    if isApply
+      for lmd in layoutModelsData
+        ko.applyBindings lmd.data, $("#" + lmd.layout)[0]
 
   render : render
   applyData : applyData

@@ -6,15 +6,22 @@
     render = function(path, done) {
       return viewRender.render(path, done);
     };
-    applyData = function(bodyHtml, model, viewBag, isApply) {
+    applyData = function(bodyHtml, layoutModelsData, viewBag, isApply) {
+      var lmd, _i, _len, _results;
+
       $.templates({
         pvt: bodyHtml
       });
       bodyHtml = $.render.pvt(viewBag);
       $("#_layout").empty();
       $("#_layout").append(bodyHtml);
-      if (model && isApply) {
-        return ko.applyBindings(model, $("#_body")[0]);
+      if (isApply) {
+        _results = [];
+        for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
+          lmd = layoutModelsData[_i];
+          _results.push(ko.applyBindings(lmd.data, $("#" + lmd.layout)[0]));
+        }
+        return _results;
       }
     };
     return {
