@@ -7,6 +7,7 @@ define ["ural/vm/indexVM",
   class IndexVM extends indexVM
 
     constructor: ->
+      @ref = ko.observable()
       @name = ko.observable()
       @date = ko.observable()
       @url = ko.observable()
@@ -19,6 +20,7 @@ define ["ural/vm/indexVM",
     onLoad: (filter, done)->
       dataProvider.get "contribs", filter, (err, data) =>
         if !err
+          @ref data.ref
           @name data.name
           @date data.date
           @url data.url
@@ -27,15 +29,12 @@ define ["ural/vm/indexVM",
           done null
 
     onUpdate: (data, done) ->
-      d =
-        name: "data-gov-1"
-        url: @url()
-        data: data
-      dataProvider.update "contribs", d, done
+      d = {id: @ref(), items: data}
+      dataProvider.ajax "contribs", "patch", d, done
 
     render: ->
       @startEdit()
-      @add id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
+      @add _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
       $("#items_list .name-input:eq(0)").focus()
       Mousetrap.bind ['tab'], (e) =>
         #more handy would make this via handler
@@ -44,7 +43,7 @@ define ["ural/vm/indexVM",
         if idx == 0
           item = @list()[0]
           if item.isValid() #item.name_1() and item.name_2()
-            @add id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
+            @add _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
             $("#items_list .name-input:eq(0)").focus()
             return false
         true

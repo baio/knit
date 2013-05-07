@@ -83,4 +83,18 @@ define ->
             @json2date resp
           done err, resp
 
+    ajax: (resource, method, data, done) ->
+      @date2json(data)
+      $.ajax(
+        url: @onGetUrl(resource)
+        data: JSON.stringify(data)
+        method : method
+        crossDomain : true
+      ).always (resp, res) =>
+          err = @onGetError(resp, res)
+          if !err
+            @json2date resp
+          done err, resp
+
+
   new DataProvider()

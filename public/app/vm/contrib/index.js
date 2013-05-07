@@ -10,6 +10,7 @@
       __extends(IndexVM, _super);
 
       function IndexVM() {
+        this.ref = ko.observable();
         this.name = ko.observable();
         this.date = ko.observable();
         this.url = ko.observable();
@@ -26,6 +27,7 @@
 
         return dataProvider.get("contribs", filter, function(err, data) {
           if (!err) {
+            _this.ref(data.ref);
             _this.name(data.name);
             _this.date(data.date);
             _this.url(data.url);
@@ -40,11 +42,10 @@
         var d;
 
         d = {
-          name: "data-gov-1",
-          url: this.url(),
-          data: data
+          id: this.ref(),
+          items: data
         };
-        return dataProvider.update("contribs", d, done);
+        return dataProvider.ajax("contribs", "patch", d, done);
       };
 
       IndexVM.prototype.render = function() {
@@ -52,7 +53,7 @@
 
         this.startEdit();
         this.add({
-          id: null,
+          _id: null,
           name_1: null,
           name_2: null,
           family_rel: null,
@@ -68,7 +69,7 @@
             item = _this.list()[0];
             if (item.isValid()) {
               _this.add({
-                id: null,
+                _id: null,
                 name_1: null,
                 name_2: null,
                 family_rel: null,

@@ -25,7 +25,7 @@
         this.family_rel = ko.observable();
         this.private_rel = ko.observable();
         this.prof_rel = ko.observable();
-        this.id = ko.observable().extend({
+        this._id = ko.observable().extend({
           validation: {
             validator: function() {
               return _this.family_rel() || _this.private_rel() || _this.prof_rel();
@@ -39,7 +39,7 @@
       }
 
       ItemVM.prototype.getIsModifyed = function() {
-        if (!this.id() && !this.name_1() && !this.name_2() && !this.family_rel() && !this.private_rel() && !this.prof_rel()) {
+        if (!this._id() && !this.name_1() && !this.name_2() && !this.family_rel() && !this.private_rel() && !this.prof_rel()) {
           return false;
         }
         return ItemVM.__super__.getIsModifyed.apply(this, arguments);

@@ -8,7 +8,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
       @family_rel = ko.observable()
       @private_rel = ko.observable()
       @prof_rel = ko.observable()
-      @id = ko.observable().extend
+      @_id = ko.observable().extend
         validation:
           validator: =>
             @family_rel() or @private_rel() or @prof_rel()
@@ -18,6 +18,6 @@ define ["ural/vm/itemVM"], (itemVM) ->
       super "contrib"
 
     getIsModifyed: ->
-      if !@id() and !@name_1() and !@name_2() \
+      if !@_id() and !@name_1() and !@name_2() \
       and !@family_rel() and !@private_rel() and !@prof_rel() then return false
       return super

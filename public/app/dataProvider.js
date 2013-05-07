@@ -173,6 +173,26 @@
         });
       };
 
+      DataProvider.prototype.ajax = function(resource, method, data, done) {
+        var _this = this;
+
+        this.date2json(data);
+        return $.ajax({
+          url: this.onGetUrl(resource),
+          data: JSON.stringify(data),
+          method: method,
+          crossDomain: true
+        }).always(function(resp, res) {
+          var err;
+
+          err = _this.onGetError(resp, res);
+          if (!err) {
+            _this.json2date(resp);
+          }
+          return done(err, resp);
+        });
+      };
+
       return DataProvider;
 
     })();
