@@ -292,8 +292,14 @@
               return ck(null);
             }
           }, function(ck) {
-            if (model && $.isFunction(model.load)) {
-              return model.load(ck);
+            if (model) {
+              if ($.isFunction(model.load)) {
+                return model.load(null, ck);
+              } else if (model.loader) {
+                return model.loader.load(model.filter, ck);
+              } else {
+                return ck(null, model);
+              }
             } else {
               return ck(null, model);
             }

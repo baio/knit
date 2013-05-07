@@ -35,13 +35,13 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
         @activateIsModifyed()
         @_isModifyedActivated = true
 
-    load: (done) ->
-      @onLoad (err, data) =>
+    load: (filter, done) ->
+      @onLoad filter, (err, data) =>
         if !err
           @map data
         done err, @
 
-    onLoad: (done) ->
+    onLoad: (filter, done) ->
       done null, []
 
     save: ->

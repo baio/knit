@@ -16,6 +16,6 @@ define ["ural/controller",
       @view_apply "app/views/contrib/start.html", new user()
 
     item: (id) ->
-      @view_apply "app/views/contrib/item.html", new contrib(), {id : id}
+      @view_apply "app/views/contrib/item.html", {loader : new contrib(), filter : {id : id}}
 
   Controller : ContribController

@@ -12,5 +12,5 @@ require ["ural/localization/localizationManager", "ural/router", "ural/bindings/
     router.Router.StartRouting "app/controllers",
       [
         { url: "/", path : {controller : "contrib", action : "start"} }
-        { url: "{controller}/{action}" }
+        { url: "{controller}/{action}/:id:" }
       ]

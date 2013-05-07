@@ -278,10 +278,10 @@
         return done();
       };
 
-      ViewModel.prototype.load = function(done) {
+      ViewModel.prototype.load = function(filter, done) {
         var _this = this;
 
-        return this.onLoad(function(err, data) {
+        return this.onLoad(filter, function(err, data) {
           if (!err) {
             _this.map(data);
           }
@@ -289,7 +289,7 @@
         });
       };
 
-      ViewModel.prototype.onLoad = function(done) {
+      ViewModel.prototype.onLoad = function(filter, done) {
         return done(null, []);
       };
 

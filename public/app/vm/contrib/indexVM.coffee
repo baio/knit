@@ -16,13 +16,13 @@ define ["ural/vm/indexVM",
     onCreateItem: ->
       new itemVM()
 
-    onLoad: (done)->
-      dataProvider.get "contribs",  contrib : "gov-ru", (err, data) =>
+    onLoad: (filter, done)->
+      dataProvider.get "contribs", filter, (err, data) =>
         if !err
           @name data.name
           @date data.date
           @url data.url
-          done err, data.data
+          done err, data.items
         else
           done null
 

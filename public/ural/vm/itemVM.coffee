@@ -182,11 +182,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
     onCreate: (done) ->
       done()
 
-    load: (done) ->
-      @onLoad (err, data) =>
+    load: (filter, done) ->
+      @onLoad filter, (err, data) =>
         if !err
           @map data
         done err, @
 
-    onLoad: (done) ->
+    onLoad: (filter, done) ->
       done null, []

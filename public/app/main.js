@@ -18,7 +18,7 @@
           action: "start"
         }
       }, {
-        url: "{controller}/{action}"
+        url: "{controller}/{action}/:id:"
       }
     ]);
   });

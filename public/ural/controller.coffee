@@ -191,8 +191,13 @@ define ["ural/viewEngine",
           else
             ck null
         (ck) ->
-          if model and $.isFunction(model.load)
-            model.load ck
+          if model
+            if $.isFunction(model.load)
+              model.load null, ck
+            else if model.loader
+              model.loader.load model.filter, ck
+            else
+              ck null, model
           else
             ck null, model
         ], (err, res) =>

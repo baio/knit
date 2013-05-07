@@ -21,17 +21,15 @@
         return new itemVM();
       };
 
-      IndexVM.prototype.onLoad = function(done) {
+      IndexVM.prototype.onLoad = function(filter, done) {
         var _this = this;
 
-        return dataProvider.get("contribs", {
-          contrib: "gov-ru"
-        }, function(err, data) {
+        return dataProvider.get("contribs", filter, function(err, data) {
           if (!err) {
             _this.name(data.name);
             _this.date(data.date);
             _this.url(data.url);
-            return done(err, data.data);
+            return done(err, data.items);
           } else {
             return done(null);
           }

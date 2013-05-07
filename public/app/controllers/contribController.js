@@ -22,8 +22,11 @@
       };
 
       ContribController.prototype.item = function(id) {
-        return this.view_apply("app/views/contrib/item.html", new contrib(), {
-          id: id
+        return this.view_apply("app/views/contrib/item.html", {
+          loader: new contrib(),
+          filter: {
+            id: id
+          }
         });
       };
 

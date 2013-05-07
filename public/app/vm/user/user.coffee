@@ -10,5 +10,5 @@ define ["ural/vm/itemVM",
       @name = ko.observable("baio")
       @contribs = new contribs()
 
-    onLoad: (done) ->
-      dataProvider.get "users", {}, done
+    onLoad: (filter, done) ->
+      dataProvider.get "users", filter, done

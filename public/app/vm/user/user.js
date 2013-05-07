@@ -14,8 +14,8 @@
         this.contribs = new contribs();
       }
 
-      User.prototype.onLoad = function(done) {
-        return dataProvider.get("users", {}, done);
+      User.prototype.onLoad = function(filter, done) {
+        return dataProvider.get("users", filter, done);
       };
 
       return User;
