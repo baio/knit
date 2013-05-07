@@ -3,12 +3,12 @@
         <div class="row-fluid">
             <div class="span11">
                 <div class="row-fluid">
-                    <h2>Modify contrib</h2>
+                    <h2>Modify contrib, <span data-bind="text: name"></span></h2>
                 </div>
                 <div class="row-fluid">
                     <div class="span11">
-                        Contrib Name : <input type="text" data-bind="value: name">
                         <a id="save_button" class="btn btn-primary btn-large" data-bind="click: save, css : {disabled : !isModifyed()}">Save</a>
+                        <a href="#" data-bind="attr : {href : url}, text: date" target="_blank"></a>
                     </div>
                 </div>
                 <div id="items_list" data-bind="foreach: list">

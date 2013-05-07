@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/indexVM", "app/vm/contrib/itemVM", "app/dataProvider"], function(indexVM, itemVM, dataProvider) {
+  define(["ural/vm/indexVM", "app/vm/contrib/item", "app/dataProvider"], function(indexVM, itemVM, dataProvider) {
     var IndexVM;
 
     return IndexVM = (function(_super) {
@@ -50,6 +50,16 @@
       IndexVM.prototype.render = function() {
         var _this = this;
 
+        this.startEdit();
+        this.add({
+          id: null,
+          name_1: null,
+          name_2: null,
+          family_rel: null,
+          private_rel: null,
+          prof_rel: null
+        });
+        $("#items_list .name-input:eq(0)").focus();
         return Mousetrap.bind(['tab'], function(e) {
           var idx, item;
 

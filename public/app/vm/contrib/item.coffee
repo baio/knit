@@ -16,3 +16,8 @@ define ["ural/vm/itemVM"], (itemVM) ->
           params : [@family_rel, @prof_rel, @priv_rel]
       @isModifyed = ko.observable()
       super "contrib"
+
+    getIsModifyed: ->
+      if !@id() and !@name_1() and !@name_2() \
+      and !@family_rel() and !@private_rel() and !@prof_rel() then return false
+      return super

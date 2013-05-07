@@ -38,6 +38,13 @@
         ItemVM.__super__.constructor.call(this, "contrib");
       }
 
+      ItemVM.prototype.getIsModifyed = function() {
+        if (!this.id() && !this.name_1() && !this.name_2() && !this.family_rel() && !this.private_rel() && !this.prof_rel()) {
+          return false;
+        }
+        return ItemVM.__super__.getIsModifyed.apply(this, arguments);
+      };
+
       return ItemVM;
 
     })(itemVM);

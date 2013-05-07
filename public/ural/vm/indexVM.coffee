@@ -24,16 +24,14 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       item = @createItem data
       idx = @list().length - 1 if idx is not undefined
       @list.splice idx, 0, item
+      @updateIsModifyed()
+      @listenItemIsModifyed(item)
 
     map: (data) ->
       underlyingArray = @list()
       underlyingArray.splice 0, underlyingArray.length
       underlyingArray.push(@createItem(d)) for d in data
       @list.valueHasMutated()
-      #activate isModifyed behaviour after first map
-      if ko.isObservable(@isModifyed) and !@_isModifyedActivated
-        @activateIsModifyed()
-        @_isModifyedActivated = true
 
     load: (filter, done) ->
       @onLoad filter, (err, data) =>
@@ -82,8 +80,15 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     activateIsModifyed: ->
       for item in @list()
         item.activateIsModifyed()
-        item.isModifyed.subscribe (val) =>
-          @isModifyed(val or @getIsModifyed())
+        @listenItemIsModifyed(item)
+
+    listenItemIsModifyed: (item) ->
+      item.isModifyed.subscribe (val) =>
+        @isModifyed(val or @getIsModifyed())
+
+    updateIsModifyed: ->
+      if @_isModifyedActivated
+        @isModifyed(@getIsModifyed())
 
     getIsModifyed: ->
       for item in @list()
@@ -94,6 +99,13 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     getModifyedItems: ->
       res = []
       for item in @list()
-        if item.isModifyed()
+        if item.isModifyed() and item.isValid?()
           res.push item
       res
+
+    startEdit: ->
+      if ko.isObservable(@isModifyed)
+        @isModifyed false
+        if !@_isModifyedActivated
+          @activateIsModifyed()
+          @_isModifyedActivated = true

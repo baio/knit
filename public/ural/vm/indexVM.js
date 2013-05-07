@@ -44,7 +44,9 @@
         if (idx === !void 0) {
           idx = this.list().length - 1;
         }
-        return this.list.splice(idx, 0, item);
+        this.list.splice(idx, 0, item);
+        this.updateIsModifyed();
+        return this.listenItemIsModifyed(item);
       };
 
       ViewModel.prototype.map = function(data) {
@@ -56,11 +58,7 @@
           d = data[_i];
           underlyingArray.push(this.createItem(d));
         }
-        this.list.valueHasMutated();
-        if (ko.isObservable(this.isModifyed) && !this._isModifyedActivated) {
-          this.activateIsModifyed();
-          return this._isModifyedActivated = true;
-        }
+        return this.list.valueHasMutated();
       };
 
       ViewModel.prototype.load = function(filter, done) {
@@ -135,19 +133,30 @@
       };
 
       ViewModel.prototype.activateIsModifyed = function() {
-        var item, _i, _len, _ref, _results,
-          _this = this;
+        var item, _i, _len, _ref, _results;
 
         _ref = this.list();
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
           item.activateIsModifyed();
-          _results.push(item.isModifyed.subscribe(function(val) {
-            return _this.isModifyed(val || _this.getIsModifyed());
-          }));
+          _results.push(this.listenItemIsModifyed(item));
         }
         return _results;
+      };
+
+      ViewModel.prototype.listenItemIsModifyed = function(item) {
+        var _this = this;
+
+        return item.isModifyed.subscribe(function(val) {
+          return _this.isModifyed(val || _this.getIsModifyed());
+        });
+      };
+
+      ViewModel.prototype.updateIsModifyed = function() {
+        if (this._isModifyedActivated) {
+          return this.isModifyed(this.getIsModifyed());
+        }
       };
 
       ViewModel.prototype.getIsModifyed = function() {
@@ -170,11 +179,21 @@
         _ref = this.list();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
-          if (item.isModifyed()) {
+          if (item.isModifyed() && (typeof item.isValid === "function" ? item.isValid() : void 0)) {
             res.push(item);
           }
         }
         return res;
+      };
+
+      ViewModel.prototype.startEdit = function() {
+        if (ko.isObservable(this.isModifyed)) {
+          this.isModifyed(false);
+          if (!this._isModifyedActivated) {
+            this.activateIsModifyed();
+            return this._isModifyedActivated = true;
+          }
+        }
       };
 
       return ViewModel;

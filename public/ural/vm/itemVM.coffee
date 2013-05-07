@@ -53,11 +53,6 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if !skipStratEdit
         @startEdit()
 
-      #activate isModifyed behaviour after first map
-      if ko.isObservable(@isModifyed) and !@_isModifyedActivated
-        @activateIsModifyed()
-        @_isModifyedActivated = true
-
     tryDate: (str) ->
       if str and typeof str == "string"
         match = /\/Date\((\d+)\)\//.exec str
@@ -104,13 +99,6 @@ define ["ural/modules/pubSub"], (pubSub) ->
     onCreate: (data, done) ->
       done null
 
-    ###
-    update: (item, event) ->
-      if @confirmEvent event, "update"
-        event.preventDefault()
-        pubSub.pub "crud", "update", @
-    ###
-
     remove: (item, event) ->
       if @confirmEvent event, "remove"
         event.preventDefault()
@@ -123,7 +111,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     startEdit: ->
       @stored_data = @toData()
-      @?isModifyed false
+      if ko.isObservable(@isModifyed)
+        @isModifyed @getIsModifyed()
+        if !@_isModifyedActivated
+          @activateIsModifyed()
+          @_isModifyedActivated = true
 
     cancelEdit: (item, event) ->
       event.preventDefault()
@@ -165,7 +157,10 @@ define ["ural/modules/pubSub"], (pubSub) ->
     getIsModifyed: ->
       if !@stored_data then return false
       for own prop of @stored_data
-        if ko.utils.unwrapObservable(@[prop]) != @stored_data[prop] then return true
+        val = ko.utils.unwrapObservable(@[prop])
+        #consider id is the key, if equals null if the item were created
+        if prop == "id" and val is null then return true
+        if  val != @stored_data[prop] then return true
       return false
 
     save: ->

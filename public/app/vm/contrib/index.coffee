@@ -1,5 +1,5 @@
 define ["ural/vm/indexVM",
-  "app/vm/contrib/itemVM",
+  "app/vm/contrib/item",
   "app/dataProvider"
 ]
 , (indexVM, itemVM, dataProvider) ->
@@ -34,6 +34,9 @@ define ["ural/vm/indexVM",
       dataProvider.update "contribs", d, done
 
     render: ->
+      @startEdit()
+      @add id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
+      $("#items_list .name-input:eq(0)").focus()
       Mousetrap.bind ['tab'], (e) =>
         #more handy would make this via handler
         #check if this is top row of the list

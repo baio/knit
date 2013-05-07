@@ -1,7 +1,7 @@
 define ["ural/controller",
   "app/vm/menu",
   "app/vm/user/user",
-  "app/vm/contrib/indexVM"
+  "app/vm/contrib/index"
 ],
 (controller, menu, user, contrib) ->
 

@@ -223,8 +223,8 @@ define ["ural/viewEngine",
               layoutModelsData = res[1]
               viewEngine.applyData(html, layoutModelsData, @viewBag, isApply)
               for lmd in layoutModelsData
-                if lmd.lm and $.isFunction(lmd.lm.render)
-                  lmd.lm.render lmd.data
+                if lmd.data and $.isFunction(lmd.data.render)
+                  lmd.data.render lmd.data
             if done then done err
 
     #Shortcut for view(path, model, `True`, done)

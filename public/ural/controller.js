@@ -345,8 +345,8 @@
             viewEngine.applyData(html, layoutModelsData, _this.viewBag, isApply);
             for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
               lmd = layoutModelsData[_i];
-              if (lmd.lm && $.isFunction(lmd.lm.render)) {
-                lmd.lm.render(lmd.data);
+              if (lmd.data && $.isFunction(lmd.data.render)) {
+                lmd.data.render(lmd.data);
               }
             }
           }

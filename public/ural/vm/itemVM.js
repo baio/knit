@@ -66,11 +66,7 @@
         }
         this.errors = (_ref = ko.validation) != null ? _ref.group(this) : void 0;
         if (!skipStratEdit) {
-          this.startEdit();
-        }
-        if (ko.isObservable(this.isModifyed) && !this._isModifyedActivated) {
-          this.activateIsModifyed();
-          return this._isModifyedActivated = true;
+          return this.startEdit();
         }
       };
 
@@ -145,14 +141,6 @@
         return done(null);
       };
 
-      /*
-      update: (item, event) ->
-        if @confirmEvent event, "update"
-          event.preventDefault()
-          pubSub.pub "crud", "update", @
-      */
-
-
       ViewModel.prototype.remove = function(item, event) {
         if (this.confirmEvent(event, "remove")) {
           event.preventDefault();
@@ -171,7 +159,13 @@
 
       ViewModel.prototype.startEdit = function() {
         this.stored_data = this.toData();
-        return typeof this === "function" ? this(isModifyed(false)) : void 0;
+        if (ko.isObservable(this.isModifyed)) {
+          this.isModifyed(this.getIsModifyed());
+          if (!this._isModifyedActivated) {
+            this.activateIsModifyed();
+            return this._isModifyedActivated = true;
+          }
+        }
       };
 
       ViewModel.prototype.cancelEdit = function(item, event) {
@@ -245,7 +239,7 @@
       };
 
       ViewModel.prototype.getIsModifyed = function() {
-        var prop, _ref;
+        var prop, val, _ref;
 
         if (!this.stored_data) {
           return false;
@@ -253,7 +247,11 @@
         _ref = this.stored_data;
         for (prop in _ref) {
           if (!__hasProp.call(_ref, prop)) continue;
-          if (ko.utils.unwrapObservable(this[prop]) !== this.stored_data[prop]) {
+          val = ko.utils.unwrapObservable(this[prop]);
+          if (prop === "id" && val === null) {
+            return true;
+          }
+          if (val !== this.stored_data[prop]) {
             return true;
           }
         }
