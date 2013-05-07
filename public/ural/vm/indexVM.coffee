@@ -99,7 +99,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     getModifyedItems: ->
       res = []
       for item in @list()
-        if item.isModifyed() and item.isValid?()
+        if item.isModifyed()
           res.push item
       res
 

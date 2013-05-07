@@ -179,7 +179,7 @@
         _ref = this.list();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
-          if (item.isModifyed() && (typeof item.isValid === "function" ? item.isValid() : void 0)) {
+          if (item.isModifyed()) {
             res.push(item);
           }
         }
