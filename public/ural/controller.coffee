@@ -196,6 +196,10 @@ define ["ural/viewEngine",
     #+ If `path` is presented, view loaded from file and then added to html layout (`_body` tag)
     #+ If `path` is not presnted, skip view loading
     #+ If `model` presented
+    # `model` is considered in form `_layout : {_lt1 : model1, _lt2 : model2}`, where _lt is the name of the `html`
+    # layout (tag with `id` = `_lt`), if `model` doesn't contain `_layout` field it would be initilized by default with
+    # `_layout : {_body : model}` - consider this model for `_body` tag
+    # Model for each layout will be loaded separatedly by following rules:
     #  + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`
     #  + check if it contains `render` method, if so invoke `model.render( data )`
     #+ If `model` is not presnted, skip model loading
