@@ -19,7 +19,7 @@
       }
 
       IndexVM.prototype.onCreateItem = function() {
-        return new itemVM(this);
+        return new itemVM(this.resource, this);
       };
 
       IndexVM.prototype.onLoad = function(filter, done) {

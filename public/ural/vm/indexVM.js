@@ -4,11 +4,10 @@
     var ViewModel;
 
     return ViewModel = (function() {
-      function ViewModel(resource, parentItem) {
+      function ViewModel(resource) {
         var _this = this;
 
         this.resource = resource;
-        this.parentItem = parentItem;
         this.list = ko.observableArray();
         pubSub.sub("crud", "complete_create", function(item) {
           return _this.completeCreate(item);
@@ -20,20 +19,14 @@
 
       ViewModel.prototype.completeDelete = function(item) {
         if (item.resource === this.resource) {
-          this.list.remove(item.src.item);
-        }
-        if (this.parentItem) {
-          return this.parentItem.startEdit();
+          return this.list.remove(item.src.item);
         }
       };
 
       ViewModel.prototype.completeCreate = function(item) {
         if (item.resource === this.resource) {
           item.setSrc(null, null);
-          this.list.push(item);
-        }
-        if (this.parentItem) {
-          return this.parentItem.startEdit();
+          return this.list.push(item);
         }
       };
 
@@ -85,6 +78,9 @@
           _this = this;
 
         res = [];
+        this.list.remove(function(item) {
+          return item._isAdded() && item._isRemoved();
+        });
         list = this._isModifyedActivated ? this.getModifyedItems() : this.list();
         for (_i = 0, _len = list.length; _i < _len; _i++) {
           item = list[_i];
@@ -137,7 +133,7 @@
       };
 
       ViewModel.prototype.onCreateItem = function() {
-        return new itemVM(this.resource, this.parentItem);
+        return new itemVM(this.resource);
       };
 
       ViewModel.prototype.startCreate = function(some, event) {

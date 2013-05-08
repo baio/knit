@@ -2,7 +2,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
   class ViewModel
 
-    constructor: (@resource, @parentItem) ->
+    constructor: (@resource) ->
       @list = ko.observableArray()
       pubSub.sub "crud", "complete_create", (item) => @completeCreate item
       pubSub.sub "crud", "complete_delete", (item) => @completeDelete item
@@ -10,15 +10,11 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     completeDelete: (item) ->
       if item.resource == @resource
         @list.remove item.src.item
-      if @parentItem
-        @parentItem.startEdit()
 
     completeCreate: (item) ->
       if item.resource == @resource
         item.setSrc null, null
         @list.push item
-      if @parentItem
-        @parentItem.startEdit()
 
     add: (data, idx) ->
       item = @createItem data
@@ -47,6 +43,8 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     update: (done) ->
       res = []
+      #check isAdded the same time isRemoved, then remove ones from list
+      @list.remove (item) -> item._isAdded() and item._isRemoved()
       list = if @_isModifyedActivated then @getModifyedItems() else @list()
       for item in list
         if item.toData
@@ -82,7 +80,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       vm
 
     onCreateItem: ->
-      new itemVM @resource, @parentItem
+      new itemVM @resource
 
     startCreate: (some, event) ->
       event.preventDefault()

@@ -2,7 +2,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
 
   class ItemVM extends itemVM
 
-    constructor: (index) ->
+    constructor: (resource, index) ->
       @name_1 = ko.observable().extend(required : {message : "name_1 is required."})
       @name_2 = ko.observable().extend(required : {message : "name_2 is required."})
       @family_rel = ko.observable()
@@ -15,7 +15,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
           message : "One of the relations, should be defined."
           params : [@family_rel, @prof_rel, @priv_rel]
       @isModifyed = ko.observable()
-      super "contrib"
+      super resource, index
 
     getIsModifyed: ->
       if !@_id() and !@name_1() and !@name_2() \

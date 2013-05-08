@@ -6,12 +6,21 @@
     var ViewModel;
 
     return ViewModel = (function() {
-      function ViewModel() {
+      function ViewModel(resource) {
+        this.resource = resource;
         this._isRemoved = ko.observable();
         this.init();
       }
 
       ViewModel.KeyFieldName = null;
+
+      ViewModel.prototype._isAdded = function() {
+        if (ViewModel.KeyFieldName) {
+          return this[ViewModel.KeyFieldName]() === null;
+        } else {
+          return false;
+        }
+      };
 
       ViewModel.prototype.init = function() {
         var data, prop;
@@ -91,8 +100,8 @@
         return vm;
       };
 
-      ViewModel.prototype.onCreate = function() {
-        return new ViewModel(this.resource, this.parentItem);
+      ViewModel.prototype.onCreate = function(resource) {
+        return new ViewModel(resource);
       };
 
       ViewModel.prototype.setSrc = function(item, status) {
@@ -227,7 +236,7 @@
           if (!__hasProp.call(this, prop)) continue;
           if (prop !== "isModifyed" && ko.isObservable(this[prop])) {
             _results.push(this[prop].subscribe(function() {
-              return _this.isModifyed(_this.isValid() && _this.getIsModifyed());
+              return _this.isModifyed((_this._isRemoved() || _this.isValid()) && _this.getIsModifyed());
             }));
           } else {
             _results.push(void 0);
@@ -246,11 +255,8 @@
         for (prop in _ref) {
           if (!__hasProp.call(_ref, prop)) continue;
           val = ko.utils.unwrapObservable(this[prop]);
-          if (prop === ViewModel.KeyFieldName && val === null) {
-            return true;
-          }
-          if (this._isRemoved()) {
-            return true;
+          if (this._isAdded() || this._isRemoved()) {
+            return !(this._isAdded() && this._isRemoved());
           }
           if (val !== this.stored_data[prop]) {
             return true;

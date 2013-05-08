@@ -15,7 +15,7 @@ define ["ural/vm/indexVM",
       super "contrib"
 
     onCreateItem: ->
-      new itemVM(@)
+      new itemVM(@resource, @)
 
     onLoad: (filter, done)->
       dataProvider.get "contribs", filter, (err, data) =>

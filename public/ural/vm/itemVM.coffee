@@ -2,12 +2,15 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
   class ViewModel
 
-    constructor: ->
+    constructor: (@resource) ->
       #isRemoved flag to mark item as removed
       @_isRemoved = ko.observable()
       @init()
 
     @KeyFieldName: null
+
+    _isAdded: ->
+      if ViewModel.KeyFieldName then (@[ViewModel.KeyFieldName]() is null) else false
 
     init: ->
       # `ko.mapping.toJS` - works only after `ko.mapping.fromJS` was executed
@@ -69,8 +72,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
       vm.setSrc @, status
       vm
 
-    onCreate: ->
-      new ViewModel @resource, @parentItem
+    onCreate: (resource) ->
+      new ViewModel resource
 
     setSrc: (item, status) ->
       @src =
@@ -104,7 +107,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       done null
 
     remove: ->
-      @_isRemoved true
+        @_isRemoved true
 
     details: (item, event) ->
       if @confirmEvent event, "details"
@@ -154,16 +157,14 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of @
         if prop != "isModifyed" and ko.isObservable @[prop]
           @[prop].subscribe =>
-            @isModifyed @isValid() and @getIsModifyed()
+            @isModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
 
     getIsModifyed: ->
       if !@stored_data then return false
       for own prop of @stored_data
         val = ko.utils.unwrapObservable(@[prop])
-        #consider `KeyFieldName` is the key, if equals null if the item were created
-        if prop == ViewModel.KeyFieldName and val is null then return true
-        #consider _removed flag - marker for removed item
-        if @_isRemoved() then return true
+        if @_isAdded() or @_isRemoved()
+            return not (@_isAdded() and @_isRemoved())
         if  val != @stored_data[prop] then return true
       return false
 

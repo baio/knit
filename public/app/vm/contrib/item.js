@@ -9,7 +9,7 @@
     return ItemVM = (function(_super) {
       __extends(ItemVM, _super);
 
-      function ItemVM(index) {
+      function ItemVM(resource, index) {
         var _this = this;
 
         this.name_1 = ko.observable().extend({
@@ -35,7 +35,7 @@
           }
         });
         this.isModifyed = ko.observable();
-        ItemVM.__super__.constructor.call(this, "contrib");
+        ItemVM.__super__.constructor.call(this, resource, index);
       }
 
       ItemVM.prototype.getIsModifyed = function() {
