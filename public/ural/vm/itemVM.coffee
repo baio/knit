@@ -117,7 +117,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
     startEdit: ->
       @stored_data = @toData()
       if ko.isObservable(@isModifyed)
-        @isModifyed(false)
+        @isModifyed @getIsModifyed()
         if !@_isModifyedActivated
           @activateIsModifyed()
           @_isModifyedActivated = true

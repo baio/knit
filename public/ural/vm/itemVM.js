@@ -167,7 +167,7 @@
       ViewModel.prototype.startEdit = function() {
         this.stored_data = this.toData();
         if (ko.isObservable(this.isModifyed)) {
-          this.isModifyed(false);
+          this.isModifyed(this.getIsModifyed());
           if (!this._isModifyedActivated) {
             this.activateIsModifyed();
             return this._isModifyedActivated = true;

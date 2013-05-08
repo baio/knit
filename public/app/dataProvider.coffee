@@ -13,7 +13,7 @@ define ->
 
     parseDate: (str) ->
       dt = moment(str, "YYYY-MM-DDTHH:mm:ss.Z")
-      if dt.isValid()
+      if dt and dt.isValid()
         dt.toDate()
       else
         undefined

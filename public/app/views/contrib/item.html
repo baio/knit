@@ -12,6 +12,7 @@
                         <a href="#" data-bind="attr : {href : url}, text: date" target="_blank"></a>
                     </div>
                 </div>
+                <div data-bind="template: {name: 'contrib-edit-item-template', data: editItem}"></div>
                 <div id="items_list" data-bind="template: { name: 'contrib-item-template', foreach: list}">
                 </div>
             </div>
@@ -20,7 +21,31 @@
             </div>
         </div>
     </div>
-
+    <script type="text/html" id="contrib-edit-item-template">
+        <div class="row-fluid">
+            <div class="span1">
+                <div data-bind="ifnot: isValid()">
+                    <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
+                    <p data-bind="text: errors().length"></p>
+                </div>
+            </div>
+            <div class="span2">
+                <input type="text" id="append_item_focus" class="input-xarge name-input" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-xarge name-input" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" class="input-small" data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}"/>
+            </div>
+            <div class="span2">
+                <input type="text" id="append_item_trigger"  class="input-small mousetrap" data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"/>
+            </div>
+        </div>
+    </script>
     <script type="text/html" id="contrib-item-template">
         <div class="row-fluid" data-bind="if: !_isRemoved()">
             <div class="span1">
@@ -45,7 +70,7 @@
                 <input type="text" class="input-small" data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}"/>
             </div>
             <div class="span2">
-                <input type="text" class="input-small mousetrap" data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"/>
+                <input type="text" class="input-small" data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"/>
             </div>
         </div>
     </script>

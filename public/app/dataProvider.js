@@ -29,7 +29,7 @@
         var dt;
 
         dt = moment(str, "YYYY-MM-DDTHH:mm:ss.Z");
-        if (dt.isValid()) {
+        if (dt && dt.isValid()) {
           return dt.toDate();
         } else {
           return void 0;

@@ -7,10 +7,13 @@ define ["ural/vm/indexVM",
   class IndexVM extends indexVM
 
     constructor: ->
+      @defItem = _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
       @ref = ko.observable()
       @name = ko.observable()
       @date = ko.observable()
       @url = ko.observable()
+      @editItem = new itemVM("contrib")
+      @editItem.map(@defItem)
       @isModifyed = ko.observable()
       super "contrib"
 
@@ -35,16 +38,12 @@ define ["ural/vm/indexVM",
 
     render: ->
       @startEdit()
-      @add _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
-      $("#items_list .name-input:eq(0)").focus()
       Mousetrap.bind ['tab'], (e) =>
-        #more handy would make this via handler
-        #check if this is top row of the list
-        idx = $("#items_list>:first-child").index($(e.target).closest(".row-fluid"))
-        if idx == 0
-          item = @list()[0]
-          if item.isValid() #item.name_1() and item.name_2()
-            @add _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
-            $("#items_list .name-input:eq(0)").focus()
-            return false
-        true
+        if $(e.target).attr("id") == "append_item_trigger"
+          @editItem.prof_rel($(e.target).val())
+          if @editItem.isValid()
+            @add @editItem.toData(), 0
+            @editItem.map(@defItem)
+            $("#append_item_focus").focus()
+          return false
+        return true

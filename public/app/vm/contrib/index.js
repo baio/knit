@@ -10,10 +10,20 @@
       __extends(IndexVM, _super);
 
       function IndexVM() {
+        this.defItem = {
+          _id: null,
+          name_1: null,
+          name_2: null,
+          family_rel: null,
+          private_rel: null,
+          prof_rel: null
+        };
         this.ref = ko.observable();
         this.name = ko.observable();
         this.date = ko.observable();
         this.url = ko.observable();
+        this.editItem = new itemVM("contrib");
+        this.editItem.map(this.defItem);
         this.isModifyed = ko.observable();
         IndexVM.__super__.constructor.call(this, "contrib");
       }
@@ -54,33 +64,15 @@
         var _this = this;
 
         this.startEdit();
-        this.add({
-          _id: null,
-          name_1: null,
-          name_2: null,
-          family_rel: null,
-          private_rel: null,
-          prof_rel: null
-        });
-        $("#items_list .name-input:eq(0)").focus();
         return Mousetrap.bind(['tab'], function(e) {
-          var idx, item;
-
-          idx = $("#items_list>:first-child").index($(e.target).closest(".row-fluid"));
-          if (idx === 0) {
-            item = _this.list()[0];
-            if (item.isValid()) {
-              _this.add({
-                _id: null,
-                name_1: null,
-                name_2: null,
-                family_rel: null,
-                private_rel: null,
-                prof_rel: null
-              });
-              $("#items_list .name-input:eq(0)").focus();
-              return false;
+          if ($(e.target).attr("id") === "append_item_trigger") {
+            _this.editItem.prof_rel($(e.target).val());
+            if (_this.editItem.isValid()) {
+              _this.add(_this.editItem.toData(), 0);
+              _this.editItem.map(_this.defItem);
+              $("#append_item_focus").focus();
             }
+            return false;
           }
           return true;
         });
