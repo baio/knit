@@ -14,36 +14,52 @@
 
         this.name_1 = ko.observable().extend({
           required: {
-            message: "name_1 is required."
+            message: "Имя 1 должно быть заполнено."
+          },
+          pattern: {
+            message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.',
+            params: '^[а-я]+\\s[а-я]+$'
           }
         });
         this.name_2 = ko.observable().extend({
           required: {
-            message: "name_2 is required."
+            message: "Имя 2 должно быть заполнено."
+          },
+          pattern: {
+            message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.',
+            params: '^[а-я]+\\s[а-я]+$'
           }
         });
-        this.family_rel = ko.observable();
-        this.private_rel = ko.observable();
-        this.prof_rel = ko.observable();
+        this.family_rel = ko.observable().extend({
+          pattern: {
+            message: 'Таг \'семья\' должен содержать только прописные, кирилические символы.',
+            params: '^[а-я]+$'
+          }
+        });
+        this.private_rel = ko.observable().extend({
+          pattern: {
+            message: 'Таг \'частные\' должен содержать только прописные, кирилические символы.',
+            params: '^[а-я]+$'
+          }
+        });
+        this.prof_rel = ko.observable().extend({
+          pattern: {
+            message: 'Таг \'проффесиональные\' должен содержать только прописные, кирилические символы.',
+            params: '^[а-я]+$'
+          }
+        });
         this._id = ko.observable().extend({
           validation: {
             validator: function() {
               return _this.family_rel() || _this.private_rel() || _this.prof_rel();
             },
-            message: "One of the relations, should be defined.",
+            message: "Один из тагов должен быть выбран.",
             params: [this.family_rel, this.prof_rel, this.priv_rel]
           }
         });
         this.isModifyed = ko.observable();
         ItemVM.__super__.constructor.call(this, resource, index);
       }
-
-      ItemVM.prototype.getIsModifyed = function() {
-        if (!this._id() && !this.name_1() && !this.name_2() && !this.family_rel() && !this.private_rel() && !this.prof_rel()) {
-          return false;
-        }
-        return ItemVM.__super__.getIsModifyed.apply(this, arguments);
-      };
 
       return ItemVM;
 
