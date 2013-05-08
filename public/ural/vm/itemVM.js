@@ -6,11 +6,12 @@
     var ViewModel;
 
     return ViewModel = (function() {
-      function ViewModel(resource, parentItem) {
-        this.resource = resource;
-        this.parentItem = parentItem;
+      function ViewModel() {
+        this._isRemoved = ko.observable();
         this.init();
       }
+
+      ViewModel.KeyFieldName = null;
 
       ViewModel.prototype.init = function() {
         var data, prop;
@@ -141,11 +142,8 @@
         return done(null);
       };
 
-      ViewModel.prototype.remove = function(item, event) {
-        if (this.confirmEvent(event, "remove")) {
-          event.preventDefault();
-          return pubSub.pub("crud", "delete", this);
-        }
+      ViewModel.prototype.remove = function() {
+        return this._isRemoved(true);
       };
 
       ViewModel.prototype.details = function(item, event) {
@@ -248,7 +246,10 @@
         for (prop in _ref) {
           if (!__hasProp.call(_ref, prop)) continue;
           val = ko.utils.unwrapObservable(this[prop]);
-          if (prop === "id" && val === null) {
+          if (prop === ViewModel.KeyFieldName && val === null) {
+            return true;
+          }
+          if (this._isRemoved()) {
             return true;
           }
           if (val !== this.stored_data[prop]) {

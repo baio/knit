@@ -9,7 +9,7 @@
     return ItemVM = (function(_super) {
       __extends(ItemVM, _super);
 
-      function ItemVM() {
+      function ItemVM(index) {
         var _this = this;
 
         this.name_1 = ko.observable().extend({

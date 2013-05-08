@@ -12,7 +12,7 @@ define ->
       data
 
     parseDate: (str) ->
-      dt = moment.utc(str)
+      dt = moment(str, "YYYY-MM-DDTHH:mm:ss.Z")
       if dt.isValid()
         dt.toDate()
       else

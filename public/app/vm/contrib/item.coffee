@@ -2,7 +2,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
 
   class ItemVM extends itemVM
 
-    constructor: ->
+    constructor: (index) ->
       @name_1 = ko.observable().extend(required : {message : "name_1 is required."})
       @name_2 = ko.observable().extend(required : {message : "name_2 is required."})
       @family_rel = ko.observable()

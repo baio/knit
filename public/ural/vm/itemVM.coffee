@@ -2,8 +2,12 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
   class ViewModel
 
-    constructor: (@resource, @parentItem) ->
+    constructor: ->
+      #isRemoved flag to mark item as removed
+      @_isRemoved = ko.observable()
       @init()
+
+    @KeyFieldName: null
 
     init: ->
       # `ko.mapping.toJS` - works only after `ko.mapping.fromJS` was executed
@@ -99,10 +103,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
     onCreate: (data, done) ->
       done null
 
-    remove: (item, event) ->
-      if @confirmEvent event, "remove"
-        event.preventDefault()
-        pubSub.pub "crud", "delete", @
+    remove: ->
+      @_isRemoved true
 
     details: (item, event) ->
       if @confirmEvent event, "details"
@@ -158,8 +160,10 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if !@stored_data then return false
       for own prop of @stored_data
         val = ko.utils.unwrapObservable(@[prop])
-        #consider id is the key, if equals null if the item were created
-        if prop == "id" and val is null then return true
+        #consider `KeyFieldName` is the key, if equals null if the item were created
+        if prop == ViewModel.KeyFieldName and val is null then return true
+        #consider _removed flag - marker for removed item
+        if @_isRemoved() then return true
         if  val != @stored_data[prop] then return true
       return false
 

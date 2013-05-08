@@ -15,7 +15,7 @@ define ["ural/vm/indexVM",
       super "contrib"
 
     onCreateItem: ->
-      new itemVM()
+      new itemVM(@)
 
     onLoad: (filter, done)->
       dataProvider.get "contribs", filter, (err, data) =>
@@ -31,7 +31,7 @@ define ["ural/vm/indexVM",
     onUpdate: (data, done) ->
       d = {id: @ref(), items: data}
       dataProvider.ajax "contribs", "patch", d, (err, data) ->
-        done err
+        done err, data
 
     render: ->
       @startEdit()

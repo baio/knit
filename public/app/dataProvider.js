@@ -28,7 +28,7 @@
       DataProvider.prototype.parseDate = function(str) {
         var dt;
 
-        dt = moment.utc(str);
+        dt = moment(str, "YYYY-MM-DDTHH:mm:ss.Z");
         if (dt.isValid()) {
           return dt.toDate();
         } else {

@@ -81,7 +81,8 @@
       };
 
       ViewModel.prototype.update = function(done) {
-        var item, list, res, _i, _len;
+        var item, list, res, _i, _len,
+          _this = this;
 
         res = [];
         list = this._isModifyedActivated ? this.getModifyedItems() : this.list();
@@ -93,14 +94,26 @@
             res.push(item);
           }
         }
-        return this.onUpdate(res, function(err) {
-          var _j, _len1;
+        return this.onUpdate(res, function(err, r) {
+          var i, _j, _ref;
 
           if (!err) {
-            for (_j = 0, _len1 = list.length; _j < _len1; _j++) {
-              item = list[_j];
-              item.startEdit();
+            for (i = _j = 0, _ref = r.length - 1; 0 <= _ref ? _j <= _ref : _j >= _ref; i = 0 <= _ref ? ++_j : --_j) {
+              item = list[i];
+              if (r[i].err.length === 0) {
+                if (item._isRemoved()) {
+                  _this.list.remove(item);
+                } else {
+                  if (itemVM.KeyFieldName) {
+                    item[itemVM.KeyFieldName](r[i][itemVM.KeyFieldName]);
+                  }
+                  item.startEdit();
+                }
+              } else {
+                item.setErrors(err);
+              }
             }
+            _this.updateIsModifyed();
           }
           return done(err);
         });

@@ -19,7 +19,7 @@
       }
 
       IndexVM.prototype.onCreateItem = function() {
-        return new itemVM();
+        return new itemVM(this);
       };
 
       IndexVM.prototype.onLoad = function(filter, done) {
@@ -46,7 +46,7 @@
           items: data
         };
         return dataProvider.ajax("contribs", "patch", d, function(err, data) {
-          return done(err);
+          return done(err, data);
         });
       };
 

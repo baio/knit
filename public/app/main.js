@@ -4,12 +4,13 @@
     baseUrl: "/"
   });
 
-  require(["ural/localization/localizationManager", "ural/router", "ural/bindings/_all"], function(localManager, router) {
+  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all"], function(localManager, router, itemVM) {
     localManager.setup("en");
     ko.validation.configure({
       messagesOnModified: true,
       insertMessages: false
     });
+    itemVM.KeyFieldName = "_id";
     return router.Router.StartRouting("app/controllers", [
       {
         url: "/",

@@ -53,10 +53,21 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
           res.push item.toData()
         else
           res.push item
-      @onUpdate res, (err) ->
+      @onUpdate res, (err, r) =>
         if !err
-          for item in list
-            item.startEdit()
+          for i in [0..r.length-1]
+            item = list[i]
+            if r[i].err.length == 0
+              if item._isRemoved()
+                @list.remove item
+              else
+                #update key field
+                if itemVM.KeyFieldName
+                  item[itemVM.KeyFieldName](r[i][itemVM.KeyFieldName])
+                item.startEdit()
+            else
+              item.setErrors(err)
+          @updateIsModifyed()
         done err
 
     onUpdate: (data, done) ->
