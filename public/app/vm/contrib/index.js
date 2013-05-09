@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/indexVM", "app/vm/contrib/item", "app/dataProvider"], function(indexVM, itemVM, dataProvider) {
+  define(["ural/vm/indexVM", "app/vm/contrib/item", "app/dataProvider", "app/vm/user/contrib"], function(indexVM, itemVM, dataProvider, Contrib) {
     var IndexVM;
 
     return IndexVM = (function(_super) {
@@ -18,10 +18,7 @@
           private_rel: null,
           prof_rel: null
         };
-        this.ref = ko.observable();
-        this.name = ko.observable();
-        this.date = ko.observable();
-        this.url = ko.observable();
+        this.contrib = new Contrib();
         this.editItem = new itemVM("contrib");
         this.editItem.map(this.defItem);
         this.isModifyed = ko.observable();
@@ -36,12 +33,13 @@
         var _this = this;
 
         return dataProvider.get("contribs", filter, function(err, data) {
+          var items;
+
           if (!err) {
-            _this.ref(data.ref);
-            _this.name(data.name);
-            _this.date(data.date);
-            _this.url(data.url);
-            return done(err, data.items);
+            items = data.items;
+            delete data.items;
+            _this.contrib.map(data);
+            return done(err, items);
           } else {
             return done(null);
           }

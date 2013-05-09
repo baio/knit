@@ -20,6 +20,6 @@ require ["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM
 
     router.Router.StartRouting "app/controllers",
       [
-        { url: "/", path : {controller : "contrib", action : "start"} }
+        { url: "/", path : {controller : "contrib", action : "item", arg : "518b6be039ed9719308a33ec"} }
         { url: "{controller}/{action}/:id:" }
       ]

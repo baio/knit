@@ -44,6 +44,9 @@
       };
 
       ViewModel.prototype.completeCreate = function(data) {
+        if (this._index) {
+          this._index.add(data, 0);
+        }
         this.setSrc(null, null);
         return this.map(data);
       };
@@ -136,7 +139,11 @@
       ViewModel.prototype.startUpdate = function(item, event) {
         if (this.confirmEvent(event, "startUpdate")) {
           event.preventDefault();
-          return pubSub.pub("crud", "start_update", this.clone("update"));
+          return pubSub.pub("crud", "start", {
+            resource: this.resource,
+            item: this.clone("update"),
+            type: "update"
+          });
         }
       };
 
@@ -311,15 +318,27 @@
         return this.onCreate(function(err, data) {
           if (!err) {
             _this.completeCreate(data);
-            if (_this._index) {
-              _this._index.add(data, 0);
-            }
           }
           return done(err);
         });
       };
 
       ViewModel.prototype.onCreate = function(done) {
+        return done();
+      };
+
+      ViewModel.prototype.update = function(done) {
+        var _this = this;
+
+        return this.onUpdate(function(err, data) {
+          if (!err) {
+            _this.completeUpdate(data);
+          }
+          return done(err);
+        });
+      };
+
+      ViewModel.prototype.onUpdate = function(done) {
         return done();
       };
 

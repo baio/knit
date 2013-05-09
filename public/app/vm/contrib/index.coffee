@@ -1,17 +1,15 @@
 define ["ural/vm/indexVM",
   "app/vm/contrib/item",
-  "app/dataProvider"
+  "app/dataProvider",
+  "app/vm/user/contrib"
 ]
-, (indexVM, itemVM, dataProvider) ->
+, (indexVM, itemVM, dataProvider, Contrib) ->
 
   class IndexVM extends indexVM
 
     constructor: ->
       @defItem = _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
-      @ref = ko.observable()
-      @name = ko.observable()
-      @date = ko.observable()
-      @url = ko.observable()
+      @contrib = new Contrib()
       @editItem = new itemVM("contrib")
       @editItem.map(@defItem)
       @isModifyed = ko.observable()
@@ -23,11 +21,10 @@ define ["ural/vm/indexVM",
     onLoad: (filter, done)->
       dataProvider.get "contribs", filter, (err, data) =>
         if !err
-          @ref data.ref
-          @name data.name
-          @date data.date
-          @url data.url
-          done err, data.items
+          items = data.items
+          delete data.items
+          @contrib.map data
+          done err, items
         else
           done null
 

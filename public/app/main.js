@@ -27,7 +27,8 @@
         url: "/",
         path: {
           controller: "contrib",
-          action: "start"
+          action: "item",
+          arg: "518b6be039ed9719308a33ec"
         }
       }, {
         url: "{controller}/{action}/:id:"

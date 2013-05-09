@@ -27,6 +27,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @map data, skipStratEdit
 
     completeCreate: (data) ->
+      if @_index then @_index.add data, 0
       @setSrc null, null
       @map data
 
@@ -96,7 +97,10 @@ define ["ural/modules/pubSub"], (pubSub) ->
     startUpdate: (item, event) ->
       if @confirmEvent event, "startUpdate"
         event.preventDefault()
-        pubSub.pub "crud", "start_update", @clone "update"
+        pubSub.pub "crud", "start",
+          resource: @resource
+          item: @clone "update"
+          type: "update"
 
     startRemove: (item, event) ->
       if @confirmEvent event, "startRemove"
@@ -199,10 +203,18 @@ define ["ural/modules/pubSub"], (pubSub) ->
       @onCreate (err, data) =>
         if !err
           @completeCreate data
-          if @_index then @_index.add data, 0
         done err
 
     onCreate: (done) ->
+      done()
+
+    update: (done) ->
+      @onUpdate (err, data) =>
+        if !err
+          @completeUpdate data
+        done err
+
+    onUpdate: (done) ->
       done()
 
     load: (filter, done) ->
