@@ -1,4 +1,4 @@
-define ["app/config"], (config) ->
+define ["app/dataProvider"], (dataProvider) ->
 
   class Panel
 
@@ -10,52 +10,29 @@ define ["app/config"], (config) ->
       @url_tgt = ko.computed => "https://www.google.ru/search?q=#{@name_tgt()}"
       @tags = ko.observableArray()
 
-    load: (done) ->
+    load: (filter, done) ->
+      dataProvider.get "graphs", contrib : "518b989739ed9714289d0bc1", (err, data) ->
+        if !err
+          for edge in data.edges
+            edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]
+            edge.source = data.nodes.filter((n) -> n.id == edge.source_id)[0]
+          for node in data.nodes
+            pos = node.meta.pos
+            if pos[0] == -1 then pos[0] = 0.5
+            if pos[1] == -1 then pos[1] = 0.5
+        done err, data
 
-      d3.xml config.links.panel_gexf_url, "application/xml", (gexf) ->
-
-        console.log gexf
-
-        nodes =  d3.select(gexf).selectAll("node")[0]
-        edges =  d3.select(gexf).selectAll("edge")[0]
-
-        grp_nodes = nodes.map (d) ->
-          for cn in d.childNodes
-            if cn.localName == "position"
-              position = cn
-              break
-          attrs :
-            id : d.attributes.id.value
-            label : d.attributes.label.value
-            x : if position then position.attributes.x.value else 10
-            y : if position then position.attributes.y.value else 10
-
-        grp_edges = edges.map (d) ->
-          attrs = {}
-          for node in d.childNodes
-            for cn in node.childNodes
-              if cn.attributes
-                fr = d3.select(cn).attr("for")
-                if fr in ["family_rel", "private_rel", "prof_rel", "url"]
-                  attrs[fr] = d3.select(cn).attr("value")
-          attrs : attrs
-          source : grp_nodes.filter((f) -> d3.select(d).attr("source") == f.attrs.id)[0]
-          target : grp_nodes.filter((f) -> d3.select(d).attr("target") == f.attrs.id)[0]
-          weight: 1
-
-        done null, {nodes : grp_nodes, edges : grp_edges}
-
-    render: (model) ->
+    render: (data) ->
 
       color = d3.scale.category20()
 
-      grp_nodes = model.nodes
-      grp_edges = model.edges
+      grp_nodes = data.nodes
+      grp_edges = data.edges
 
       xscale = d3.scale.linear()
-        .domain([d3.min(grp_nodes, (d) -> d.attrs.x), d3.max(grp_nodes, (d) -> d.attrs.x)]).range([400, 900])
+        .domain([d3.min(grp_nodes, (d) -> d.meta.pos[0]), d3.max(grp_nodes, (d) -> d.meta.pos[0])]).range([400, 900])
       yscale = d3.scale.linear()
-        .domain([d3.min(grp_nodes, (d) -> d.attrs.y), d3.max(grp_nodes, (d) -> d.attrs.y)]).range([200, 500])
+        .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
 
       svg = d3.select("#graph").append("svg")
         .attr("height", 900)
@@ -65,24 +42,17 @@ define ["app/config"], (config) ->
         .enter()
         .append("line")
         .classed("link", true)
-        .classed("family_rel", (d) -> d.attrs.family_rel)
-        .classed("private_rel", (d) -> !d.attrs.family_rel and d.attrs.private_rel)
-        .classed("prof_rel", (d) -> !(d.attrs.family_rel or d.attrs.private_rel) and d.attrs.prof_rel)
-        .attr("x1", (d) -> xscale(d.source.attrs.x))
-        .attr("y1", (d) -> yscale(d.source.attrs.y))
-        .attr("x2", (d) -> xscale(d.target.attrs.x))
-        .attr("y2", (d) -> yscale(d.target.attrs.y))
+        .classed("family_rel", (d) -> d.tags.filter((t) -> t.type == "family").length)
+        .classed("private_rel", (d) -> d.tags.filter((t) -> t.type == "private").length)
+        .classed("prof_rel", (d) -> d.tags.filter((t) -> t.type == "prof").length)
+        .attr("x1", (d) -> xscale(d.source.meta.pos[0]))
+        .attr("y1", (d) -> yscale(d.source.meta.pos[1]))
+        .attr("x2", (d) -> xscale(d.target.meta.pos[0]))
+        .attr("y2", (d) -> yscale(d.target.meta.pos[1]))
         .on("mouseover", (d) =>
-          @name_src d.source.attrs.label
-          @name_tgt d.target.attrs.label
-          tgs = []
-          if d.attrs.family_rel
-            tgs.push type : "family", val : d.attrs.family_rel, url : d.attrs.url
-          if d.attrs.private_rel
-            tgs.push type : "private", val : d.attrs.private_rel, url : d.attrs.url
-          if d.attrs.prof_rel
-            tgs.push type : "prof", val : d.attrs.prof_rel, url : d.attrs.url
-          @tags(tgs)
+          @name_src d.source.name
+          @name_tgt d.target.name
+          @tags d.tags
         )
 
       text = svg.selectAll("text")
@@ -91,9 +61,9 @@ define ["app/config"], (config) ->
         .append("text")
         .attr("class", "text")
         .attr("text-anchor", "middle")
-        .text((d) -> d.attrs.label)
-        .attr("x", (d) -> xscale(d.attrs.x))
-        .attr("y", (d) -> yscale(d.attrs.y) - 10)
+        .text((d) -> d.name)
+        .attr("x", (d) -> xscale(d.meta.pos[0]))
+        .attr("y", (d) -> yscale(d.meta.pos[1] - 10))
 
       node = svg.selectAll("node")
         .data(grp_nodes)
@@ -101,8 +71,8 @@ define ["app/config"], (config) ->
         .append("circle")
         .attr("r", 5)
         .attr("class", "node")
-        .attr("cx", (d) -> xscale(d.attrs.x))
-        .attr("cy", (d) -> yscale(d.attrs.y))
+        .attr("cx", (d) -> xscale(d.meta.pos[0]))
+        .attr("cy", (d) -> yscale(d.meta.pos[1]))
         .call(d3.behavior.drag()
           .origin((d) -> d)
           .on("drag", (d) ->
@@ -111,7 +81,7 @@ define ["app/config"], (config) ->
             d3.select(@).attr("cx", x).attr("cy", y)
             link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
             link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
-            text.filter((t) -> t.attrs.id == d.attrs.id).attr("x", x).attr("y", y - 10)
+            text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
           ))
 
   Panel : Panel

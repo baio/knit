@@ -10,15 +10,17 @@
       __extends(GraphController, _super);
 
       function GraphController() {
-        var nav;
-
-        nav = new menu.Menu();
-        ko.applyBindings(nav, $("#_nav")[0]);
+        this.nav = new menu.Menu();
         GraphController.__super__.constructor.apply(this, arguments);
       }
 
       GraphController.prototype.panel = function() {
-        return this.view_apply("app/views/graph/panel.html", new panel.Panel());
+        return this.view_apply("app/views/graph/panel.html", {
+          _layouts: {
+            _body: new panel.Panel(),
+            _nav: this.nav
+          }
+        });
       };
 
       GraphController.prototype.send = function() {

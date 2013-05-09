@@ -64,7 +64,9 @@ define ["ural/viewEngine",
         lmd = []
         if !err
           for i in [0..lms.length-1]
-            lmd.push layout : layouts[i], lm : lms[i], data : data[i]
+            lm = lms[i]
+            lm = lm.loader if lm.loader
+            lmd.push layout : layouts[i], lm : lm, data : data[i]
         done err, lmd
 
     #**Load data, render view**
@@ -101,8 +103,8 @@ define ["ural/viewEngine",
               layoutModelsData = res[1]
               viewEngine.applyData(html, layoutModelsData, @viewBag, isApply)
               for lmd in layoutModelsData
-                if lmd.data and $.isFunction(lmd.data.render)
-                  lmd.data.render lmd.data
+                if lmd.lm and $.isFunction(lmd.lm.render)
+                  lmd.lm.render lmd.data
             if done then done err
 
     #Shortcut for view(path, model, `True`, done)

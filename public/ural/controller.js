@@ -92,14 +92,18 @@
           lms.push(layoutModels[prop]);
         }
         return async.map(lms, this._loadLayoutModel, function(err, data) {
-          var i, lmd, _i, _ref;
+          var i, lm, lmd, _i, _ref;
 
           lmd = [];
           if (!err) {
             for (i = _i = 0, _ref = lms.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+              lm = lms[i];
+              if (lm.loader) {
+                lm = lm.loader;
+              }
               lmd.push({
                 layout: layouts[i],
-                lm: lms[i],
+                lm: lm,
                 data: data[i]
               });
             }
@@ -138,8 +142,8 @@
             viewEngine.applyData(html, layoutModelsData, _this.viewBag, isApply);
             for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
               lmd = layoutModelsData[_i];
-              if (lmd.data && $.isFunction(lmd.data.render)) {
-                lmd.data.render(lmd.data);
+              if (lmd.lm && $.isFunction(lmd.lm.render)) {
+                lmd.lm.render(lmd.data);
               }
             }
           }
