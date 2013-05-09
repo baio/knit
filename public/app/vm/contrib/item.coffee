@@ -35,4 +35,5 @@ define ["ural/vm/itemVM"], (itemVM) ->
           message : "Один из тагов должен быть выбран."
           params : [@family_rel, @prof_rel, @priv_rel]
       @isModifyed = ko.observable()
+      @_isRemoved = ko.observable()
       super resource, index

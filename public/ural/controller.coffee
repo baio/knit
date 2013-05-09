@@ -14,7 +14,8 @@ define ["ural/viewEngine",
 
       pubSub.sub "crud", "start_create", (item) => @crudStartCreate item
       pubSub.sub "crud", "start_update", (opts) => @crudStartUpdate opts
-      pubSub.sub "crud", "start_delete", (item) => @crudStartDelete item
+      pubSub.sub "crud", "start_delete", (params) => @crudStartDelete params
+      pubSub.sub "crud", "end_delete", (params) => @crudEnd params, "delete"
       pubSub.sub "crud", "get", (opts) => @crudGet opts
       pubSub.sub "crud", "create", (item) => @crudCreate item
       pubSub.sub "crud", "update", (opts) => @crudUpdate opts
@@ -97,8 +98,22 @@ define ["ural/viewEngine",
         if vm
           vm.map data
 
-    crudStartDelete: (item) ->
-      @showForm item.resource, "delete", item
+    crudStartDelete: (params) ->
+      @showForm params.resource, "delete", params.item
+
+
+    crudEnd: (params, crudType) ->
+      @hideForm params.resource, crudType
+      if params.err
+        notifyType = "error"
+        msg = params.err
+      else
+        notifyType = "success"
+        msg = params.msg
+      @notify msg, null, notifyType
+
+    notify: (msg, caption, type) ->
+      toastr[type] msg, caption
 
     crudStartCreate: (item) ->
       #item.errors.showAllMessages false

@@ -7,6 +7,7 @@
                     <h2>Or choose one to edit</h2>
                     <!-- ko foreach: list -->
                     <h3>
+                        <a href="#" data-bind="click: remove"><i class="icon-remove"></i></a>
                         <a href="#/contrib/item" data-bind="link: ref"><span data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
                     </h3>
                     <!-- /ko -->

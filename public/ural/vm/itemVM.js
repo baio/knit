@@ -6,9 +6,9 @@
     var ViewModel;
 
     return ViewModel = (function() {
-      function ViewModel(resource) {
+      function ViewModel(resource, _index) {
         this.resource = resource;
-        this._isRemoved = ko.observable();
+        this._index = _index;
         this.init();
       }
 
@@ -152,7 +152,26 @@
       };
 
       ViewModel.prototype.remove = function() {
-        return this._isRemoved(true);
+        var _this = this;
+
+        if (ko.isObservable(this._isRemoved)) {
+          return this._isRemoved(true);
+        } else {
+          return this.onRemove(function(err) {
+            if (_this._index) {
+              _this._index.list.remove(_this);
+            }
+            return pubSub.pub("crud", "end_delete", {
+              err: err,
+              msg: "Delecte success",
+              resource: _this.resource
+            });
+          });
+        }
+      };
+
+      ViewModel.prototype.onRemove = function(done) {
+        return done();
       };
 
       ViewModel.prototype.details = function(item, event) {

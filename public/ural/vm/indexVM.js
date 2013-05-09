@@ -133,7 +133,7 @@
       };
 
       ViewModel.prototype.onCreateItem = function() {
-        return new itemVM(this.resource);
+        return new itemVM(this.resource, this);
       };
 
       ViewModel.prototype.startCreate = function(some, event) {

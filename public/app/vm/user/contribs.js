@@ -9,11 +9,11 @@
     Contrib = (function(_super) {
       __extends(Contrib, _super);
 
-      function Contrib() {
+      function Contrib(resource, _index) {
         this.id = ko.observable();
         this.name = ko.observable();
         this.url = ko.observable();
-        Contrib.__super__.constructor.call(this, "contrib");
+        Contrib.__super__.constructor.call(this, "contrib", _index);
       }
 
       Contrib.prototype.onCreate = function(done) {
@@ -21,6 +21,13 @@
 
         data = this.toData();
         return dataProvider.create("contribs", data, done);
+      };
+
+      Contrib.prototype.onRemove = function(done) {
+        var data;
+
+        data = this.toData();
+        return dataProvider.ajax("contribs", "delete", data, done);
       };
 
       return Contrib;
@@ -34,7 +41,7 @@
       }
 
       Contribs.prototype.onCreateItem = function() {
-        return new Contrib();
+        return new Contrib("contrib", this);
       };
 
       return Contribs;

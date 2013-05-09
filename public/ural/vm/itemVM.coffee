@@ -2,9 +2,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
   class ViewModel
 
-    constructor: (@resource) ->
-      #isRemoved flag to mark item as removed
-      @_isRemoved = ko.observable()
+    constructor: (@resource, @_index) ->
       @init()
 
     @KeyFieldName: null
@@ -107,7 +105,18 @@ define ["ural/modules/pubSub"], (pubSub) ->
       done null
 
     remove: ->
+      if ko.isObservable(@_isRemoved)
         @_isRemoved true
+      else
+        @onRemove (err) =>
+          if @_index then @_index.list.remove @
+          pubSub.pub "crud", "end_delete",
+            err: err
+            msg: "Delecte success"
+            resource: @resource
+
+    onRemove: (done)->
+      done()
 
     details: (item, event) ->
       if @confirmEvent event, "details"

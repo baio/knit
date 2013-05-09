@@ -80,7 +80,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       vm
 
     onCreateItem: ->
-      new itemVM @resource
+      new itemVM @resource, @
 
     startCreate: (some, event) ->
       event.preventDefault()

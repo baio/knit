@@ -58,6 +58,7 @@
           }
         });
         this.isModifyed = ko.observable();
+        this._isRemoved = ko.observable();
         ItemVM.__super__.constructor.call(this, resource, index);
       }
 

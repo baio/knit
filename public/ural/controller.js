@@ -20,8 +20,11 @@
         pubSub.sub("crud", "start_update", function(opts) {
           return _this.crudStartUpdate(opts);
         });
-        pubSub.sub("crud", "start_delete", function(item) {
-          return _this.crudStartDelete(item);
+        pubSub.sub("crud", "start_delete", function(params) {
+          return _this.crudStartDelete(params);
+        });
+        pubSub.sub("crud", "end_delete", function(params) {
+          return _this.crudEnd(params, "delete");
         });
         pubSub.sub("crud", "get", function(opts) {
           return _this.crudGet(opts);
@@ -165,8 +168,26 @@
         });
       };
 
-      Controller.prototype.crudStartDelete = function(item) {
-        return this.showForm(item.resource, "delete", item);
+      Controller.prototype.crudStartDelete = function(params) {
+        return this.showForm(params.resource, "delete", params.item);
+      };
+
+      Controller.prototype.crudEnd = function(params, crudType) {
+        var msg, notifyType;
+
+        this.hideForm(params.resource, crudType);
+        if (params.err) {
+          notifyType = "error";
+          msg = params.err;
+        } else {
+          notifyType = "success";
+          msg = params.msg;
+        }
+        return this.notify(msg, null, notifyType);
+      };
+
+      Controller.prototype.notify = function(msg, caption, type) {
+        return toastr[type](msg, caption);
       };
 
       Controller.prototype.crudStartCreate = function(item) {
