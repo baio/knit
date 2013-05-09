@@ -50,7 +50,7 @@
         var d;
 
         d = {
-          id: this.ref(),
+          id: this.contrib.ref(),
           items: data
         };
         return dataProvider.ajax("contribs", "patch", d, function(err, data) {

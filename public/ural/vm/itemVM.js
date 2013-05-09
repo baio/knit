@@ -294,7 +294,7 @@
         var status, _done,
           _this = this;
 
-        status = this.src.status;
+        status = this.src ? this.src.status : "update";
         _done = function(err) {
           return pubSub.pub("crud", "end", {
             resource: _this.resource,
