@@ -205,8 +205,8 @@
         if (ko.isObservable(this.isModifyed)) {
           this.isModifyed(false);
           if (!this._isModifyedActivated) {
-            this.activateIsModifyed();
-            return this._isModifyedActivated = true;
+            this._isModifyedActivated = true;
+            return this.activateIsModifyed();
           }
         }
       };

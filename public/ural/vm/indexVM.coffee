@@ -120,5 +120,5 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       if ko.isObservable(@isModifyed)
         @isModifyed false
         if !@_isModifyedActivated
-          @activateIsModifyed()
           @_isModifyedActivated = true
+          @activateIsModifyed()
