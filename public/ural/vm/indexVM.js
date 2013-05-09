@@ -138,7 +138,11 @@
 
       ViewModel.prototype.startCreate = function(some, event) {
         event.preventDefault();
-        return pubSub.pub("crud", "start_create", this.createItem(this.resource, "create"));
+        return pubSub.pub("crud", "start", {
+          resource: this.resource,
+          item: this.createItem(this.resource, "create"),
+          type: "create"
+        });
       };
 
       ViewModel.prototype.activateIsModifyed = function() {
@@ -157,9 +161,11 @@
       ViewModel.prototype.listenItemIsModifyed = function(item) {
         var _this = this;
 
-        return item.isModifyed.subscribe(function(val) {
-          return _this.isModifyed(val || _this.getIsModifyed());
-        });
+        if (this._isModifyedActivated) {
+          return item.isModifyed.subscribe(function(val) {
+            return _this.isModifyed(val || _this.getIsModifyed());
+          });
+        }
       };
 
       ViewModel.prototype.updateIsModifyed = function() {

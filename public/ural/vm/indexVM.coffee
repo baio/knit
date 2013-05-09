@@ -84,7 +84,10 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     startCreate: (some, event) ->
       event.preventDefault()
-      pubSub.pub "crud", "start_create", @createItem(@resource, "create")
+      pubSub.pub "crud", "start",
+        resource: @resource
+        item: @createItem(@resource, "create")
+        type: "create"
 
     activateIsModifyed: ->
       for item in @list()
@@ -92,8 +95,9 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
         @listenItemIsModifyed(item)
 
     listenItemIsModifyed: (item) ->
-      item.isModifyed.subscribe (val) =>
-        @isModifyed(val or @getIsModifyed())
+      if @_isModifyedActivated
+        item.isModifyed.subscribe (val) =>
+          @isModifyed(val or @getIsModifyed())
 
     updateIsModifyed: ->
       if @_isModifyedActivated

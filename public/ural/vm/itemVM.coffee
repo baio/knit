@@ -28,7 +28,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     completeCreate: (data) ->
       @setSrc null, null
-      @map data, keepEdit
+      @map data
 
     map: (data, skipStratEdit) ->
 
@@ -80,7 +80,9 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     cancel: (item, event) ->
       event.preventDefault()
-      pubSub.pub "crud", "cancel", resource : @resource, status : @src.status
+      pubSub.pub "crud", "end",
+        resource : @resource
+        type: @src.status
 
     confirmEvent: (event, eventName) ->
       attr = $(event.target).attr "data-bind-event"
@@ -110,9 +112,10 @@ define ["ural/modules/pubSub"], (pubSub) ->
       else
         @onRemove (err) =>
           if @_index then @_index.list.remove @
-          pubSub.pub "crud", "end_delete",
+          pubSub.pub "crud", "end",
             err: err
-            msg: "Delecte success"
+            type: "delete"
+            msg: "Success"
             resource: @resource
 
     onRemove: (done)->
@@ -178,15 +181,26 @@ define ["ural/modules/pubSub"], (pubSub) ->
       return false
 
     save: ->
-      if @src.status == "create"
-        @create ->
-      else if @src.status == "update"
-        @update ->
+      status = @src.status
+      _done = (err) =>
+        pubSub.pub "crud", "end",
+          resource: @resource
+          type: status
+          err: err
+          msg: "Success"
+      if status == "create"
+        @create _done
+      else if status == "update"
+        @update _done
       else
         throw new Error("Item not in edit state")
 
     create: (done) ->
-      @onCreate done
+      @onCreate (err, data) =>
+        if !err
+          @completeCreate data
+          if @_index then @_index.add data, 0
+        done err
 
     onCreate: (done) ->
       done()

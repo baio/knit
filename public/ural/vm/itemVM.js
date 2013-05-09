@@ -45,7 +45,7 @@
 
       ViewModel.prototype.completeCreate = function(data) {
         this.setSrc(null, null);
-        return this.map(data, keepEdit);
+        return this.map(data);
       };
 
       ViewModel.prototype.map = function(data, skipStratEdit) {
@@ -113,9 +113,9 @@
 
       ViewModel.prototype.cancel = function(item, event) {
         event.preventDefault();
-        return pubSub.pub("crud", "cancel", {
+        return pubSub.pub("crud", "end", {
           resource: this.resource,
-          status: this.src.status
+          type: this.src.status
         });
       };
 
@@ -161,9 +161,10 @@
             if (_this._index) {
               _this._index.list.remove(_this);
             }
-            return pubSub.pub("crud", "end_delete", {
+            return pubSub.pub("crud", "end", {
               err: err,
-              msg: "Delecte success",
+              type: "delete",
+              msg: "Success",
               resource: _this.resource
             });
           });
@@ -285,17 +286,39 @@
       };
 
       ViewModel.prototype.save = function() {
-        if (this.src.status === "create") {
-          return this.create(function() {});
-        } else if (this.src.status === "update") {
-          return this.update(function() {});
+        var status, _done,
+          _this = this;
+
+        status = this.src.status;
+        _done = function(err) {
+          return pubSub.pub("crud", "end", {
+            resource: _this.resource,
+            type: status,
+            err: err,
+            msg: "Success"
+          });
+        };
+        if (status === "create") {
+          return this.create(_done);
+        } else if (status === "update") {
+          return this.update(_done);
         } else {
           throw new Error("Item not in edit state");
         }
       };
 
       ViewModel.prototype.create = function(done) {
-        return this.onCreate(done);
+        var _this = this;
+
+        return this.onCreate(function(err, data) {
+          if (!err) {
+            _this.completeCreate(data);
+            if (_this._index) {
+              _this._index.add(data, 0);
+            }
+          }
+          return done(err);
+        });
       };
 
       ViewModel.prototype.onCreate = function(done) {
