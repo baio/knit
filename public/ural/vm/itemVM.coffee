@@ -30,6 +30,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
       @setSrc null, null
       @map data
 
+    completeRemove: ->
+      if @src.item._index
+        @src.item._index.list.remove @src.item
+      @setSrc null, null
+
     map: (data, skipStratEdit) ->
 
       data = data[0] if $.isArray()
@@ -65,13 +70,13 @@ define ["ural/modules/pubSub"], (pubSub) ->
           moment(str).toDate()
 
     clone: (status) ->
-      vm = @onCreate()
+      vm = @onCreateItem()
       vm.map @toData()
       vm.setSrc @, status
       vm
 
-    onCreate: (resource) ->
-      new ViewModel resource
+    onCreateItem: ->
+      new ViewModel @resource, @_index
 
     setSrc: (item, status) ->
       @src =
@@ -96,22 +101,17 @@ define ["ural/modules/pubSub"], (pubSub) ->
     startRemove: (item, event) ->
       if @confirmEvent event, "startRemove"
         event.preventDefault()
-        pubSub.pub "crud", "start_delete", @clone "delete"
-
-    create: (item, event) ->
-      if @confirmEvent event, "create"
-        event.preventDefault()
-        pubSub.pub "crud", "create", @
-
-    onCreate: (data, done) ->
-      done null
+        pubSub.pub "crud", "start",
+          resource: @resource
+          item: @clone "delete"
+          type: "delete"
 
     remove: ->
       if ko.isObservable(@_isRemoved)
         @_isRemoved true
       else
         @onRemove (err) =>
-          if @_index then @_index.list.remove @
+          @completeRemove()
           pubSub.pub "crud", "end",
             err: err
             type: "delete"

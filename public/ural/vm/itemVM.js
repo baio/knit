@@ -48,6 +48,13 @@
         return this.map(data);
       };
 
+      ViewModel.prototype.completeRemove = function() {
+        if (this.src.item._index) {
+          this.src.item._index.list.remove(this.src.item);
+        }
+        return this.setSrc(null, null);
+      };
+
       ViewModel.prototype.map = function(data, skipStratEdit) {
         var d, dataIndexVM, prop, _ref;
 
@@ -94,14 +101,14 @@
       ViewModel.prototype.clone = function(status) {
         var vm;
 
-        vm = this.onCreate();
+        vm = this.onCreateItem();
         vm.map(this.toData());
         vm.setSrc(this, status);
         return vm;
       };
 
-      ViewModel.prototype.onCreate = function(resource) {
-        return new ViewModel(resource);
+      ViewModel.prototype.onCreateItem = function() {
+        return new ViewModel(this.resource, this._index);
       };
 
       ViewModel.prototype.setSrc = function(item, status) {
@@ -136,19 +143,12 @@
       ViewModel.prototype.startRemove = function(item, event) {
         if (this.confirmEvent(event, "startRemove")) {
           event.preventDefault();
-          return pubSub.pub("crud", "start_delete", this.clone("delete"));
+          return pubSub.pub("crud", "start", {
+            resource: this.resource,
+            item: this.clone("delete"),
+            type: "delete"
+          });
         }
-      };
-
-      ViewModel.prototype.create = function(item, event) {
-        if (this.confirmEvent(event, "create")) {
-          event.preventDefault();
-          return pubSub.pub("crud", "create", this);
-        }
-      };
-
-      ViewModel.prototype.onCreate = function(data, done) {
-        return done(null);
       };
 
       ViewModel.prototype.remove = function() {
@@ -158,9 +158,7 @@
           return this._isRemoved(true);
         } else {
           return this.onRemove(function(err) {
-            if (_this._index) {
-              _this._index.list.remove(_this);
-            }
+            _this.completeRemove();
             return pubSub.pub("crud", "end", {
               err: err,
               type: "delete",

@@ -16,6 +16,10 @@
         Contrib.__super__.constructor.call(this, "contrib", _index);
       }
 
+      Contrib.prototype.onCreateItem = function() {
+        return new Contrib(this.resource, this._index);
+      };
+
       Contrib.prototype.onCreate = function(done) {
         var data;
 
@@ -41,7 +45,7 @@
       }
 
       Contribs.prototype.onCreateItem = function() {
-        return new Contrib("contrib", this);
+        return new Contrib(this.resource, this);
       };
 
       return Contribs;

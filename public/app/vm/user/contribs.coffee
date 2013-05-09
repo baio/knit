@@ -12,6 +12,9 @@ define ["ural/vm/indexVM",
       @url = ko.observable()
       super "contrib", _index
 
+    onCreateItem: ->
+      new Contrib @resource, @_index
+
     onCreate: (done) ->
       data = @toData()
       dataProvider.create "contribs", data, done
@@ -26,4 +29,4 @@ define ["ural/vm/indexVM",
       super "contrib"
 
     onCreateItem: ->
-      new Contrib "contrib", @
+      new Contrib @resource, @
