@@ -96,7 +96,6 @@
           change: function(event, ui) {
             var observable;
 
-            console.log("change " + ui.item);
             observable = valueAccessor();
             observable((opts.allowNotInList || ui.item ? $(element).val() : null));
             $(element).val(observable());

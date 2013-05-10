@@ -52,7 +52,6 @@ define ->
           valueAccessor() ui.item.value
           _updateAutocompleteFields viewModel, opts.fields, ui.item, opts.resetRelatedFieldsOnNull
         change: (event, ui) ->
-          console.log "change " + ui.item
           observable = valueAccessor()
           observable (if opts.allowNotInList or ui.item  then $(element).val() else null)
           $(element).val observable()

@@ -1,15 +1,11 @@
-define ["ural/controller",
- "app/vm/menu",
- "app/vm/graph/panel",
- "app/vm/graph/toolbox",
+define [
+        "app/controllers/controllerBase",
+        "app/vm/graph/panel",
+        "app/vm/graph/toolbox"
 ],
-(controller, menu, panel, toolbox) ->
+(controllerBase, panel, toolbox) ->
 
-  class GraphController extends controller.Controller
-
-    constructor: ->
-      @nav = new menu()
-      super
+  class GraphController extends controllerBase.Controller
 
     panel: (contrib) ->
       if !contrib
@@ -18,8 +14,6 @@ define ["ural/controller",
       @view_apply "app/views/graph/panel.html",
         _layouts:
           _body: {loader : pl, filter : {contrib : contrib}}
-          _nav:  @nav
           _toolbox: new toolbox(@nav, pl)
-
 
   Controller : GraphController

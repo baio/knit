@@ -3,15 +3,15 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/controller", "app/vm/menu", "app/vm/graph/panel", "app/vm/graph/toolbox"], function(controller, menu, panel, toolbox) {
-    var GraphController;
+  define(["app/controllers/controllerBase", "app/vm/graph/panel", "app/vm/graph/toolbox"], function(controllerBase, panel, toolbox) {
+    var GraphController, _ref;
 
     GraphController = (function(_super) {
       __extends(GraphController, _super);
 
       function GraphController() {
-        this.nav = new menu();
-        GraphController.__super__.constructor.apply(this, arguments);
+        _ref = GraphController.__super__.constructor.apply(this, arguments);
+        return _ref;
       }
 
       GraphController.prototype.panel = function(contrib) {
@@ -29,7 +29,6 @@
                 contrib: contrib
               }
             },
-            _nav: this.nav,
             _toolbox: new toolbox(this.nav, pl)
           }
         });
@@ -37,7 +36,7 @@
 
       return GraphController;
 
-    })(controller.Controller);
+    })(controllerBase.Controller);
     return {
       Controller: GraphController
     };

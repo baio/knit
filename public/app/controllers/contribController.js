@@ -3,27 +3,29 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/controller", "app/vm/menu", "app/vm/user/user", "app/vm/contrib/index"], function(controller, menu, user, contrib) {
-    var ContribController;
+  define(["app/controllers/controllerBase", "app/vm/user/user", "app/vm/contrib/index"], function(controller, user, contrib) {
+    var ContribController, _ref;
 
     ContribController = (function(_super) {
       __extends(ContribController, _super);
 
       function ContribController() {
-        this.nav = new menu.Menu();
-        ContribController.__super__.constructor.apply(this, arguments);
+        _ref = ContribController.__super__.constructor.apply(this, arguments);
+        return _ref;
       }
 
       ContribController.prototype.start = function() {
         return this.view_apply("app/views/contrib/start.html", {
           _layouts: {
-            _body: new user(),
-            _nav: this.nav
+            _body: new user()
           }
         });
       };
 
       ContribController.prototype.item = function(id) {
+        if (!id) {
+          id = this.nav.activeContrib().ref();
+        }
         return this.view_apply("app/views/contrib/item.html", {
           _layouts: {
             _body: {
@@ -31,8 +33,7 @@
               filter: {
                 id: id
               }
-            },
-            _nav: this.nav
+            }
           }
         });
       };
