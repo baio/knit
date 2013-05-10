@@ -48,7 +48,6 @@ define ->
               response m
             minLength: 2
         select: (event, ui) ->
-          console.log "select " + ui.item
           valueAccessor() ui.item.value
           _updateAutocompleteFields viewModel, opts.fields, ui.item, opts.resetRelatedFieldsOnNull
         change: (event, ui) ->
@@ -60,7 +59,6 @@ define ->
     update: (element, valueAccessor, allBindingsAccessor) ->
       opts = allBindingsAccessor().autocompleteOpts
       value = ko.utils.unwrapObservable valueAccessor()
-      console.log "update " + value
       if $(element).val() != value
         $(element).val value
 
@@ -133,7 +131,6 @@ define ->
         if f then _setClass val
 
       ko.utils.domNodeDisposal.addDisposeCallback element, ->
-        console.log "dispose"
         $(element).removeClass "error"
 
   ko.bindingHandlers.validation =

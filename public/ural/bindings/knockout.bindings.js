@@ -89,7 +89,6 @@
             });
           },
           select: function(event, ui) {
-            console.log("select " + ui.item);
             valueAccessor()(ui.item.value);
             return _updateAutocompleteFields(viewModel, opts.fields, ui.item, opts.resetRelatedFieldsOnNull);
           },
@@ -108,7 +107,6 @@
 
         opts = allBindingsAccessor().autocompleteOpts;
         value = ko.utils.unwrapObservable(valueAccessor());
-        console.log("update " + value);
         if ($(element).val() !== value) {
           return $(element).val(value);
         }
@@ -209,7 +207,6 @@
           }
         });
         return ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-          console.log("dispose");
           return $(element).removeClass("error");
         });
       }
