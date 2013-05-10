@@ -5,6 +5,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
     constructor: (@controllerDirectory) ->
       @_controllers = []
       pubSub.sub "href", "change", (data) =>
+        console.log "!!!"
         @_hash data.href
 
     @StartRouting:(controllerDirectory, routes) ->

@@ -1,5 +1,6 @@
 define ["ural/viewRender"], (viewRender) ->
 
+  _layoutModelsData = []
 
   #** render(path, done) **
   #
@@ -26,6 +27,12 @@ define ["ural/viewRender"], (viewRender) ->
     $.templates pvt : bodyHtml
     layoutHtml = $.render.pvt viewBag
 
+    for lmd in _layoutModelsData
+      lt = $("#" + lmd.layout)[0]
+      ko.cleanNode lt
+      $("[data-view-engine-clean]", lt).empty()
+    _layoutModelsData = []
+
     $("#_layout").empty()
     $("#_layout").append layoutHtml
 
@@ -33,6 +40,7 @@ define ["ural/viewRender"], (viewRender) ->
       for lmd in layoutModelsData
         lt = $("#" + lmd.layout)[0]
         ko.applyBindings lmd.data, lt
+      _layoutModelsData = layoutModelsData
 
   render : render
   applyData : applyData

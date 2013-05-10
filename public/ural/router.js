@@ -10,6 +10,7 @@
         this.controllerDirectory = controllerDirectory;
         this._controllers = [];
         pubSub.sub("href", "change", function(data) {
+          console.log("!!!");
           return _this._hash(data.href);
         });
       }
