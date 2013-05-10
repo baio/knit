@@ -4,19 +4,7 @@
     var Panel;
 
     return Panel = (function() {
-      function Panel() {
-        var _this = this;
-
-        this.name_src = ko.observable();
-        this.name_tgt = ko.observable();
-        this.url_src = ko.computed(function() {
-          return "https://www.google.ru/search?q=" + (_this.name_src());
-        });
-        this.url_tgt = ko.computed(function() {
-          return "https://www.google.ru/search?q=" + (_this.name_tgt());
-        });
-        this.tags = ko.observableArray();
-      }
+      function Panel() {}
 
       Panel.prototype.load = function(filter, done) {
         return dataProvider.get("graphs", {
@@ -52,8 +40,7 @@
       };
 
       Panel.prototype.render = function(data) {
-        var color, grp_edges, grp_nodes, link, node, svg, text,
-          _this = this;
+        var color, grp_edges, grp_nodes, link, node, svg, text;
 
         this.data = data;
         color = d3.scale.category20();
@@ -87,11 +74,7 @@
           return d.target.meta.pos[0];
         }).attr("y2", function(d) {
           return d.target.meta.pos[1];
-        }).on("mouseover", function(d) {
-          _this.name_src(d.source.name);
-          _this.name_tgt(d.target.name);
-          return _this.tags(d.tags);
-        });
+        }).on("mouseover", this.onHoverEdge);
         text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
           return d.name;
         }).attr("x", function(d) {
@@ -123,6 +106,8 @@
           return d.meta.pos = [x, y];
         }));
       };
+
+      Panel.prototype.onHoverEdge = function(edge) {};
 
       Panel.prototype.toData = function() {
         return this.data.nodes;

@@ -2,14 +2,6 @@ define ["app/dataProvider"], (dataProvider) ->
 
   class Panel
 
-    constructor: ->
-
-      @name_src = ko.observable()
-      @name_tgt = ko.observable()
-      @url_src = ko.computed => "https://www.google.ru/search?q=#{@name_src()}"
-      @url_tgt = ko.computed => "https://www.google.ru/search?q=#{@name_tgt()}"
-      @tags = ko.observableArray()
-
     load: (filter, done) ->
       dataProvider.get "graphs", contrib : filter.contrib, (err, data) ->
         if !err
@@ -53,11 +45,7 @@ define ["app/dataProvider"], (dataProvider) ->
         .attr("y1", (d) -> d.source.meta.pos[1])
         .attr("x2", (d) -> d.target.meta.pos[0])
         .attr("y2", (d) -> d.target.meta.pos[1])
-        .on("mouseover", (d) =>
-          @name_src d.source.name
-          @name_tgt d.target.name
-          @tags d.tags
-        )
+        .on("mouseover", @onHoverEdge)
 
       text = svg.selectAll("text")
         .data(grp_nodes)
@@ -89,6 +77,7 @@ define ["app/dataProvider"], (dataProvider) ->
             d.meta.pos = [x, y]
           ))
 
+    onHoverEdge: (edge) ->
 
     toData: ->
       @data.nodes
