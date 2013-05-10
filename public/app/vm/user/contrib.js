@@ -10,7 +10,7 @@
       __extends(Contrib, _super);
 
       function Contrib(resource, _index) {
-        this.id = ko.observable();
+        this.ref = ko.observable();
         this.name = ko.observable();
         this.url = ko.observable();
         Contrib.__super__.constructor.call(this, "contrib", _index);

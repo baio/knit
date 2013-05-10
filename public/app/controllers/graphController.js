@@ -15,11 +15,9 @@
       }
 
       GraphController.prototype.panel = function(contrib) {
-        var pl;
+        var pl,
+          _this = this;
 
-        if (!contrib) {
-          contrib = this.nav.activeContrib().ref();
-        }
         pl = new panel();
         return this.view_apply("app/views/graph/panel.html", {
           _layouts: {
@@ -30,6 +28,10 @@
               }
             },
             _toolbox: new toolbox(this.nav, pl)
+          }
+        }, function(err) {
+          if (!err) {
+            return _this.nav.activeContrib(pl.data.name);
           }
         });
       };

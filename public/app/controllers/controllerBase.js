@@ -14,9 +14,9 @@
         GraphController.__super__.constructor.apply(this, arguments);
       }
 
-      GraphController.prototype.view_apply = function(path, model) {
+      GraphController.prototype.view_apply = function(path, model, done) {
         model._layouts._nav = this.nav;
-        return GraphController.__super__.view_apply.call(this, path, model);
+        return GraphController.__super__.view_apply.call(this, path, model, done);
       };
 
       return GraphController;

@@ -6,7 +6,7 @@ define ["ural/modules/pubSub", "app/vm/user/user"], (pubSub, user) ->
     constructor: ->
 
       @active = ko.observable()
-      @activeContrib = ko.observable()
+      @activeContrib = ko.observable("Choose graph")
 
       pubSub.sub "href", "changed", (data) =>
         @active "/" + data.controller + "/" + data.action
@@ -16,6 +16,5 @@ define ["ural/modules/pubSub", "app/vm/user/user"], (pubSub, user) ->
 
     load: (filter, done) ->
       @user.load filter, (err) =>
-        @activeContrib(@user.contribs.list()[0])
         done err, @
 

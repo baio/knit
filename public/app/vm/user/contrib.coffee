@@ -8,7 +8,7 @@ define [
   class Contrib extends itemVM
 
     constructor: (resource, _index) ->
-      @id = ko.observable()
+      @ref = ko.observable()
       @name = ko.observable()
       @url = ko.observable()
       super "contrib", _index

@@ -12,8 +12,6 @@ define ["app/controllers/controllerBase",
           _body: new user()
 
     item: (id) ->
-      if !id
-        id = @nav.activeContrib().ref()
       @view_apply "app/views/contrib/item.html",
         _layouts:
           _body: {loader : new contrib(), filter : {id : id}}

@@ -8,7 +8,7 @@
         var _this = this;
 
         this.active = ko.observable();
-        this.activeContrib = ko.observable();
+        this.activeContrib = ko.observable("Choose graph");
         pubSub.sub("href", "changed", function(data) {
           return _this.active("/" + data.controller + "/" + data.action);
         });
@@ -19,7 +19,6 @@
         var _this = this;
 
         return this.user.load(filter, function(err) {
-          _this.activeContrib(_this.user.contribs.list()[0]);
           return done(err, _this);
         });
       };

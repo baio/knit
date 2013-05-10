@@ -9,8 +9,8 @@ define ["ural/controller",
       @nav = new menu()
       super
 
-    view_apply: (path, model) ->
+    view_apply: (path, model, done) ->
       model._layouts._nav = @nav
-      super path, model
+      super path, model, done
 
   Controller : GraphController

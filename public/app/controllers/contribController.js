@@ -23,9 +23,6 @@
       };
 
       ContribController.prototype.item = function(id) {
-        if (!id) {
-          id = this.nav.activeContrib().ref();
-        }
         return this.view_apply("app/views/contrib/item.html", {
           _layouts: {
             _body: {
