@@ -1,4 +1,4 @@
-define ["ural/modules/pubSub"], (pubSub) ->
+define ["ural/modules/pubSub", "app/vm/user/user"], (pubSub, user) ->
 
 
   class Menu
@@ -6,8 +6,16 @@ define ["ural/modules/pubSub"], (pubSub) ->
     constructor: ->
 
       @active = ko.observable()
+      @activeContrib = ko.observable()
 
       pubSub.sub "href", "changed", (data) =>
         @active "/" + data.controller + "/" + data.action
 
-  Menu : Menu
+      @user = new user()
+
+
+    load: (filter, done) ->
+      @user.load filter, (err) =>
+        @activeContrib(@user.contribs.list()[0])
+        done err, @
+

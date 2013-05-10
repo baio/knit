@@ -20,7 +20,7 @@
 
       Panel.prototype.load = function(filter, done) {
         return dataProvider.get("graphs", {
-          contrib: "518b989739ed9714289d0bc1"
+          contrib: filter.contrib
         }, function(err, data) {
           var edge, node, pos, _i, _j, _len, _len1, _ref, _ref1;
 
@@ -120,16 +120,12 @@
           text.filter(function(t) {
             return t.id === d.id;
           }).attr("x", x).attr("y", y - 10);
-          d.meta.pos = [x, y];
-          return console.log(d.meta.pos);
+          return d.meta.pos = [x, y];
         }));
       };
 
       Panel.prototype.toData = function() {
-        return {
-          contrib: "518b989739ed9714289d0bc1",
-          data: this.data.nodes
-        };
+        return this.data.nodes;
       };
 
       return Panel;

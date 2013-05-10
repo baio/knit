@@ -52,7 +52,16 @@
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li data-bind="css : {active : active() == '/graph/panel'}"><a href="#/graph/panel" data-bind="link : null">Overview</a></li>
-                    <li data-bind="css : {active : active() == '/contrib/start'}"><a href="#/contrib/start" data-bind="link : null">Contribs</a></li>
+                    <li data-bind="css : {active : active() == '/contrib/start'}"><a href="#/contrib/start" data-bind="link : null">Data</a></li>
+                </ul>
+                <ul class="nav pull-right" data-bind="with: user">
+                    <li><a href="#">Hello, <span data-bind="text: name"></span></a></li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown" data-bind="with: contribs">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Contribs<b class="caret"></b></a>
+                        <ul class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: list}">
+                        </ul>
+                    </li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -62,6 +71,10 @@
 
 <div id="_layout">
 </div>
+
+<script type="text/html" id="contrib-menu-item">
+    <li><a href="#" data-bind="text: name, click: openGraph"></a></li>
+</script>
 
 <script data-main="/app/main" src="/assets/js/require.js"></script>
 

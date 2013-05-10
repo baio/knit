@@ -10,19 +10,27 @@
       __extends(GraphController, _super);
 
       function GraphController() {
-        this.nav = new menu.Menu();
+        this.nav = new menu();
         GraphController.__super__.constructor.apply(this, arguments);
       }
 
-      GraphController.prototype.panel = function() {
+      GraphController.prototype.panel = function(contrib) {
         var pl;
 
+        if (!contrib) {
+          contrib = this.nav.activeContrib().ref();
+        }
         pl = new panel();
         return this.view_apply("app/views/graph/panel.html", {
           _layouts: {
-            _body: pl,
+            _body: {
+              loader: pl,
+              filter: {
+                contrib: contrib
+              }
+            },
             _nav: this.nav,
-            _toolbox: new toolbox(pl)
+            _toolbox: new toolbox(this.nav, pl)
           }
         });
       };

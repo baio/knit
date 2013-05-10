@@ -11,7 +11,7 @@ define ["app/dataProvider"], (dataProvider) ->
       @tags = ko.observableArray()
 
     load: (filter, done) ->
-      dataProvider.get "graphs", contrib : "518b989739ed9714289d0bc1", (err, data) ->
+      dataProvider.get "graphs", contrib : filter.contrib, (err, data) ->
         if !err
           for edge in data.edges
             edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]
@@ -87,11 +87,10 @@ define ["app/dataProvider"], (dataProvider) ->
             link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
             text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
             d.meta.pos = [x, y]
-            console.log d.meta.pos
           ))
 
 
     toData: ->
-      contrib: "518b989739ed9714289d0bc1", data: @data.nodes
+      @data.nodes
 
 

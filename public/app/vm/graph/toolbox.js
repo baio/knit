@@ -4,12 +4,16 @@
     var Toolbox;
 
     return Toolbox = (function() {
-      function Toolbox(panel) {
+      function Toolbox(nav, panel) {
+        this.nav = nav;
         this.panel = panel;
       }
 
       Toolbox.prototype.save = function() {
-        return dataProvider.ajax("graphs", "post", this.panel.toData(), function() {});
+        return dataProvider.ajax("graphs", "post", {
+          contrib: this.nav.activeContrib().ref(),
+          data: this.panel.toData()
+        }, function() {});
       };
 
       return Toolbox;

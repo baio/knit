@@ -8,17 +8,18 @@ define ["ural/controller",
   class GraphController extends controller.Controller
 
     constructor: ->
-      @nav = new menu.Menu()
-      #ko.applyBindings(nav, $("#_nav")[0])
+      @nav = new menu()
       super
 
-    panel: ->
+    panel: (contrib) ->
+      if !contrib
+        contrib = @nav.activeContrib().ref()
       pl = new panel()
       @view_apply "app/views/graph/panel.html",
         _layouts:
-          _body: pl
+          _body: {loader : pl, filter : {contrib : contrib}}
           _nav:  @nav
-          _toolbox: new toolbox(pl)
+          _toolbox: new toolbox(@nav, pl)
 
 
   Controller : GraphController

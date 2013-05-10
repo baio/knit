@@ -47,10 +47,21 @@
         return Contrib.__super__.create.call(this, function(err) {
           done(err);
           if (!err) {
-            return pubSub.pub("href", "change", {
-              href: "/contrib/item/" + (_this.ref())
-            });
+            return _this.openContrib();
           }
+        });
+      };
+
+      Contrib.prototype.openContrib = function() {
+        return pubSub.pub("href", "change", {
+          href: "/contrib/item/" + (this.ref())
+        });
+      };
+
+      Contrib.prototype.openGraph = function(data, event) {
+        event.preventDefault();
+        return pubSub.pub("href", "change", {
+          href: "/graph/panel/" + (this.ref())
         });
       };
 
