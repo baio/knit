@@ -11,7 +11,7 @@
 
       Toolbox.prototype.save = function() {
         return dataProvider.ajax("graphs", "post", {
-          contrib: this.nav.activeContrib().ref(),
+          contrib: this.nav.activeContrib().id,
           data: this.panel.toData()
         }, function() {});
       };

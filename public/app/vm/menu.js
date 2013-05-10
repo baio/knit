@@ -8,7 +8,10 @@
         var _this = this;
 
         this.active = ko.observable();
-        this.activeContrib = ko.observable("Choose graph");
+        this.activeContrib = ko.observable({
+          id: null,
+          name: "Choose graph"
+        });
         pubSub.sub("href", "changed", function(data) {
           return _this.active("/" + data.controller + "/" + data.action);
         });

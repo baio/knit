@@ -1,5 +1,6 @@
 define ["ural/viewRender"], (viewRender) ->
 
+
   #** render(path, done) **
   #
   #see viewRender.render
@@ -30,7 +31,8 @@ define ["ural/viewRender"], (viewRender) ->
 
     if isApply
       for lmd in layoutModelsData
-        ko.applyBindings lmd.data, $("#" + lmd.layout)[0]
+        lt = $("#" + lmd.layout)[0]
+        ko.applyBindings lmd.data, lt
 
   render : render
   applyData : applyData

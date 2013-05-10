@@ -1,19 +1,16 @@
 define ["ural/viewEngine",
-        "ural/modules/pubSub",
-        "ural/modules/dataProvider"],
-(viewEngine, pubSub, dataProvider) ->
+        "ural/modules/pubSub"],
+(viewEngine, pubSub) ->
 
   class Controller
 
     constructor: (@viewModel) ->
 
-      @dataProvider = dataProvider.get()
-
       if viewModel
         ko.applyBindings viewModel, $("#_body")[0]
 
-      pubSub.sub "crud", "start", (params) => @crudStart params
-      pubSub.sub "crud", "end", (params) => @crudEnd params
+      pubSub.sub "crud", "start", true, (params) => @crudStart params
+      pubSub.sub "crud", "end", true, (params) => @crudEnd params
 
     crudStart: (params) ->
       @showForm params.resource, params.type, params.item

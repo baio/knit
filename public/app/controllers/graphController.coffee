@@ -15,6 +15,6 @@ define [
           _toolbox: new toolbox(@nav, pl)
       ,(err) =>
         if !err
-          @nav.activeContrib pl.data.name
+          @nav.activeContrib id: pl.data.id, name: pl.data.name
 
   Controller : GraphController

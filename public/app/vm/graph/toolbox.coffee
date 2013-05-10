@@ -5,4 +5,4 @@ define ["app/dataProvider"], (dataProvider) ->
     constructor: (@nav, @panel)->
 
     save: ->
-      dataProvider.ajax "graphs", "post", {contrib: @nav.activeContrib().ref(), data : @panel.toData()}, ->
+      dataProvider.ajax "graphs", "post", {contrib: @nav.activeContrib().id, data : @panel.toData()}, ->

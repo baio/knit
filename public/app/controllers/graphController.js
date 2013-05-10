@@ -31,7 +31,10 @@
           }
         }, function(err) {
           if (!err) {
-            return _this.nav.activeContrib(pl.data.name);
+            return _this.nav.activeContrib({
+              id: pl.data.id,
+              name: pl.data.name
+            });
           }
         });
       };

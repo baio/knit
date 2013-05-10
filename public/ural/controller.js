@@ -2,7 +2,7 @@
 (function() {
   var __hasProp = {}.hasOwnProperty;
 
-  define(["ural/viewEngine", "ural/modules/pubSub", "ural/modules/dataProvider"], function(viewEngine, pubSub, dataProvider) {
+  define(["ural/viewEngine", "ural/modules/pubSub"], function(viewEngine, pubSub) {
     var Controller;
 
     Controller = (function() {
@@ -10,14 +10,13 @@
         var _this = this;
 
         this.viewModel = viewModel;
-        this.dataProvider = dataProvider.get();
         if (viewModel) {
           ko.applyBindings(viewModel, $("#_body")[0]);
         }
-        pubSub.sub("crud", "start", function(params) {
+        pubSub.sub("crud", "start", true, function(params) {
           return _this.crudStart(params);
         });
-        pubSub.sub("crud", "end", function(params) {
+        pubSub.sub("crud", "end", true, function(params) {
           return _this.crudEnd(params);
         });
       }

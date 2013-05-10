@@ -7,7 +7,7 @@
       return viewRender.render(path, done);
     };
     applyData = function(bodyHtml, layoutModelsData, viewBag, isApply) {
-      var layoutHtml, lmd, _i, _len, _results;
+      var layoutHtml, lmd, lt, _i, _len, _results;
 
       $.templates({
         pvt: bodyHtml
@@ -19,7 +19,8 @@
         _results = [];
         for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
           lmd = layoutModelsData[_i];
-          _results.push(ko.applyBindings(lmd.data, $("#" + lmd.layout)[0]));
+          lt = $("#" + lmd.layout)[0];
+          _results.push(ko.applyBindings(lmd.data, lt));
         }
         return _results;
       }
