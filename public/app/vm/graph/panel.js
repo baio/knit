@@ -22,16 +22,37 @@
               edge.source = data.nodes.filter(function(n) {
                 return n.id === edge.source_id;
               })[0];
+              edge.isType = function(type) {
+                var family, priv, prof;
+
+                family = this.tags.filter(function(t) {
+                  return t.type === "family";
+                }).length;
+                priv = this.tags.filter(function(t) {
+                  return t.type === "private";
+                }).length;
+                prof = this.tags.filter(function(t) {
+                  return t.type === "prof";
+                }).length;
+                switch (type) {
+                  case "family":
+                    return family;
+                  case "private":
+                    return !family && priv;
+                  case "prof":
+                    return !family && !priv && prof;
+                }
+              };
             }
             _ref1 = data.nodes;
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               node = _ref1[_j];
               pos = node.meta.pos;
               if (pos[0] === -1) {
-                pos[0] = 100;
+                pos[0] = 500;
               }
               if (pos[1] === -1) {
-                pos[1] = 100;
+                pos[1] = 500;
               }
             }
           }
@@ -55,17 +76,11 @@
 
         svg = d3.select("#graph").append("svg").attr("height", 900);
         link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("family_rel", function(d) {
-          return d.tags.filter(function(t) {
-            return t.type === "family";
-          }).length;
+          return d.isType("family");
         }).classed("private_rel", function(d) {
-          return d.tags.filter(function(t) {
-            return t.type === "private";
-          }).length;
+          return d.isType("private");
         }).classed("prof_rel", function(d) {
-          return d.tags.filter(function(t) {
-            return t.type === "prof";
-          }).length;
+          return d.isType("prof");
         }).attr("x1", function(d) {
           return d.source.meta.pos[0];
         }).attr("y1", function(d) {

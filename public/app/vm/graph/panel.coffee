@@ -8,10 +8,22 @@ define ["app/dataProvider"], (dataProvider) ->
           for edge in data.edges
             edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]
             edge.source = data.nodes.filter((n) -> n.id == edge.source_id)[0]
+            edge.isType = (type) ->
+              family = @tags.filter((t) -> t.type == "family").length
+              priv = @tags.filter((t) -> t.type == "private").length
+              prof = @tags.filter((t) -> t.type == "prof").length
+              switch type
+                when "family"
+                  family
+                when "private"
+                  !family and priv
+                when "prof"
+                  !family and !priv and prof
+
           for node in data.nodes
             pos = node.meta.pos
-            if pos[0] == -1 then pos[0] = 100
-            if pos[1] == -1 then pos[1] = 100
+            if pos[0] == -1 then pos[0] = 500
+            if pos[1] == -1 then pos[1] = 500
         done err, data
 
     render: (data) ->
@@ -38,9 +50,9 @@ define ["app/dataProvider"], (dataProvider) ->
         .enter()
         .append("line")
         .classed("link", true)
-        .classed("family_rel", (d) -> d.tags.filter((t) -> t.type == "family").length)
-        .classed("private_rel", (d) -> d.tags.filter((t) -> t.type == "private").length)
-        .classed("prof_rel", (d) -> d.tags.filter((t) -> t.type == "prof").length)
+        .classed("family_rel", (d) -> d.isType("family"))
+        .classed("private_rel", (d) -> d.isType("private"))
+        .classed("prof_rel", (d) -> d.isType("prof"))
         .attr("x1", (d) -> d.source.meta.pos[0])
         .attr("y1", (d) -> d.source.meta.pos[1])
         .attr("x2", (d) -> d.target.meta.pos[0])
