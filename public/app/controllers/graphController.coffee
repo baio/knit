@@ -1,9 +1,9 @@
 define ["ural/controller",
  "app/vm/menu",
  "app/vm/graph/panel",
- "app/vm/graph/send",
- "app/config"],
-(controller, menu, panel, send, config) ->
+ "app/vm/graph/toolbox",
+],
+(controller, menu, panel, toolbox) ->
 
   class GraphController extends controller.Controller
 
@@ -13,14 +13,12 @@ define ["ural/controller",
       super
 
     panel: ->
+      pl = new panel()
       @view_apply "app/views/graph/panel.html",
         _layouts:
-          _body: new panel.Panel()
+          _body: pl
           _nav:  @nav
+          _toolbox: new toolbox(pl)
 
-    send: ->
-      @viewBag =
-        download_gexf_href : config.links.gexf_download
-      @view "app/views/graph/send.html", new send.Send()
 
   Controller : GraphController

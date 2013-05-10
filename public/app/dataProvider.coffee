@@ -67,7 +67,7 @@ define ->
 
     update: (resource, data, done) ->
       @date2json(data)
-      $.put(@onGetUrl(resource), JSON.stringify(data))
+      $.post(@onGetUrl(resource), JSON.stringify(data))
         .always (resp, res) =>
           err = @onGetError(resp, res)
           if !err

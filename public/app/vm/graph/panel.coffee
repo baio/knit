@@ -18,21 +18,25 @@ define ["app/dataProvider"], (dataProvider) ->
             edge.source = data.nodes.filter((n) -> n.id == edge.source_id)[0]
           for node in data.nodes
             pos = node.meta.pos
-            if pos[0] == -1 then pos[0] = 0.5
-            if pos[1] == -1 then pos[1] = 0.5
+            if pos[0] == -1 then pos[0] = 100
+            if pos[1] == -1 then pos[1] = 100
         done err, data
 
     render: (data) ->
+
+      @data = data
 
       color = d3.scale.category20()
 
       grp_nodes = data.nodes
       grp_edges = data.edges
 
+      ###
       xscale = d3.scale.linear()
         .domain([d3.min(grp_nodes, (d) -> d.meta.pos[0]), d3.max(grp_nodes, (d) -> d.meta.pos[0])]).range([400, 900])
       yscale = d3.scale.linear()
         .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
+      ###
 
       svg = d3.select("#graph").append("svg")
         .attr("height", 900)
@@ -45,10 +49,10 @@ define ["app/dataProvider"], (dataProvider) ->
         .classed("family_rel", (d) -> d.tags.filter((t) -> t.type == "family").length)
         .classed("private_rel", (d) -> d.tags.filter((t) -> t.type == "private").length)
         .classed("prof_rel", (d) -> d.tags.filter((t) -> t.type == "prof").length)
-        .attr("x1", (d) -> xscale(d.source.meta.pos[0]))
-        .attr("y1", (d) -> yscale(d.source.meta.pos[1]))
-        .attr("x2", (d) -> xscale(d.target.meta.pos[0]))
-        .attr("y2", (d) -> yscale(d.target.meta.pos[1]))
+        .attr("x1", (d) -> d.source.meta.pos[0])
+        .attr("y1", (d) -> d.source.meta.pos[1])
+        .attr("x2", (d) -> d.target.meta.pos[0])
+        .attr("y2", (d) -> d.target.meta.pos[1])
         .on("mouseover", (d) =>
           @name_src d.source.name
           @name_tgt d.target.name
@@ -62,8 +66,8 @@ define ["app/dataProvider"], (dataProvider) ->
         .attr("class", "text")
         .attr("text-anchor", "middle")
         .text((d) -> d.name)
-        .attr("x", (d) -> xscale(d.meta.pos[0]))
-        .attr("y", (d) -> yscale(d.meta.pos[1] - 10))
+        .attr("x", (d) -> d.meta.pos[0])
+        .attr("y", (d) -> d.meta.pos[1] - 10)
 
       node = svg.selectAll("node")
         .data(grp_nodes)
@@ -71,8 +75,8 @@ define ["app/dataProvider"], (dataProvider) ->
         .append("circle")
         .attr("r", 5)
         .attr("class", "node")
-        .attr("cx", (d) -> xscale(d.meta.pos[0]))
-        .attr("cy", (d) -> yscale(d.meta.pos[1]))
+        .attr("cx", (d) -> d.meta.pos[0])
+        .attr("cy", (d) -> d.meta.pos[1])
         .call(d3.behavior.drag()
           .origin((d) -> d)
           .on("drag", (d) ->
@@ -82,6 +86,12 @@ define ["app/dataProvider"], (dataProvider) ->
             link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
             link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
             text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
+            d.meta.pos = [x, y]
+            console.log d.meta.pos
           ))
 
-  Panel : Panel
+
+    toData: ->
+      contrib: "518b989739ed9714289d0bc1", data: @data.nodes
+
+

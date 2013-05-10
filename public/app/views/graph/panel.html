@@ -1,19 +1,25 @@
 <div>
-    <div id="_body">
-        <!--
-        <div class="affix graph-panel">
-            <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
-                <li><a href="#" data-bind="attr : {href : url_src}, text : name_src" target="_blank"></a></li>
-                <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
-                <li class="divider"></li>
-                <!-- ko foreach : tags --
-                <li><a href="#" data-bind="attr : {href : url}, text : val" target="_blank"></a></li>
-                <!-- /ko --
-            </ul>
-        </div>
-         -->
-        <div class="graph-container">
-            <div id="graph" style="width: 100%; height: 100%;"></div>
-        </div>
+    <!--
+    <div class="affix graph-panel">
+        <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
+            <li><a href="#" data-bind="attr : {href : url_src}, text : name_src" target="_blank"></a></li>
+            <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
+            <li class="divider"></li>
+            <!-- ko foreach : tags --
+            <li><a href="#" data-bind="attr : {href : url}, text : val" target="_blank"></a></li>
+            <!-- /ko --
+        </ul>
+    </div>
+     -->
+    <div class="affix graph-panel" id="_toolbox">
+        <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
+            <li>
+                <a href="#" class="btn btn-primary btn-small" data-bind="click: save">Save</a>
+            </li>
+            <!-- /ko -->
+        </ul>
+    </div>
+    <div class="graph-container" id="_body">
+        <div id="graph" style="width: 100%; height: 100%;"></div>
     </div>
 </div>

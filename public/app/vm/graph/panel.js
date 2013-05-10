@@ -3,7 +3,7 @@
   define(["app/dataProvider"], function(dataProvider) {
     var Panel;
 
-    Panel = (function() {
+    return Panel = (function() {
       function Panel() {
         var _this = this;
 
@@ -40,10 +40,10 @@
               node = _ref1[_j];
               pos = node.meta.pos;
               if (pos[0] === -1) {
-                pos[0] = 0.5;
+                pos[0] = 100;
               }
               if (pos[1] === -1) {
-                pos[1] = 0.5;
+                pos[1] = 100;
               }
             }
           }
@@ -52,26 +52,20 @@
       };
 
       Panel.prototype.render = function(data) {
-        var color, grp_edges, grp_nodes, link, node, svg, text, xscale, yscale,
+        var color, grp_edges, grp_nodes, link, node, svg, text,
           _this = this;
 
+        this.data = data;
         color = d3.scale.category20();
         grp_nodes = data.nodes;
         grp_edges = data.edges;
-        xscale = d3.scale.linear().domain([
-          d3.min(grp_nodes, function(d) {
-            return d.meta.pos[0];
-          }), d3.max(grp_nodes, function(d) {
-            return d.meta.pos[0];
-          })
-        ]).range([400, 900]);
-        yscale = d3.scale.linear().domain([
-          d3.min(grp_nodes, function(d) {
-            return d.meta.pos[1];
-          }), d3.max(grp_nodes, function(d) {
-            return d.meta.pos[1];
-          })
-        ]).range([200, 500]);
+        /*
+        xscale = d3.scale.linear()
+          .domain([d3.min(grp_nodes, (d) -> d.meta.pos[0]), d3.max(grp_nodes, (d) -> d.meta.pos[0])]).range([400, 900])
+        yscale = d3.scale.linear()
+          .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
+        */
+
         svg = d3.select("#graph").append("svg").attr("height", 900);
         link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("family_rel", function(d) {
           return d.tags.filter(function(t) {
@@ -86,13 +80,13 @@
             return t.type === "prof";
           }).length;
         }).attr("x1", function(d) {
-          return xscale(d.source.meta.pos[0]);
+          return d.source.meta.pos[0];
         }).attr("y1", function(d) {
-          return yscale(d.source.meta.pos[1]);
+          return d.source.meta.pos[1];
         }).attr("x2", function(d) {
-          return xscale(d.target.meta.pos[0]);
+          return d.target.meta.pos[0];
         }).attr("y2", function(d) {
-          return yscale(d.target.meta.pos[1]);
+          return d.target.meta.pos[1];
         }).on("mouseover", function(d) {
           _this.name_src(d.source.name);
           _this.name_tgt(d.target.name);
@@ -101,14 +95,14 @@
         text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
           return d.name;
         }).attr("x", function(d) {
-          return xscale(d.meta.pos[0]);
+          return d.meta.pos[0];
         }).attr("y", function(d) {
-          return yscale(d.meta.pos[1] - 10);
+          return d.meta.pos[1] - 10;
         });
         return node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
-          return xscale(d.meta.pos[0]);
+          return d.meta.pos[0];
         }).attr("cy", function(d) {
-          return yscale(d.meta.pos[1]);
+          return d.meta.pos[1];
         }).call(d3.behavior.drag().origin(function(d) {
           return d;
         }).on("drag", function(d) {
@@ -123,18 +117,24 @@
           link.filter(function(l) {
             return l.target === d;
           }).attr("x2", x).attr("y2", y);
-          return text.filter(function(t) {
+          text.filter(function(t) {
             return t.id === d.id;
           }).attr("x", x).attr("y", y - 10);
+          d.meta.pos = [x, y];
+          return console.log(d.meta.pos);
         }));
+      };
+
+      Panel.prototype.toData = function() {
+        return {
+          contrib: "518b989739ed9714289d0bc1",
+          data: this.data.nodes
+        };
       };
 
       return Panel;
 
     })();
-    return {
-      Panel: Panel
-    };
   });
 
 }).call(this);

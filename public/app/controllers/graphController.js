@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/controller", "app/vm/menu", "app/vm/graph/panel", "app/vm/graph/send", "app/config"], function(controller, menu, panel, send, config) {
+  define(["ural/controller", "app/vm/menu", "app/vm/graph/panel", "app/vm/graph/toolbox"], function(controller, menu, panel, toolbox) {
     var GraphController;
 
     GraphController = (function(_super) {
@@ -15,19 +15,16 @@
       }
 
       GraphController.prototype.panel = function() {
+        var pl;
+
+        pl = new panel();
         return this.view_apply("app/views/graph/panel.html", {
           _layouts: {
-            _body: new panel.Panel(),
-            _nav: this.nav
+            _body: pl,
+            _nav: this.nav,
+            _toolbox: new toolbox(pl)
           }
         });
-      };
-
-      GraphController.prototype.send = function() {
-        this.viewBag = {
-          download_gexf_href: config.links.gexf_download
-        };
-        return this.view("app/views/graph/send.html", new send.Send());
       };
 
       return GraphController;

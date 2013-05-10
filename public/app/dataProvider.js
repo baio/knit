@@ -147,7 +147,7 @@
         var _this = this;
 
         this.date2json(data);
-        return $.put(this.onGetUrl(resource), JSON.stringify(data)).always(function(resp, res) {
+        return $.post(this.onGetUrl(resource), JSON.stringify(data)).always(function(resp, res) {
           var err;
 
           err = _this.onGetError(resp, res);
