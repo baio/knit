@@ -1,7 +1,7 @@
 <div>
     <div class="container-fluid" style="margin-top: 30px" id="_body">
         <div class="row-fluid">
-            <div class="span11">
+            <div class="span12">
                 <!-- ko with: contrib -->
                 <div class="row-fluid">
                     <h2>Modify contrib, <a data-bind="text: name, click: startUpdate"></a></h2>
@@ -19,9 +19,6 @@
                 <div data-bind="template: {name: 'contrib-edit-item-template', data: editItem}"></div>
                 <div id="items_list" data-bind="template: { name: 'contrib-item-template', foreach: list}">
                 </div>
-            </div>
-            <div class="span1">
-                menu
             </div>
         </div>
     </div>

@@ -9,8 +9,13 @@ define ["ural/viewEngine",
       if viewModel
         ko.applyBindings viewModel, $("#_body")[0]
 
-      pubSub.sub "crud", "start", true, (params) => @crudStart params
-      pubSub.sub "crud", "end", true, (params) => @crudEnd params
+      #TODO: crudStart - static?
+      if !Controller.IsSubscribed
+        Controller.IsSubscribed = true
+        pubSub.sub "crud", "start", (params) => @crudStart params
+        pubSub.sub "crud", "end", (params) => @crudEnd params
+
+    @IsSubscribed: false
 
     crudStart: (params) ->
       @showForm params.resource, params.type, params.item
@@ -35,8 +40,6 @@ define ["ural/viewEngine",
       if !form[0] then throw "Required form not implemented"
       ko.applyBindings item, form[0]
       form.modal("show").on("hidden", ->
-          #looks like cleanNode doesn't delete list-binded items, bug?
-          item.cleanUp?()
           ko.cleanNode form[0])
 
     hideForm: (resource, formType) ->

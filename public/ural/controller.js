@@ -13,13 +13,18 @@
         if (viewModel) {
           ko.applyBindings(viewModel, $("#_body")[0]);
         }
-        pubSub.sub("crud", "start", true, function(params) {
-          return _this.crudStart(params);
-        });
-        pubSub.sub("crud", "end", true, function(params) {
-          return _this.crudEnd(params);
-        });
+        if (!Controller.IsSubscribed) {
+          Controller.IsSubscribed = true;
+          pubSub.sub("crud", "start", function(params) {
+            return _this.crudStart(params);
+          });
+          pubSub.sub("crud", "end", function(params) {
+            return _this.crudEnd(params);
+          });
+        }
       }
+
+      Controller.IsSubscribed = false;
 
       Controller.prototype.crudStart = function(params) {
         return this.showForm(params.resource, params.type, params.item);
@@ -56,9 +61,6 @@
         }
         ko.applyBindings(item, form[0]);
         return form.modal("show").on("hidden", function() {
-          if (typeof item.cleanUp === "function") {
-            item.cleanUp();
-          }
           return ko.cleanNode(form[0]);
         });
       };
