@@ -61,7 +61,8 @@
         }
         ko.applyBindings(item, form[0]);
         return form.modal("show").on("hidden", function() {
-          return ko.cleanNode(form[0]);
+          ko.cleanNode(form[0]);
+          return $("[data-view-engine-clean]", form[0]).empty();
         });
       };
 

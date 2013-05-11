@@ -9,21 +9,30 @@
     return Graph = (function(_super) {
       __extends(Graph, _super);
 
-      function Graph(resource, _index) {
+      function Graph(resource, _index, _contribs) {
+        this._contribs = _contribs;
         this.ref = ko.observable();
         this.name = ko.observable();
         this.date = ko.observable();
         Graph.__super__.constructor.call(this, "graph", _index);
+        this.contribsToInclude = this._contribs.list().filter(function(f) {
+          return f.isSelected();
+        });
       }
 
       Graph.prototype.onCreateItem = function() {
-        return new Graph(this.resource, this._index);
+        return new Graph(this.resource, this._index, this._contribs);
       };
 
       Graph.prototype.onCreate = function(done) {
         var data;
 
-        data = this.toData();
+        data = {
+          name: this.name(),
+          contribs: this._contribs.list().map(function(m) {
+            return m.ref();
+          })
+        };
         return dataProvider.create("graphs", data, done);
       };
 

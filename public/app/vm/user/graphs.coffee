@@ -4,8 +4,8 @@ define ["ural/vm/indexVM", "app/vm/user/graph"]
 
   class Graphs extends indexVM
 
-    constructor: ->
+    constructor: (@contribs) ->
       super "graph"
 
     onCreateItem: ->
-      new Graph @resource, @
+      new Graph @resource, @, @contribs

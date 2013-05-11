@@ -26,7 +26,7 @@
       }
 
       Toolbox.prototype.save = function() {
-        return dataProvider.ajax("graphs", "post", {
+        return dataProvider.ajax("graphs", "patch", {
           graph: this.nav.activeGraph().id,
           data: this.panel.toData()
         }, function() {});

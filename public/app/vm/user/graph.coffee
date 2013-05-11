@@ -7,17 +7,18 @@ define [
 
   class Graph extends itemVM
 
-    constructor: (resource, _index) ->
+    constructor: (resource, _index, @_contribs) ->
       @ref = ko.observable()
       @name = ko.observable()
       @date = ko.observable()
       super "graph", _index
+      @contribsToInclude = @_contribs.list().filter((f) -> f.isSelected())
 
     onCreateItem: ->
-      new Graph @resource, @_index
+      new Graph @resource, @_index, @_contribs
 
     onCreate: (done) ->
-      data = @toData()
+      data = name: @name(), contribs: @_contribs.list().map((m) -> m.ref())
       dataProvider.create "graphs", data, done
 
     onRemove: (done) ->

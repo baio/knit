@@ -1,17 +1,16 @@
 define ["ural/vm/itemVM",
         "app/vm/user/contribs",
         "app/vm/user/graphs",
-        "app/dataProvider",
-        "ural/modules/pubSub"
+        "app/dataProvider"
 ]
-, (indexVM, contribs, graphs, dataProvider, pubSub) ->
+, (indexVM, contribs, graphs, dataProvider) ->
 
   class User extends indexVM
 
     constructor: ->
       @name = ko.observable("baio")
       @contribs = new contribs()
-      @graphs = new graphs()
+      @graphs = new graphs(@contribs)
 
     onLoad: (filter, done) ->
       dataProvider.get "users", filter, done

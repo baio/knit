@@ -9,12 +9,13 @@
     return Graphs = (function(_super) {
       __extends(Graphs, _super);
 
-      function Graphs() {
+      function Graphs(contribs) {
+        this.contribs = contribs;
         Graphs.__super__.constructor.call(this, "graph");
       }
 
       Graphs.prototype.onCreateItem = function() {
-        return new Graph(this.resource, this);
+        return new Graph(this.resource, this, this.contribs);
       };
 
       return Graphs;
