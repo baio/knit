@@ -14,7 +14,7 @@
         return _ref;
       }
 
-      GraphController.prototype.panel = function(contrib) {
+      GraphController.prototype.panel = function(graph) {
         var pl,
           _this = this;
 
@@ -24,14 +24,14 @@
             _body: {
               loader: pl,
               filter: {
-                contrib: contrib
+                graph: graph
               }
             },
             _toolbox: new toolbox(this.nav, pl)
           }
         }, function(err) {
           if (!err) {
-            return _this.nav.activeContrib({
+            return _this.nav.activeGraph({
               id: pl.data.id,
               name: pl.data.name
             });

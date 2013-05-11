@@ -8,7 +8,7 @@
 
       Panel.prototype.load = function(filter, done) {
         return dataProvider.get("graphs", {
-          contrib: filter.contrib
+          graph: filter.graph
         }, function(err, data) {
           var edge, node, pos, _i, _j, _len, _len1, _ref, _ref1;
 

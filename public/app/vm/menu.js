@@ -8,7 +8,7 @@
         var _this = this;
 
         this.active = ko.observable();
-        this.activeContrib = ko.observable({
+        this.activeGraph = ko.observable({
           id: null,
           name: "Choose graph"
         });

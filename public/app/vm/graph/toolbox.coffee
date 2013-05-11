@@ -14,4 +14,4 @@ define ["app/dataProvider"], (dataProvider) ->
         @tags edge.tags
 
     save: ->
-      dataProvider.ajax "graphs", "post", {contrib: @nav.activeContrib().id, data : @panel.toData()}, ->
+      dataProvider.ajax "graphs", "post", {graph: @nav.activeGraph().id, data : @panel.toData()}, ->

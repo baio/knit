@@ -34,5 +34,6 @@ define [
         if !err
           @openGraph()
 
-    openContrib: ->
+    open: (data, event)->
+      event.preventDefault()
       pubSub.pub "href", "change", href: "/graph/panel/#{@ref()}"

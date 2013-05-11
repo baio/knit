@@ -3,7 +3,7 @@ define ["app/dataProvider"], (dataProvider) ->
   class Panel
 
     load: (filter, done) ->
-      dataProvider.get "graphs", contrib : filter.contrib, (err, data) ->
+      dataProvider.get "graphs", graph : filter.graph, (err, data) ->
         if !err
           for edge in data.edges
             edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]

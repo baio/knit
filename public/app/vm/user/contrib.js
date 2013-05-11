@@ -59,13 +59,6 @@
         });
       };
 
-      Contrib.prototype.openGraph = function(data, event) {
-        event.preventDefault();
-        return pubSub.pub("href", "change", {
-          href: "/graph/panel/" + (this.ref())
-        });
-      };
-
       return Contrib;
 
     })(itemVM);

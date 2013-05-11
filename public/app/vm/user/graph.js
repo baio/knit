@@ -52,7 +52,8 @@
         });
       };
 
-      Graph.prototype.openContrib = function() {
+      Graph.prototype.open = function(data, event) {
+        event.preventDefault();
         return pubSub.pub("href", "change", {
           href: "/graph/panel/" + (this.ref())
         });

@@ -38,6 +38,3 @@ define [
     openContrib: ->
       pubSub.pub "href", "change", href: "/contrib/item/#{@ref()}"
 
-    openGraph: (data, event)->
-      event.preventDefault()
-      pubSub.pub "href", "change", href: "/graph/panel/#{@ref()}"
