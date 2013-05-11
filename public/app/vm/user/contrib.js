@@ -13,6 +13,7 @@
         this.ref = ko.observable();
         this.name = ko.observable();
         this.url = ko.observable();
+        this.isSelected = ko.observable();
         Contrib.__super__.constructor.call(this, "contrib", _index);
       }
 

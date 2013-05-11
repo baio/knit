@@ -1,43 +1,38 @@
 define [
         "ural/vm/itemVM"
         "app/dataProvider"
-        "ural/modules/pubSub"
+        "ural/modules/pubSub",
 ]
 , (itemVM, dataProvider, pubSub) ->
 
-  class Contrib extends itemVM
+  class Graph extends itemVM
 
     constructor: (resource, _index) ->
       @ref = ko.observable()
       @name = ko.observable()
-      @url = ko.observable()
-      @isSelected = ko.observable()
-      super "contrib", _index
+      @date = ko.observable()
+      super "graph", _index
 
     onCreateItem: ->
-      new Contrib @resource, @_index
+      new Graph @resource, @_index
 
     onCreate: (done) ->
       data = @toData()
-      dataProvider.create "contribs", data, done
+      dataProvider.create "graphs", data, done
 
     onRemove: (done) ->
       data = @toData()
-      dataProvider.ajax "contribs", "delete", data, done
+      dataProvider.ajax "graphs", "delete", data, done
 
     onUpdate: (done) ->
       data = @toData()
-      dataProvider.ajax "contribs", "put", data, done
+      dataProvider.ajax "graphs", "put", data, done
 
     create: (done) ->
       super (err) =>
         done err
         if !err
-          @openContrib()
+          @openGraph()
 
     openContrib: ->
-      pubSub.pub "href", "change", href: "/contrib/item/#{@ref()}"
-
-    openGraph: (data, event)->
-      event.preventDefault()
       pubSub.pub "href", "change", href: "/graph/panel/#{@ref()}"

@@ -5,7 +5,12 @@
             <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
             <li class="divider"></li>
             <!-- ko foreach : tags -->
-            <li><a href="#" data-bind="attr : {href : url}, text : name" target="_blank"></a></li>
+            <li>
+                <a href="#" data-bind="text : name" target="_blank"></a>
+                <ul data-bind="foreach: urls">
+                    <li><a href="#" data-bind="attr: {href: $data}" target="_blank">link</a></li>
+                </ul>
+            </li>
             <!-- /ko -->
             <li class="divider"></li>
             <li>
