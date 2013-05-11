@@ -16,7 +16,6 @@
                     <h4>
                         <a href="#" data-bind="click: startRemove"><i class="icon-remove"></i></a>
                         <a href="#/contrib/item" data-bind="link: ref"><span data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
-                        <input type="checkbox" data-bind="checked: isSelected">
                     </h4>
                     <!-- /ko -->
                 </div>
@@ -27,7 +26,7 @@
                     <!-- ko foreach: list -->
                     <h4>
                         <a href="#" data-bind="click: startRemove"><i class="icon-remove"></i></a>
-                        <a href="#/graph/item" data-bind="link: ref"><span data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
+                        <a href="#" data-bind="click: startUpdate"><span data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
                     </h4>
                     <!-- /ko -->
                 </div>
@@ -90,10 +89,10 @@
                     <input type="text" id="inputGraphName" placeholder="Name" data-bind="value: name">
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group" >
                 <label class="control-label">Contribs to include</label>
-                <div class="controls">
-                    <ul data-view-engine-clean data-bind="template : {name: 'grah-contrib-include', foreach: contribsToInclude}">
+                <div class="controls" data-bind="with: _contribs">
+                    <ul data-bind="template : {name : 'contrib-graph-item', foreach: list}" data-view-engine-clean>
                     </ul>
                 </div>
             </div>
@@ -101,10 +100,56 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-bind="click: cancel">Close</a>
-        <a href="#" class="btn btn-primary" data-bind="click: create">Create</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Create</a>
+    </div>
+</div>
+<div class="modal hide fade" data-form-type='update' data-form-resource='graph'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>New graph</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputGraphName">Name</label>
+                <div class="controls">
+                    <input type="text" id="inputUpdGraphName" placeholder="Name" data-bind="value: name">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Contribs to include</label>
+                <div class="controls" data-bind="with: _contribs">
+                    <ul data-bind="template : {name : 'contrib-graph-item', foreach: list}" data-view-engine-clean>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Close</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Save</a>
     </div>
 </div>
 
-<script type="text/html" id="grah-contrib-include">
-    <li data-bind="text: name"></li>
+<script type="text/html" id="contrib-graph-item">
+    <li>
+        <input  type="checkbox" data-bind="checked: isSelected"><span data-bind="text: name"></span>
+    </li>
 </script>
+
+<div class="modal hide fade" data-form-type='delete' data-form-resource='graph'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Are you shure?</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <h2>All data will be lost.</h2>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Close</a>
+        <a href="#" class="btn btn-primary" data-bind="click: remove">Remove</a>
+    </div>
+</div>
+

@@ -14,11 +14,28 @@
         this.ref = ko.observable();
         this.name = ko.observable();
         this.date = ko.observable();
+        this.contribs = ko.observableArray();
         Graph.__super__.constructor.call(this, "graph", _index);
-        this.contribsToInclude = this._contribs.list().filter(function(f) {
-          return f.isSelected();
-        });
       }
+
+      Graph.prototype.map = function(data, skipStratEdit) {
+        var contrib, _i, _len, _ref, _results;
+
+        Graph.__super__.map.call(this, data, skipStratEdit);
+        _ref = this._contribs.list();
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          contrib = _ref[_i];
+          if (this.contribs()) {
+            _results.push(contrib.isSelected(this.contribs().filter(function(f) {
+              return f === contrib.ref();
+            }).length));
+          } else {
+            _results.push(contrib.isSelected(false));
+          }
+        }
+        return _results;
+      };
 
       Graph.prototype.onCreateItem = function() {
         return new Graph(this.resource, this._index, this._contribs);
@@ -29,7 +46,9 @@
 
         data = {
           name: this.name(),
-          contribs: this._contribs.list().map(function(m) {
+          contribs: this._contribs.list().filter(function(f) {
+            return f.isSelected();
+          }).map(function(m) {
             return m.ref();
           })
         };
@@ -46,7 +65,15 @@
       Graph.prototype.onUpdate = function(done) {
         var data;
 
-        data = this.toData();
+        data = {
+          id: this.ref(),
+          name: this.name(),
+          contribs: this._contribs.list().filter(function(f) {
+            return f.isSelected();
+          }).map(function(m) {
+            return m.ref();
+          })
+        };
         return dataProvider.ajax("graphs", "put", data, done);
       };
 
