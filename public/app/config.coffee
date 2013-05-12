@@ -16,4 +16,4 @@ define ->
       gexf_download : "http://baio-links.herokuapp.com/gexf"
       gexf_upload : "http://baio-links.herokuapp.com/gexf"
 
-  _dev
+  _prod
