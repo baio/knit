@@ -1,8 +1,14 @@
 require.config
   baseUrl: "/"
 
-require ["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all"],
-  (localManager, router, itemVM, bindingOpts) ->
+require [
+  "ural/localization/localizationManager",
+  "ural/router",
+  "ural/vm/itemVM",
+  "ural/bindings/_all",
+  "app/config",
+],
+  (localManager, router, itemVM, bindingOpts, config) ->
     localManager.setup "en"
     ko.validation.configure(
       messagesOnModified: true
@@ -10,7 +16,7 @@ require ["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM
     )
     itemVM.KeyFieldName = "_id"
     bindingOpts.autocomplete =
-      baseUrl: "http://localhost:8080"
+      baseUrl: config.base_url
       fields:
         key:  "key"
         value: "val"

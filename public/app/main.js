@@ -4,7 +4,7 @@
     baseUrl: "/"
   });
 
-  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all"], function(localManager, router, itemVM, bindingOpts) {
+  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/config"], function(localManager, router, itemVM, bindingOpts, config) {
     localManager.setup("en");
     ko.validation.configure({
       messagesOnModified: true,
@@ -12,7 +12,7 @@
     });
     itemVM.KeyFieldName = "_id";
     bindingOpts.autocomplete = {
-      baseUrl: "http://localhost:8080",
+      baseUrl: config.base_url,
       fields: {
         key: "key",
         value: "val",

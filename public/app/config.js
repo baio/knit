@@ -4,6 +4,7 @@
     var _dev, _prod;
 
     _dev = {
+      base_url: "http://localhost:8080",
       links: {
         panel_gexf_url: "http://localhost:8080/gexf",
         data_upload: "http://localhost:8080/contribs",
@@ -12,6 +13,7 @@
       }
     };
     _prod = {
+      base_url: "http://baio-knit.herokuapp.com/",
       links: {
         panel_gexf_url: "http://baio-links.herokuapp.com/gexf",
         data_upload: "http://baio-links.herokuapp.com/contribs",
@@ -19,7 +21,7 @@
         gexf_upload: "http://baio-links.herokuapp.com/gexf"
       }
     };
-    return _prod;
+    return _dev;
   });
 
 }).call(this);
