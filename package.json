@@ -2,7 +2,9 @@
     "name": "links",
     "version": "0.0.1",
     "dependencies": {
-        "connect": "latest"
+        "connect": "latest",
+        "passport": "latest",
+        "passport-twitter": "latest"
     },
     "engines": {
         "node": "0.10.x",
