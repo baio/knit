@@ -1,8 +1,8 @@
-define ->
+define ["app/config"], (config) ->
 
   class DataProvider
 
-    onGetBaseUrl: -> "http://localhost:8080"
+    onGetBaseUrl: -> config.base_url
 
     onFlatData: (data) ->
       for own prop of data

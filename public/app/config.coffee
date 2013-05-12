@@ -1,7 +1,7 @@
 define ->
 
   _dev =
-    base_url : "http://localhost:8080"
+    base_url : "/srv" #"http://localhost:8080"#"/srv"
     links :
       panel_gexf_url : "http://localhost:8080/gexf"
       data_upload : "http://localhost:8080/contribs"
@@ -16,4 +16,4 @@ define ->
       gexf_download : "http://baio-links.herokuapp.com/gexf"
       gexf_upload : "http://baio-links.herokuapp.com/gexf"
 
-  _prod
+  _dev

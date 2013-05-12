@@ -2,14 +2,14 @@
 (function() {
   var __hasProp = {}.hasOwnProperty;
 
-  define(function() {
+  define(["app/config"], function(config) {
     var DataProvider;
 
     DataProvider = (function() {
       function DataProvider() {}
 
       DataProvider.prototype.onGetBaseUrl = function() {
-        return "http://localhost:8080";
+        return config.base_url;
       };
 
       DataProvider.prototype.onFlatData = function(data) {
@@ -200,3 +200,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=dataProvider.map
+*/

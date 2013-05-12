@@ -4,7 +4,7 @@
     var _dev, _prod;
 
     _dev = {
-      base_url: "http://localhost:8080",
+      base_url: "/srv",
       links: {
         panel_gexf_url: "http://localhost:8080/gexf",
         data_upload: "http://localhost:8080/contribs",
@@ -21,7 +21,11 @@
         gexf_upload: "http://baio-links.herokuapp.com/gexf"
       }
     };
-    return _prod;
+    return _dev;
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=config.map
+*/
