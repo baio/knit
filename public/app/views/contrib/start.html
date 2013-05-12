@@ -1,5 +1,14 @@
 <div id="_body">
-    <div class="container-fluid" style="margin-top: 30px">
+    <div class="container-fluid" style="margin-top: 30px" data-bind="ifnot: name">
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="row-fluid">
+                    <h2>You must <a href="/auth/twitter">login</a>, before play with data</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" style="margin-top: 30px" data-bind="if: name">
         <div class="row-fluid">
             <div class="span12">
                 <div class="row-fluid">

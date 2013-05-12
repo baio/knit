@@ -10,9 +10,18 @@
       __extends(User, _super);
 
       function User() {
-        this.name = ko.observable("baio");
+        var _this = this;
+
+        this._id = ko.observable();
         this.contribs = new contribs();
         this.graphs = new graphs(this.contribs);
+        this.name = ko.computed(function() {
+          if (_this._id()) {
+            return _this._id().split("@")[1];
+          } else {
+            return null;
+          }
+        });
       }
 
       User.prototype.onLoad = function(filter, done) {
@@ -25,3 +34,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=user.map
+*/

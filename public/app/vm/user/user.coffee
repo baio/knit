@@ -8,9 +8,11 @@ define ["ural/vm/itemVM",
   class User extends indexVM
 
     constructor: ->
-      @name = ko.observable("baio")
+      @_id = ko.observable()
       @contribs = new contribs()
       @graphs = new graphs(@contribs)
+      @name = ko.computed =>
+         if @_id() then @_id().split("@")[1] else null
 
     onLoad: (filter, done) ->
       dataProvider.get "users", filter, done

@@ -14,7 +14,8 @@
 
   dispatchers = {
     users: require("./dispatchers/users"),
-    graphs: require("./dispatchers/graphs")
+    graphs: require("./dispatchers/graphs"),
+    contribs: require("./dispatchers/contribs")
   };
 
   _redirect = function(req, res, next) {
@@ -70,14 +71,12 @@
   }));
 
   passport.serializeUser(function(user, done) {
-    console.log("serialize");
     return done(null, user.name + ":" + user.displayName + ":" + user.img);
   });
 
   passport.deserializeUser(function(id, done) {
     var sp;
 
-    console.log("deserialize");
     sp = id.split(":");
     return done(null, {
       name: sp[0],
@@ -87,7 +86,10 @@
   });
 
   connect().use(connect.cookieParser()).use(connect.bodyParser()).use(_redirect).use(connect.query()).use(connect.session({
-    secret: 'keyboard cat'
+    secret: 'keyboard cat',
+    store: new MongoStore({
+      url: "mongodb://adm:123@ds059957.mongolab.com:59957/knit"
+    })
   })).use(passport.initialize()).use(passport.session()).use(_router).use(connect["static"]("public")).listen(process.env.PORT || 8001);
 
 }).call(this);

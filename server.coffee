@@ -6,6 +6,7 @@ url = require("url")
 dispatchers =
   users : require("./dispatchers/users")
   graphs : require("./dispatchers/graphs")
+  contribs : require("./dispatchers/contribs")
 
 _redirect = (req, res, next) ->
   res.redirect = (url) ->
@@ -42,11 +43,9 @@ passport.use new TwitterStrategy
     done null, { name: "twitter@" + profile.username, displayName: profile.displayName, img: profile.photos[0].value }
 
 passport.serializeUser (user, done) ->
-  console.log "serialize"
   done null, user.name + ":" + user.displayName + ":" + user.img
 
 passport.deserializeUser (id, done) ->
-  console.log "deserialize"
   sp = id.split ":"
   done null, name: sp[0], displayName: sp[1], img: sp[2]
 
@@ -55,7 +54,7 @@ connect()
   .use(connect.bodyParser())
   .use(_redirect)
   .use(connect.query())
-  .use(connect.session secret: 'keyboard cat')#, store: new MongoStore(url: "mongodb://adm:123@ds059957.mongolab.com:59957/knit"))
+  .use(connect.session secret: 'keyboard cat', store: new MongoStore(url: "mongodb://adm:123@ds059957.mongolab.com:59957/knit"))
   .use(passport.initialize())
   .use(passport.session())
   .use(_router)

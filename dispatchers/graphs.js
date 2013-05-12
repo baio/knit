@@ -10,7 +10,8 @@
     if (req.isAuthenticated()) {
       userName = req.user.name;
     }
-    return request("" + process.env.DISPATCH_URL + "/graphs", {
+    return request({
+      uri: "" + process.env.DISPATCH_URL + "/graphs",
       qs: {
         user: userName
       }
