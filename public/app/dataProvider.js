@@ -181,7 +181,9 @@
           url: this.onGetUrl(resource),
           data: JSON.stringify(data),
           method: method,
-          crossDomain: true
+          crossDomain: true,
+          contentType: "application/json; charset=UTF-8",
+          dataType: 'json'
         }).always(function(resp, res) {
           var err;
 

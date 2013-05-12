@@ -2,20 +2,10 @@
 (function() {
   var request;
 
-  request = require("request");
+  request = require("./request");
 
   exports.get = function(req, res) {
-    var userName;
-
-    if (req.isAuthenticated()) {
-      userName = req.user.name;
-    }
-    return request({
-      uri: "" + process.env.DISPATCH_URL + "/graphs",
-      qs: {
-        user: userName
-      }
-    }).pipe(res);
+    return request.req(req, res, "graphs", true);
   };
 
 }).call(this);

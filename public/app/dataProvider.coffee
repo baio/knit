@@ -90,6 +90,8 @@ define ["app/config"], (config) ->
         data: JSON.stringify(data)
         method : method
         crossDomain : true
+        contentType : "application/json; charset=UTF-8"
+        dataType : 'json'
       ).always (resp, res) =>
           err = @onGetError(resp, res)
           if !err

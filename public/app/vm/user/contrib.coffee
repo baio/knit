@@ -19,7 +19,7 @@ define [
 
     onCreate: (done) ->
       data = @toData()
-      dataProvider.create "contribs", data, done
+      dataProvider.ajax "contribs", "post", data, done
 
     onRemove: (done) ->
       data = @toData()

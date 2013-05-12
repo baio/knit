@@ -25,7 +25,7 @@
         var data;
 
         data = this.toData();
-        return dataProvider.create("contribs", data, done);
+        return dataProvider.ajax("contribs", "post", data, done);
       };
 
       Contrib.prototype.onRemove = function(done) {
@@ -65,3 +65,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=contrib.map
+*/
