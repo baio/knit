@@ -13,10 +13,9 @@
             </li>
             <!-- /ko -->
             <li class="divider"></li>
-            <li>
+            <li data-bind="if: nav.user.name">
                 <a href="#" class="btn btn-primary btn-small" data-bind="click: save">Save</a>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
     <div class="graph-container" id="_body">
