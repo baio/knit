@@ -17,7 +17,8 @@
     graphs: require("./dispatchers/graphs"),
     contribs: require("./dispatchers/contribs"),
     names: require("./dispatchers/names"),
-    tags: require("./dispatchers/tags")
+    tags: require("./dispatchers/tags"),
+    pushes: require("./dispatchers/pushes")
   };
 
   _redirect = function(req, res, next) {

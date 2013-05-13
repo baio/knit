@@ -9,6 +9,7 @@ dispatchers =
   contribs : require("./dispatchers/contribs")
   names : require("./dispatchers/names")
   tags : require("./dispatchers/tags")
+  pushes : require("./dispatchers/pushes")
 
 _redirect = (req, res, next) ->
   res.redirect = (url) ->

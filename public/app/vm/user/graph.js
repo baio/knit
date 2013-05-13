@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], function(itemVM, dataProvider, pubSub) {
+  define(["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub", "app/vm/user/pushes"], function(itemVM, dataProvider, pubSub, Pushes) {
     var Graph;
 
     return Graph = (function(_super) {
@@ -15,6 +15,7 @@
         this.name = ko.observable();
         this.date = ko.observable();
         this.contribs = ko.observableArray();
+        this.pushes = new Pushes(this);
         Graph.__super__.constructor.call(this, "graph", _index);
       }
 

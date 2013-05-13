@@ -36,7 +36,18 @@
                     <h4>
                         <a href="#" data-bind="click: startRemove"><i class="icon-remove"></i></a>
                         <a href="#" data-bind="click: startUpdate"><span data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
+                        <!-- ko with: pushes -->
+                            <a href="#" data-bind="click: startCreate"><small>push</small></a>
+                        <!-- /ko -->
                     </h4>
+                    <div>
+                        <!-- ko if: pushes && pushes.list().length > 0 -->
+                            Pushes:
+                            <!-- ko foreach: pushes.list -->
+                                <span class="label label-info"><span data-bind="text: displayText" ></span></span>
+                            <!-- /ko -->
+                        <!-- /ko -->
+                    </div>
                     <!-- /ko -->
                 </div>
             </div>
@@ -145,7 +156,6 @@
         <input  type="checkbox" data-bind="checked: isSelected"><span data-bind="text: name"></span>
     </li>
 </script>
-
 <div class="modal hide fade" data-form-type='delete' data-form-resource='graph'>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -159,6 +169,32 @@
     <div class="modal-footer">
         <a href="#" class="btn" data-bind="click: cancel">Close</a>
         <a href="#" class="btn btn-primary" data-bind="click: remove">Remove</a>
+    </div>
+</div>
+<div class="modal hide fade" data-form-type='create' data-form-resource='push'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Push request</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputPushUser">Name</label>
+                <div class="controls">
+                    <input type="text" id="inputPushUser" placeholder="Push user" data-bind="value: dest_user">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPushGraph">Name</label>
+                <div class="controls">
+                    <input type="text" id="inputPushGraph" placeholder="Push graphs" data-bind="value: dest_graph">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Close</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Push</a>
     </div>
 </div>
 
