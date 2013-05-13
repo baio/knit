@@ -21,7 +21,7 @@
         gexf_upload: "http://baio-links.herokuapp.com/gexf"
       }
     };
-    return _dev;
+    return _prod;
   });
 
 }).call(this);
