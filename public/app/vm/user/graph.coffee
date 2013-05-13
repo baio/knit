@@ -28,7 +28,7 @@ define [
 
     onCreate: (done) ->
       data = name: @name(), contribs: @_contribs.list().filter((f) -> f.isSelected()).map((m) -> m.ref())
-      dataProvider.create "graphs", data, done
+      dataProvider.ajax "graphs", "post", data, done
 
     onRemove: (done) ->
       data = @toData()

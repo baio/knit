@@ -8,6 +8,18 @@
     return request.req(req, res, "graphs", true);
   };
 
+  exports.post = function(req, res) {
+    return request.req(req, res, "graphs", true);
+  };
+
+  exports.put = function(req, res) {
+    return request.req(req, res, "graphs", true);
+  };
+
+  exports.patch = function(req, res) {
+    return request.req(req, res, "graphs", true);
+  };
+
 }).call(this);
 
 /*

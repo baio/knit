@@ -52,7 +52,7 @@
             return m.ref();
           })
         };
-        return dataProvider.create("graphs", data, done);
+        return dataProvider.ajax("graphs", "post", data, done);
       };
 
       Graph.prototype.onRemove = function(done) {
@@ -101,3 +101,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=graph.map
+*/

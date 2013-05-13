@@ -55,7 +55,14 @@
                     <li data-bind="css : {active : active() == '/contrib/start'}"><a href="#/contrib/start" data-bind="link : null">Data</a></li>
                 </ul>
                 <ul class="nav pull-right" data-bind="with: user">
-                    <li data-bind="if: name"><a href="#">Hello, <span data-bind="text: name"></span></a></li>
+                    <li data-bind="if: name" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello, <span data-bind="text: name"></span>
+                        &nbsp;<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/auth/logout">Logout</a></li>
+                        </ul>
+                    </li>
                     <li data-bind="ifnot: name"><a href="/auth/twitter">Login</a></li>
                     <li class="divider-vertical"></li>
                     <li class="dropdown">

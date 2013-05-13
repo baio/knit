@@ -34,7 +34,12 @@
     var match, path, srv_method, srv_path;
 
     path = url.parse(req.url).pathname;
-    if (path === "/auth/twitter") {
+    if (path === "/auth/logout") {
+      req.session.destroy();
+      req.logout();
+      req.url = "/main.html";
+      return next();
+    } else if (path === "/auth/twitter") {
       console.log("auth");
       return passport.authenticate('twitter')(req, res, next);
     } else if (path === "/auth/twitter/callback") {
