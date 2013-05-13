@@ -1,10 +1,11 @@
 define [
         "ural/vm/itemVM"
         "app/dataProvider"
-        "ural/modules/pubSub",
+        "ural/modules/pubSub"
         "app/vm/user/pushes"
+        "app/vm/user/pulls"
 ]
-, (itemVM, dataProvider, pubSub, Pushes) ->
+, (itemVM, dataProvider, pubSub, Pushes, Pulls) ->
 
   class Graph extends itemVM
 
@@ -14,8 +15,8 @@ define [
       @date = ko.observable()
       @contribs = ko.observableArray()
       @pushes = new Pushes(@)
+      @pulls = new Pulls(@)
       super "graph", _index
-
 
     map: (data, skipStratEdit) ->
       super data, skipStratEdit

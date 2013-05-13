@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "pulls.js",
+  "sourceRoot": "",
+  "sources": [
+    "pulls.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA,KAAA;oSAAA;;CAAA,CAAA,CACE,CAAA,EADF,CACE,EAAC,QADI,CAAA;CAIL,IAAA,GAAA;;WAAM;CAEJ;;CAAa,EAAA,GAAA,SAAE;CACb,EADa,CAAA,EACb,EADY;CACZ,KAAA,EAAA,+BAAM;CADR,MAAa;;CAAb,EAGc,MAAA,GAAd;CACW,CAAW,EAAhB,EAAA,EAAA,OAAA;CAJN,MAGc;;CAHd;;CAFkB;CAJtB,EACE;CADF"
+}

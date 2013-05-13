@@ -41,11 +41,19 @@
                         <!-- /ko -->
                     </h4>
                     <div>
-                        <!-- ko if: pushes && pushes.list().length > 0 -->
+                        <!-- ko if: pushes.list().length > 0 -->
                             Pushes:
                             <!-- ko foreach: pushes.list -->
-                                <span class="label label-info"><span data-bind="text: displayText" ></span></span>
+                                <span class="label label-info" data-bind="text: displayText"></span>
                             <!-- /ko -->
+                        <!-- /ko -->
+                    </div>
+                    <div>
+                        <!-- ko if: pulls.list().length > 0 -->
+                        Pulls:
+                        <!-- ko foreach: pulls.list -->
+                        <span class="label label-info" data-bind="text: displayText, click: startUpdate" ></span>
+                        <!-- /ko -->
                         <!-- /ko -->
                     </div>
                     <!-- /ko -->
@@ -198,3 +206,22 @@
     </div>
 </div>
 
+<div class="modal hide fade" data-form-type='update' data-form-resource='pull'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Push request</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <a href="#" class="btn btn-success" data-bind="click: accept">Accept</a>
+            </div>
+            <div class="control-group">
+                <a href="#" class="btn btn-danger" data-bind="click: reject">Reject</a>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Close</a>
+    </div>
+</div>

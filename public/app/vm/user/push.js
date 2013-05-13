@@ -15,16 +15,10 @@
         this._graph = _graph;
         this.dest_user = ko.observable();
         this.dest_graph = ko.observable();
-        this.dest_user_name = ko.observable();
-        this.dest_user_graph = ko.observable();
         this.status = ko.observable();
         Push.__super__.constructor.call(this, "push", _index);
         this.displayText = ko.computed(function() {
-          var txt;
-
-          txt = _this.dest_user() + "-" + _this.status();
-          console.log(txt);
-          return txt;
+          return _this.dest_user() + "-" + _this.status();
         });
       }
 

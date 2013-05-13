@@ -10,14 +10,10 @@ define [
     constructor: (resource, _index, @_graph) ->
       @dest_user = ko.observable()
       @dest_graph = ko.observable()
-      @dest_user_name = ko.observable()
-      @dest_user_graph = ko.observable()
       @status = ko.observable()
       super "push", _index
       @displayText = ko.computed =>
-        txt = @dest_user() + "-" + @status()
-        console.log(txt)
-        txt
+        @dest_user() + "-" + @status()
 
     onCreateItem: ->
       new Graph @resource, @_graph
