@@ -55,19 +55,9 @@
                     <li data-bind="css : {active : active() == '/contrib/start'}"><a href="#/contrib/start" data-bind="link : null">Data</a></li>
                 </ul>
                 <ul class="nav pull-right" data-bind="with: user">
-                    <li data-bind="if: name" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello, <span data-bind="text: name"></span>
-                        &nbsp;<b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/auth/logout">Logout</a></li>
-                        </ul>
-                    </li>
-                    <li data-bind="ifnot: name"><a href="/auth/twitter">Login</a></li>
-                    <li class="divider-vertical"></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="with: $parent">
-                            <span data-bind="text: activeGraph().name"></span>
+                            <span>Popular</span>
                             &nbsp;<b class="caret"></b>
                         </a>
                         <!-- ko with: graphs -->
@@ -75,6 +65,29 @@
                         </ul>
                         <!-- /ko -->
                     </li>
+                    <!-- ko if: name-->
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="with: $parent">
+                            <span>Yours</span>
+                            &nbsp;<b class="caret"></b>
+                        </a>
+                        <!-- ko with: graphs -->
+                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: list}">
+                        </ul>
+                        <!-- /ko -->
+                    </li>
+                    <!-- /ko -->
+                    <li class="divider-vertical"></li>
+                    <li data-bind="if: name" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello, <span data-bind="text: name"></span>
+                            &nbsp;<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/auth/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                    <li data-bind="ifnot: name"><a href="/auth/twitter">Login</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
