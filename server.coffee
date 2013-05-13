@@ -7,6 +7,8 @@ dispatchers =
   users : require("./dispatchers/users")
   graphs : require("./dispatchers/graphs")
   contribs : require("./dispatchers/contribs")
+  names : require("./dispatchers/names")
+  tags : require("./dispatchers/tags")
 
 _redirect = (req, res, next) ->
   res.redirect = (url) ->
@@ -38,15 +40,15 @@ _router = (req, res, next) ->
 passport.use new TwitterStrategy
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  callbackURL: "http://localhost:8001/auth/twitter/callback",
+  callbackURL: process.env.TWITTER_CALLBACK,
   (token, tokenSecret, profile, done) ->
     done null, { name: "twitter@" + profile.username, displayName: profile.displayName, img: profile.photos[0].value }
 
 passport.serializeUser (user, done) ->
-  done null, user.name + ":" + user.displayName + ":" + user.img
+  done null, user.name + "|" + user.displayName + "|" + user.img
 
 passport.deserializeUser (id, done) ->
-  sp = id.split ":"
+  sp = id.split "|"
   done null, name: sp[0], displayName: sp[1], img: sp[2]
 
 connect()
@@ -54,7 +56,7 @@ connect()
   .use(connect.bodyParser())
   .use(_redirect)
   .use(connect.query())
-  .use(connect.session secret: 'keyboard cat', store: new MongoStore(url: "mongodb://adm:123@ds059957.mongolab.com:59957/knit"))
+  .use(connect.session secret: process.env.SESSION_SECRET, store: new MongoStore(url: process.env.MONGO_STORE))
   .use(passport.initialize())
   .use(passport.session())
   .use(_router)

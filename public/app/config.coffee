@@ -9,7 +9,7 @@ define ->
       gexf_upload : "http://localhost:8080/gexf"
 
   _prod =
-    base_url : "http://baio-knit.herokuapp.com/"
+    base_url : "http://baio-knit.herokuapp.com/srv"
     links :
       panel_gexf_url : "http://baio-links.herokuapp.com/gexf"
       data_upload : "http://baio-links.herokuapp.com/contribs"

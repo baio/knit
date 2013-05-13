@@ -15,7 +15,9 @@
   dispatchers = {
     users: require("./dispatchers/users"),
     graphs: require("./dispatchers/graphs"),
-    contribs: require("./dispatchers/contribs")
+    contribs: require("./dispatchers/contribs"),
+    names: require("./dispatchers/names"),
+    tags: require("./dispatchers/tags")
   };
 
   _redirect = function(req, res, next) {
@@ -61,7 +63,7 @@
   passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://localhost:8001/auth/twitter/callback"
+    callbackURL: process.env.TWITTER_CALLBACK
   }, function(token, tokenSecret, profile, done) {
     return done(null, {
       name: "twitter@" + profile.username,
@@ -71,13 +73,13 @@
   }));
 
   passport.serializeUser(function(user, done) {
-    return done(null, user.name + ":" + user.displayName + ":" + user.img);
+    return done(null, user.name + "|" + user.displayName + "|" + user.img);
   });
 
   passport.deserializeUser(function(id, done) {
     var sp;
 
-    sp = id.split(":");
+    sp = id.split("|");
     return done(null, {
       name: sp[0],
       displayName: sp[1],
@@ -86,9 +88,9 @@
   });
 
   connect().use(connect.cookieParser()).use(connect.bodyParser()).use(_redirect).use(connect.query()).use(connect.session({
-    secret: 'keyboard cat',
+    secret: process.env.SESSION_SECRET,
     store: new MongoStore({
-      url: "mongodb://adm:123@ds059957.mongolab.com:59957/knit"
+      url: process.env.MONGO_STORE
     })
   })).use(passport.initialize()).use(passport.session()).use(_router).use(connect["static"]("public")).listen(process.env.PORT || 8001);
 
