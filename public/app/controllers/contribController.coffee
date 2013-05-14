@@ -1,6 +1,7 @@
 define ["app/controllers/controllerBase",
   "app/vm/user/user",
-  "app/vm/contrib/index"
+  "app/vm/contrib/index",
+  "app/vm/publicContrib/index"
 ],
 (controller, user, contrib) ->
 
@@ -15,5 +16,6 @@ define ["app/controllers/controllerBase",
       @view_apply "app/views/contrib/item.html",
         _layouts:
           _body: {loader : new contrib(), filter : {id : id}}
+
 
   Controller : ContribController
