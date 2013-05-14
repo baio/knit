@@ -25,6 +25,9 @@
         var data;
 
         data = this.toData();
+        if (this._index._graph) {
+          data.graph_ref = this._index._graph.ref();
+        }
         return dataProvider.ajax("contribs", "post", data, done);
       };
 

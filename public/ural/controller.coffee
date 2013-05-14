@@ -89,7 +89,7 @@ define ["ural/viewEngine",
     #`[isApply]` - not required, if presented and `true` then `data` will be applied to the view (see `viewEngine.applyData)
     #`[done]` - not required, if presented will be invoked as `done(err, data)`
     view: (path, model, isApply, done) ->
-      done = isApplay if $.isFunction(isApply)
+      done = isApply if $.isFunction(isApply)
       async.parallel [
         (ck) ->
           if path

@@ -19,6 +19,7 @@ define [
 
     onCreate: (done) ->
       data = @toData()
+      if @_index._graph then data.graph_ref = @_index._graph.ref()
       dataProvider.ajax "contribs", "post", data, done
 
     onRemove: (done) ->

@@ -9,7 +9,8 @@
     return Contribs = (function(_super) {
       __extends(Contribs, _super);
 
-      function Contribs() {
+      function Contribs(_graph) {
+        this._graph = _graph;
         Contribs.__super__.constructor.call(this, "contrib");
       }
 
@@ -23,3 +24,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=contribs.map
+*/

@@ -4,7 +4,7 @@ define ["ural/vm/indexVM", "app/vm/user/contrib"]
 
   class Contribs extends indexVM
 
-    constructor: ->
+    constructor: (@_graph) ->
       super "contrib"
 
     onCreateItem: ->

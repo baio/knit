@@ -10,7 +10,8 @@
         this.active = ko.observable();
         this.activeGraph = ko.observable({
           id: null,
-          name: null
+          name: null,
+          isYours: null
         });
         pubSub.sub("href", "changed", function(data) {
           return _this.active("/" + data.controller + "/" + data.action);
