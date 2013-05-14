@@ -6,7 +6,7 @@
 
   exports.get = function(req, res) {
     if (req.isAuthenticated()) {
-      req.query["name"] = req.user.name;
+      req.query["name"] = req.user.displayName;
     }
     return request.req(req, res, "curUser", true);
   };
