@@ -1,7 +1,8 @@
-define ["ural/vm/itemVM",
+define ["ural/vm/itemVM"
         "app/dataProvider"
+        "ural/modules/pubSub"
 ]
-, (ItemVM, dataProvider) ->
+, (ItemVM, dataProvider, pubSub) ->
 
   class User extends ItemVM
 
@@ -10,6 +11,10 @@ define ["ural/vm/itemVM",
       @name = ko.observable()
       @graphs = ko.observableArray()
       @popular = ko.observableArray()
+
+    open: (data, event) ->
+      event.preventDefault()
+      pubSub.pub "href", "change", href: "/graph/panel/#{data.ref()}"
 
     onLoad: (filter, done) ->
       dataProvider.get "curUser", filter, (err, data) =>

@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/itemVM", "app/dataProvider"], function(ItemVM, dataProvider) {
+  define(["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], function(ItemVM, dataProvider, pubSub) {
     var User;
 
     return User = (function(_super) {
@@ -15,6 +15,13 @@
         this.graphs = ko.observableArray();
         this.popular = ko.observableArray();
       }
+
+      User.prototype.open = function(data, event) {
+        event.preventDefault();
+        return pubSub.pub("href", "change", {
+          href: "/graph/panel/" + (data.ref())
+        });
+      };
 
       User.prototype.onLoad = function(filter, done) {
         var _this = this;
