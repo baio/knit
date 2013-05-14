@@ -18,7 +18,8 @@
     contribs: require("./dispatchers/contribs"),
     names: require("./dispatchers/names"),
     tags: require("./dispatchers/tags"),
-    pushes: require("./dispatchers/pushes")
+    pushes: require("./dispatchers/pushes"),
+    curUser: require("./dispatchers/curUser")
   };
 
   _redirect = function(req, res, next) {
@@ -38,8 +39,10 @@
     if (path === "/auth/logout") {
       req.session.destroy();
       req.logout();
-      req.url = "/main.html";
-      return next();
+      res.writeHead(302, {
+        'Location': '/'
+      });
+      return res.end();
     } else if (path === "/auth/twitter") {
       console.log("auth");
       return passport.authenticate('twitter')(req, res, next);

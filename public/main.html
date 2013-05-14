@@ -48,11 +48,23 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="brand" href="#/" data-bind="link : null">Knit</a>
+            <!-- ko with: activeGraph -->
+            <a class="brand" href="/">Knit <span data-bind="text: name"></span></a>
+            <!-- /ko -->
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li data-bind="css : {active : active() == '/graph/panel'}"><a href="#/graph/panel" data-bind="link : null">Overview</a></li>
                     <li data-bind="css : {active : active() == '/contrib/start'}"><a href="#/contrib/start" data-bind="link : null">Data</a></li>
+                    <li class="divider-vertical"></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <span>Save</span>
+                            &nbsp;<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Rename</a></li>
+                        </ul>
+                    </li>
                 </ul>
                 <ul class="nav pull-right" data-bind="with: user">
                     <li class="dropdown">
@@ -60,10 +72,8 @@
                             <span>Popular</span>
                             &nbsp;<b class="caret"></b>
                         </a>
-                        <!-- ko with: graphs -->
-                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: list}">
+                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: popular}">
                         </ul>
-                        <!-- /ko -->
                     </li>
                     <!-- ko if: name-->
                     <li class="divider-vertical"></li>
@@ -72,10 +82,8 @@
                             <span>Yours</span>
                             &nbsp;<b class="caret"></b>
                         </a>
-                        <!-- ko with: graphs -->
-                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: list}">
+                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: graphs}">
                         </ul>
-                        <!-- /ko -->
                     </li>
                     <!-- /ko -->
                     <li class="divider-vertical"></li>

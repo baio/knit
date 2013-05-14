@@ -219,7 +219,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     load: (filter, done) ->
       @onLoad filter, (err, data) =>
-        if !err
+        if !err and data
           @map data
         done err, @
 

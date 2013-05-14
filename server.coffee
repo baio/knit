@@ -10,6 +10,7 @@ dispatchers =
   names : require("./dispatchers/names")
   tags : require("./dispatchers/tags")
   pushes : require("./dispatchers/pushes")
+  curUser : require("./dispatchers/curUser")
 
 _redirect = (req, res, next) ->
   res.redirect = (url) ->
@@ -22,8 +23,8 @@ _router = (req, res, next) ->
   if path == "/auth/logout"
     req.session.destroy()
     req.logout()
-    req.url = "/main.html"
-    next()
+    res.writeHead(302, {'Location' : '/'})
+    res.end()
   else if path == "/auth/twitter"
     console.log "auth"
     passport.authenticate('twitter')(req, res, next)

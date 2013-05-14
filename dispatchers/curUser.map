@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "curUser.js",
+  "sourceRoot": "",
+  "sources": [
+    "curUser.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA,KAAA,CAAA;;CAAA,CAAA,CAAU,IAAV,IAAU;;CAAV,CAEA,CAAA,IAAO,EAAQ;CACb,EAAM,CAAN,WAAG;CACD,EAAG,CAAyB,CAAlB,CAAV;MADF;CAEQ,CAAS,CAAjB,CAAA,GAAO,EAAP,EAAA;CALF,EAEc;CAFd"
+}
