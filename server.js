@@ -8,7 +8,7 @@
 
   TwitterStrategy = require('passport-twitter').Strategy;
 
-  MongoStore = require("connect-mongodb");
+  MongoStore = require("./mongo/connect-mongodb");
 
   url = require("url");
 

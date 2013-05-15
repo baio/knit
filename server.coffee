@@ -1,7 +1,9 @@
 connect = require("connect")
 passport = require('passport')
 TwitterStrategy = require('passport-twitter').Strategy
-MongoStore = require "connect-mongodb"
+MongoStore = require("./mongo/connect-mongodb")
+#mongodb = require("mongodb")
+#mongoconn = require("./mongo/connection.js")
 url = require("url")
 dispatchers =
   users : require("./dispatchers/users")
@@ -57,6 +59,9 @@ passport.serializeUser (user, done) ->
 passport.deserializeUser (id, done) ->
   sp = id.split "|"
   done null, name: sp[0], displayName: sp[1], img: sp[2]
+
+#connopts = mongoconn.str2config(process.env.MONGO_STORE)
+#db = new mongodb.Db(connopts.db, new mongodb.Server(connopts.host, connopts.port,{}), {w: 1})
 
 connect()
   .use(connect.cookieParser())
