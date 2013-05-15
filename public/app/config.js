@@ -13,7 +13,7 @@
       }
     };
     _prod = {
-      base_url: "http://baio-knit.herokuapp.com/srv",
+      base_url: "/srv",
       links: {
         panel_gexf_url: "http://baio-links.herokuapp.com/gexf",
         data_upload: "http://baio-links.herokuapp.com/contribs",
@@ -21,7 +21,7 @@
         gexf_upload: "http://baio-links.herokuapp.com/gexf"
       }
     };
-    return _dev;
+    return _prod;
   });
 
 }).call(this);
