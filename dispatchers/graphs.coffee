@@ -11,3 +11,6 @@ exports.put = (req, res) ->
 
 exports.patch = (req, res) ->
   request.req(req, res, "graphs", true)
+
+exports.delete = (req, res) ->
+  request.req(req, res, "graphs", true)

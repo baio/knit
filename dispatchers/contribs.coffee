@@ -14,3 +14,6 @@ exports.patch = (req, res) ->
 
 exports.delete = (req, res) ->
   request.req(req, res, "contribs")
+
+exports.copy = (req, res) ->
+  request.req(req, res, "contribs")

@@ -62,6 +62,17 @@
         });
       };
 
+      Contrib.prototype.copy = function() {
+        return dataProvider.ajax("contribs", "copy", {
+          ref: this.ref()
+        }, function(err, data) {
+          return pubSub.pub("msg", "show", {
+            err: (err ? err.message : null),
+            msg: "copy success"
+          });
+        });
+      };
+
       return Contrib;
 
     })(itemVM);

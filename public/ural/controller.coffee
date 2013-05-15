@@ -12,17 +12,13 @@ define ["ural/viewEngine",
       #TODO: crudStart - static?
       if !Controller.IsSubscribed
         Controller.IsSubscribed = true
+        pubSub.sub "msg", "show", (params) => @msgShow params
         pubSub.sub "crud", "start", (params) => @crudStart params
         pubSub.sub "crud", "end", (params) => @crudEnd params
 
     @IsSubscribed: false
 
-    crudStart: (params) ->
-      @showForm params.resource, params.type, params.item
-
-    crudEnd: (params) ->
-      if !params.err
-        @hideForm params.resource, params.type
+    msgShow: (params) ->
       if params.err
         notifyType = "error"
         msg = params.err
@@ -31,6 +27,14 @@ define ["ural/viewEngine",
         msg = params.msg
       if notifyType
         @notify msg, null, notifyType
+
+    crudStart: (params) ->
+      @showForm params.resource, params.type, params.item
+
+    crudEnd: (params) ->
+      if !params.err
+        @hideForm params.resource, params.type
+      @msgShow params
 
     notify: (msg, caption, type) ->
       toastr[type] msg, caption

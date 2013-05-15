@@ -20,6 +20,10 @@
     return request.req(req, res, "graphs", true);
   };
 
+  exports["delete"] = function(req, res) {
+    return request.req(req, res, "graphs", true);
+  };
+
 }).call(this);
 
 /*

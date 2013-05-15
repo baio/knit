@@ -15,6 +15,9 @@
         }
         if (!Controller.IsSubscribed) {
           Controller.IsSubscribed = true;
+          pubSub.sub("msg", "show", function(params) {
+            return _this.msgShow(params);
+          });
           pubSub.sub("crud", "start", function(params) {
             return _this.crudStart(params);
           });
@@ -26,16 +29,9 @@
 
       Controller.IsSubscribed = false;
 
-      Controller.prototype.crudStart = function(params) {
-        return this.showForm(params.resource, params.type, params.item);
-      };
-
-      Controller.prototype.crudEnd = function(params) {
+      Controller.prototype.msgShow = function(params) {
         var msg, notifyType;
 
-        if (!params.err) {
-          this.hideForm(params.resource, params.type);
-        }
         if (params.err) {
           notifyType = "error";
           msg = params.err;
@@ -46,6 +42,17 @@
         if (notifyType) {
           return this.notify(msg, null, notifyType);
         }
+      };
+
+      Controller.prototype.crudStart = function(params) {
+        return this.showForm(params.resource, params.type, params.item);
+      };
+
+      Controller.prototype.crudEnd = function(params) {
+        if (!params.err) {
+          this.hideForm(params.resource, params.type);
+        }
+        return this.msgShow(params);
       };
 
       Controller.prototype.notify = function(msg, caption, type) {

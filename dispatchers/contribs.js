@@ -24,6 +24,10 @@
     return request.req(req, res, "contribs");
   };
 
+  exports.copy = function(req, res) {
+    return request.req(req, res, "contribs");
+  };
+
 }).call(this);
 
 /*

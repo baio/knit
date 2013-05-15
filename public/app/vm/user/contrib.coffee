@@ -39,3 +39,6 @@ define [
     openContrib: ->
       pubSub.pub "href", "change", href: "/contrib/item/#{@ref()}"
 
+    copy: ->
+      dataProvider.ajax "contribs", "copy", {ref : @ref()}, (err, data) ->
+        pubSub.pub "msg", "show", {err: (if err then err.message else null), msg: "copy success"}
