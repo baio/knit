@@ -2,7 +2,7 @@
 (function() {
   var __hasProp = {}.hasOwnProperty;
 
-  define(["app/config"], function(config) {
+  define(["app/config", "app/cache/manager"], function(config, cache) {
     var DataProvider;
 
     DataProvider = (function() {
@@ -130,17 +130,16 @@
       };
 
       DataProvider.prototype.get = function(resource, filter, done) {
-        var _this = this;
+        return this.ajax(resource, "get", filter, done);
+        /*
+        $.get(@onGetUrl(resource), filter)
+          .always (resp, res) =>
+            err = @onGetError(resp, res)
+            if !err
+              @json2date resp
+            done err, resp
+        */
 
-        return $.get(this.onGetUrl(resource), filter).always(function(resp, res) {
-          var err;
-
-          err = _this.onGetError(resp, res);
-          if (!err) {
-            _this.json2date(resp);
-          }
-          return done(err, resp);
-        });
       };
 
       DataProvider.prototype.update = function(resource, data, done) {
@@ -174,12 +173,20 @@
       };
 
       DataProvider.prototype.ajax = function(resource, method, data, done) {
-        var _this = this;
+        var c,
+          _this = this;
 
+        if (method === "get") {
+          c = this._cache_get(resource, data);
+          if (c) {
+            done(null, c);
+            return;
+          }
+        }
         this.date2json(data);
         return $.ajax({
           url: this.onGetUrl(resource),
-          data: JSON.stringify(data),
+          data: data && !$.isEmptyObject(data) ? data : void 0,
           method: method,
           crossDomain: true,
           contentType: "application/json; charset=UTF-8",
@@ -190,9 +197,30 @@
           err = _this.onGetError(resp, res);
           if (!err) {
             _this.json2date(resp);
+            _this._cache_upd(resource, (method === "get" ? data : null), resp);
           }
           return done(err, resp);
         });
+      };
+
+      DataProvider.prototype._cache_get = function(resource, filter) {
+        var c;
+
+        c = cache(resource);
+        if (c) {
+          return c.get(filter);
+        } else {
+          return null;
+        }
+      };
+
+      DataProvider.prototype._cache_upd = function(resource, filter, data) {
+        var c;
+
+        c = cache(resource);
+        if (c) {
+          return c.update(filter, data);
+        }
       };
 
       return DataProvider;

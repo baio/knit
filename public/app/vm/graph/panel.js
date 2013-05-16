@@ -7,9 +7,7 @@
       function Panel() {}
 
       Panel.prototype.load = function(filter, done) {
-        return dataProvider.get("graphs", {
-          graph: filter.graph
-        }, function(err, data) {
+        return dataProvider.get("graphs", filter, function(err, data) {
           var edge, node, pos, _i, _j, _len, _len1, _ref, _ref1;
 
           if (!err) {
@@ -134,3 +132,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=panel.map
+*/

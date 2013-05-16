@@ -1,4 +1,4 @@
-define ["app/config"], (config) ->
+define ["app/config", "app/cache/manager"], (config, cache) ->
 
   class DataProvider
 
@@ -58,12 +58,15 @@ define ["app/config"], (config) ->
         code : 500, message : (if resp.error then resp.error else "Error"), errors : resp.errors
 
     get: (resource, filter, done) ->
+      @ajax resource, "get", filter, done
+      ###
       $.get(@onGetUrl(resource), filter)
         .always (resp, res) =>
           err = @onGetError(resp, res)
           if !err
             @json2date resp
           done err, resp
+      ###
 
     update: (resource, data, done) ->
       @date2json(data)
@@ -84,10 +87,15 @@ define ["app/config"], (config) ->
           done err, resp
 
     ajax: (resource, method, data, done) ->
+      if method == "get"
+        c = @_cache_get(resource, data)
+        if c
+          done null, c
+          return
       @date2json(data)
       $.ajax(
         url: @onGetUrl(resource)
-        data: JSON.stringify(data)
+        data: if data and !$.isEmptyObject(data) then data else undefined
         method : method
         crossDomain : true
         contentType : "application/json; charset=UTF-8"
@@ -96,7 +104,15 @@ define ["app/config"], (config) ->
           err = @onGetError(resp, res)
           if !err
             @json2date resp
+            @_cache_upd resource, (if method == "get" then data else null), resp
           done err, resp
 
+    _cache_get: (resource, filter) ->
+      c = cache resource
+      if c then c.get filter else null
+
+    _cache_upd: (resource, filter, data) ->
+      c = cache resource
+      if c then c.update filter, data
 
   new DataProvider()

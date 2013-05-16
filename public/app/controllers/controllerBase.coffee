@@ -1,7 +1,8 @@
 define ["ural/controller",
-        "app/vm/menu"
+  "app/vm/menu",
+  "app/cache/manager"
 ],
-(controller, menu) ->
+(controller, menu, cache) ->
 
   class GraphController extends controller.Controller
 

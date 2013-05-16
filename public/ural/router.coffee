@@ -46,6 +46,9 @@ define ["ural/modules/pubSub"], (pubSub) ->
     onRoute: (controller, action, index, callback) ->
       controllerName = "#{controller}Controller"
       ctl = @_controllers[controllerName]
+      try
+        index = JSON.parse(index) if index
+      catch e
       if !ctl
         require ["#{@controllerDirectory}/#{controllerName}"], (controllerModule) =>
           ctl = eval "new controllerModule.Controller()"

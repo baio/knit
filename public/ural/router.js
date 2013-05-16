@@ -74,11 +74,18 @@
       };
 
       Router.prototype.onRoute = function(controller, action, index, callback) {
-        var controllerName, ctl,
+        var controllerName, ctl, e,
           _this = this;
 
         controllerName = "" + controller + "Controller";
         ctl = this._controllers[controllerName];
+        try {
+          if (index) {
+            index = JSON.parse(index);
+          }
+        } catch (_error) {
+          e = _error;
+        }
         if (!ctl) {
           return require(["" + this.controllerDirectory + "/" + controllerName], function(controllerModule) {
             ctl = eval("new controllerModule.Controller()");
@@ -117,3 +124,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=router.map
+*/
