@@ -14,4 +14,5 @@ define ["ural/controller",
       model._layouts._nav = @nav
       super path, model, done
 
+
   Controller : GraphController

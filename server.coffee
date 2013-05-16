@@ -2,9 +2,8 @@ connect = require("connect")
 passport = require('passport')
 TwitterStrategy = require('passport-twitter').Strategy
 MongoStore = require("./mongo/connect-mongodb")
-#mongodb = require("mongodb")
-#mongoconn = require("./mongo/connection.js")
 url = require("url")
+#Cookies = require("cookies")
 dispatchers =
   users : require("./dispatchers/users")
   graphs : require("./dispatchers/graphs")
@@ -33,6 +32,8 @@ _router = (req, res, next) ->
   else if path == "/auth/twitter/callback"
     passport.authenticate('twitter', {successRedirect: '/', failureRedirect: '/login'})(req, res, next)
   else if path == "/"
+    #cookies = new Cookies(req, res)
+    #cookies.set("auth", if req.user then req.user.name else null)
     req.url = "/main.html"
     next()
   else if path.match /^\/srv\/\w+$/

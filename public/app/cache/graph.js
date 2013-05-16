@@ -12,6 +12,9 @@
           return "graph";
         }
       },
+      _auth: function() {
+        return true;
+      },
       get: function(filter) {
         var d;
 
@@ -19,10 +22,12 @@
           console.log("g : " + filter.graph);
           d = $.jStorage.get(this._getName(filter.graph));
           if (d) {
-            return JSON.parse(d);
-          } else {
-            return null;
+            d = JSON.parse(d);
+            if (d && d.auth !== _auth()) {
+              d = null;
+            }
           }
+          return d;
         }
       },
       update: function(filter, data) {
@@ -36,6 +41,7 @@
             TTL: TTL
           });
           if (filter.graph !== data.ref) {
+            data.auth = _auth();
             return $.jStorage.set(this._getName(data.ref), _data, {
               TTL: TTL
             });
