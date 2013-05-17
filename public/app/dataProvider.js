@@ -17,7 +17,7 @@
 
         for (prop in data) {
           if (!__hasProp.call(data, prop)) continue;
-          if (!(data[prop] instanceof Date) && (typeof data[prop] === "object" || Array.isArray(data[prop]))) {
+          if (!(data[prop] instanceof Date) && (typeof data[prop] === "object" || Array.isArray(data[prop]) || $.isFunction(data[prop]))) {
             delete data[prop];
           }
         }
@@ -183,10 +183,17 @@
             return;
           }
         }
-        this.date2json(data);
+        if (data && !$.isEmptyObject(data)) {
+          data = this.onFlatData(data);
+          if (method !== "get") {
+            data = JSON.stringify(data);
+          }
+        } else {
+          data = void 0;
+        }
         return $.ajax({
           url: this.onGetUrl(resource),
-          data: data && !$.isEmptyObject(data) ? data : void 0,
+          data: data,
           method: method,
           crossDomain: true,
           contentType: "application/json; charset=UTF-8",

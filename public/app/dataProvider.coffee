@@ -6,7 +6,7 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
 
     onFlatData: (data) ->
       for own prop of data
-        if !(data[prop] instanceof Date) and (typeof data[prop] == "object" or Array.isArray data[prop])
+        if !(data[prop] instanceof Date) and (typeof data[prop] == "object" or Array.isArray(data[prop]) or $.isFunction(data[prop]))
           delete data[prop]
       @date2json data
       data
@@ -92,10 +92,14 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
         if c
           done null, c
           return
-      @date2json(data)
+      if data and !$.isEmptyObject(data)
+        data = @onFlatData(data)
+        data = JSON.stringify(data) if method != "get"
+      else
+        data = undefined
       $.ajax(
         url: @onGetUrl(resource)
-        data: if data and !$.isEmptyObject(data) then data else undefined
+        data: data
         method : method
         crossDomain : true
         contentType : "application/json; charset=UTF-8"
