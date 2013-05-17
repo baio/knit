@@ -93,8 +93,11 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
           done null, c
           return
       if data and !$.isEmptyObject(data)
-        data = @onFlatData(data)
-        data = JSON.stringify(data) if method != "get"
+        if method == "get"
+          @onFlatData(data)
+        else
+          @json2date data
+          data = JSON.stringify(data)
       else
         data = undefined
       $.ajax(

@@ -184,8 +184,10 @@
           }
         }
         if (data && !$.isEmptyObject(data)) {
-          data = this.onFlatData(data);
-          if (method !== "get") {
+          if (method === "get") {
+            this.onFlatData(data);
+          } else {
+            this.json2date(data);
             data = JSON.stringify(data);
           }
         } else {
