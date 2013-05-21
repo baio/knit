@@ -57,25 +57,30 @@
             </a>
             <!-- Site name for smallar screens -->
             <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span class="bold">Knit</span></a>
-            <!-- ko if: $data.activeGraph -->
-            <!-- ko with: activeGraph -->
-            <a href="#/graph/panel" class="brand" data-bind="link: id"><span class="bold">Knit</span></a>
-            <ul class="nav pull-left" data-bind="if: name, visible: $parent.active() === '/graph/panel' && isYours">
-                <li>
+            <a href="#/graph/panel" class="brand" data-bind="link: null"><span class="bold">Knit</span></a>
+            <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
+                <li class="dropdown dropdown-big">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         gov-ru
                     </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#/graph/data" data-bind="link : id"><i class="icon-th-large"></i>Данные графа</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="icon-hdd"></i>Сохранить расположение</a></li>
+                    <ul class="dropdown-menu" data-bind="with: activeGraph">
+                        <li>
+                            <h5>Создан 1 марта 2012</h5>
+                            <p>Здесь описание графа ...</p>
+                        </li>
+                        <li data-bind="visible : isYours">
+                            <hr/>
+                            <a href="#/graph/data" data-bind="link : id"><i class="icon-th-large"></i>Данные графа</a>
+                            <hr/>
+                        </li>
+                        <li data-bind="visible : isYours">
+                            <a href="#"><i class="icon-hdd"></i>Сохранить расположение</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
-            <!-- /ko -->
-            <!-- /ko -->
-
             <div class="nav-collapse collapse" data-bind="with: user">
+
                 <ul class="nav pull-right">
                     <li data-bind="ifnot: name">
                         <a href="/auth/twitter"><i class="icon-home"></i>Вход</a>
@@ -128,8 +133,8 @@
 
                     <li class="divider-vertical"></li>
 
-                    <!-- Members button with number of latest members count -->
-                    <li class="dropdown dropdown-big" data-bind="if: name">
+                    <!-- ko if: name -->
+                    <li class="dropdown dropdown-big">
                         <a class="dropdown-toggle" href="#" data-toggle="dropdown">
                             <i class="icon-briefcase"></i> Ваши <span class="badge badge-success">7</span>
                         </a>
@@ -155,7 +160,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="divider-vertical" data-bind="if: name"></li>
+                    <li class="divider-vertical"></li>
+                    <!-- /ko -->
 
                 </ul>
 
