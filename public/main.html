@@ -59,13 +59,12 @@
             <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span class="bold">Knit</span></a>
             <a href="#/graph/panel" class="brand" data-bind="link: null"><span class="bold">Knit</span></a>
             <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
-                <li class="dropdown dropdown-big">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        gov-ru
+                <li class="dropdown dropdown-big" data-bind="with: activeGraph">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="text: name">
                     </a>
-                    <ul class="dropdown-menu" data-bind="with: activeGraph">
+                    <ul class="dropdown-menu">
                         <li>
-                            <h5>Создан 1 марта 2012</h5>
+                            <h5>Создан <span>1 марта 2012</span></h5>
                             <p>Здесь описание графа ...</p>
                         </li>
                         <li data-bind="visible : isYours">
