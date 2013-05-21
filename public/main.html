@@ -1,36 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>Knit</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
+    <meta name="keywords" content="">
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="../assets/css/jquery-ui.min.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap.css" rel="stylesheet">
-    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="../assets/css/toastr.min.css" rel="stylesheet">
-    <link href="../assets/css/site.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
+    <link href="assets/css/toastr.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/widgets.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/site.css" rel="stylesheet">
 
-    <script src="../assets/js/jquery-2.0.0.min.js"></script>
-    <script src="../assets/js/jquery-ui.min.js"></script>
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/async.js"></script>
-    <script src="../assets/js/knockout-2.2.1.js"></script>
-    <script src="../assets/js/knockout.mapping-latest.js"></script>
-    <script src="../assets/js/knockout.validation.js"></script>
-    <script src="../assets/js/signals.min.js"></script>
-    <script src="../assets/js/crossroads.min.js"></script>
-    <script src="../assets/js/amplify.min.js"></script>
-    <script src="../assets/js/toastr.min.js"></script>
-    <script src="../assets/js/jsrender.js"></script>
-    <script src="../assets/js/mousetrap.min.js"></script>
-    <script src="../assets/js/moment.min.js"></script>
-    <script src="../assets/js/jstorage.min.js"></script>
+    <script src="assets/js/jquery-2.0.0.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/async.js"></script>
+    <script src="assets/js/knockout-2.2.1.js"></script>
+    <script src="assets/js/knockout.mapping-latest.js"></script>
+    <script src="assets/js/knockout.validation.js"></script>
+    <script src="assets/js/signals.min.js"></script>
+    <script src="assets/js/crossroads.min.js"></script>
+    <script src="assets/js/amplify.min.js"></script>
+    <script src="assets/js/toastr.min.js"></script>
+    <script src="assets/js/jsrender.js"></script>
+    <script src="assets/js/mousetrap.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>
+    <script src="assets/js/jstorage.min.js"></script>
+    <script type="text/javascript" src="assets/js/d3.v2.js"></script>
 
-    <script type="text/javascript" src="../assets/js/d3.v2.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -41,83 +46,175 @@
 
 <body>
 
-<div class="navbar navbar-inverse navbar-fixed-top">
+<div class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner" id="_nav">
         <div class="container">
-            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <!-- Menu button for smallar screens -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
-            <a class="brand" href="/">
-                Knit
-                <!-- ko if: $data.activeGraph  -->
-                    <!-- ko with: activeGraph -->
-                    <span data-bind="text: name"></span>
-                    <!-- /ko -->
-                <!-- /ko -->
             </a>
-            <div class="nav-collapse collapse">
-                <ul class="nav">
-                    <!-- ko ifnot: $data.activeGraph  -->
-                    <li data-bind="css : {active : active() == '/graph/panel'}"><a href="#/graph/panel" data-bind="link : null">Overview</a></li>
-                    <!-- /ko -->
-                    <!-- ko if: $data.activeGraph  -->
-                    <!-- ko with : activeGraph -->
-                    <li data-bind="css : {active : $parent.active() == '/graph/panel'}"><a href="#/graph/panel" data-bind="link : id">Overview</a></li>
-                    <li data-bind="visible: isYours, css : {active : $parent.active() == '/graph/data'}"><a href="#/graph/data" data-bind="link : id">Data</a></li>
-                    <li data-bind="visible: isYours" class="divider-vertical"></li>
-                    <!-- /ko -->
-                    <!-- /ko -->
-                </ul>
-                <ul class="nav pull-right" data-bind="with: user">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="with: $parent">
-                            <span>Popular</span>
-                            &nbsp;<b class="caret"></b>
-                        </a>
-                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: popular}">
-                        </ul>
+            <!-- Site name for smallar screens -->
+            <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span class="bold">Knit</span></a>
+            <!-- ko if: $data.activeGraph -->
+            <!-- ko with: activeGraph -->
+            <a href="#/graph/panel" class="brand" data-bind="link: id"><span class="bold">Knit</span></a>
+            <ul class="nav pull-left" data-bind="if: name, visible: $parent.active() === '/graph/panel' && isYours">
+                <li>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        gov-ru
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/graph/data" data-bind="link : id"><i class="icon-th-large"></i>Данные графа</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="icon-hdd"></i>Сохранить расположение</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- /ko -->
+            <!-- /ko -->
+
+            <div class="nav-collapse collapse" data-bind="with: user">
+                <ul class="nav pull-right">
+                    <li data-bind="ifnot: name">
+                        <a href="/auth/twitter"><i class="icon-home"></i>Вход</a>
                     </li>
-                    <!-- ko if: name-->
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown" data-bind="with: $parent">
-                            <span>Yours</span>
-                            &nbsp;<b class="caret"></b>
+                    <li class="dropdown pull-right" data-bind="if: name">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img src="" alt="" data-bind="attr : { src : img } " class="nav-user-pic"/> Привет, <span data-bind="text: name"></span> <b class="caret"></b>
                         </a>
-                        <ul data-view-engine-clean class="dropdown-menu" data-bind="template: {name : 'contrib-menu-item', foreach: graphs}">
-                        </ul>
-                    </li>
-                    <!-- /ko -->
-                    <li class="divider-vertical"></li>
-                    <li data-bind="if: name" class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">Hello, <span data-bind="text: name"></span>
-                            &nbsp;<b class="caret"></b>
-                        </a>
+
+                        <!-- Dropdown menu -->
                         <ul class="dropdown-menu">
-                            <li><a href="#/contrib/start" data-bind="link : null">Your contribs</a></li>
-                            <li><a href="#/public/index" data-bind="link : null">Public contribs</a></li>
+                            <li><a href="#/contrib/start" data-bind="link : null"><i class="icon-briefcase"></i>Ваши данные</a></li>
+                            <li><a href="#/public/index" data-bind="link : null"><i class="icon-globe"></i>Данные пользователей</a></li>
                             <li class="divider"></li>
-                            <li><a href="/auth/logout">Logout</a></li>
+                            <li><a href="/auth/logout"><i class="icon-off"></i> Выйти</a></li>
                         </ul>
                     </li>
-                    <li data-bind="ifnot: name"><a href="/auth/twitter">Login</a></li>
+
                 </ul>
+
+                <ul class="nav pull-right">
+
+                    <!-- Message button with number of latest messages count-->
+                    <li class="dropdown dropdown-big">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="icon-thumbs-up"></i> Популярные
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <!-- Heading - h5 -->
+                                <h5><i class="icon-globe"></i> Популярные графы</h5>
+                                <!-- Use hr tag to add border -->
+                                <hr/>
+                            </li>
+                            <!-- ko foreach: popular -->
+                            <li>
+                                <a href="#" data-bind="text: name, click: $parent.open"></a>
+                                <p>Здесь описание графа ...</p>
+                                <hr/>
+                            </li>
+                            <!-- /ko -->
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">Смотреть все</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="divider-vertical"></li>
+
+                    <!-- Members button with number of latest members count -->
+                    <li class="dropdown dropdown-big" data-bind="if: name">
+                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                            <i class="icon-briefcase"></i> Ваши <span class="badge badge-success">7</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <!-- Heading - h5 -->
+                                <h5><i class="icon-briefcase"></i> Ваши графы</h5>
+                                <!-- Use hr tag to add border -->
+                                <hr/>
+                            </li>
+                            <!-- ko foreach: graphs -->
+                            <li>
+                                <a href="#" data-bind="text: name, click: $parent.open"></a>
+                                <p>Здесь описание графа ...</p>
+                                <hr/>
+                            </li>
+                            <!-- /ko -->
+                            <li>
+                                <div class="drop-foot">
+                                    <a href="#">Смотреть все</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="divider-vertical" data-bind="if: name"></li>
+
+                </ul>
+
             </div>
-            <!--/.nav-collapse -->
+
         </div>
     </div>
 </div>
 
-<div id="_layout">
+<script type="text/html" id="contrib-menu-item">
+    <li>
+        <a href="#" data-bind="text: name, click: $parent.open"></a>
+        <p>Здесь описание графа ...</p>
+        <hr/>
+    </li>
+</script>
+
+
+<!-- Main content starts -->
+
+<div class="content">
+
+
+    <div class="mainbar">
+
+        <!-- Matter -->
+
+        <div class="matter">
+            <div class="container-fluid">
+
+                <div class="row-fluid">
+
+                    <div class="span12">
+
+                        <div id="_layout">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- Matter ends -->
+
+    </div>
+
+
+    <!-- Mainbar ends -->
+    <div class="clearfix"></div>
+
 </div>
 
-<script type="text/html" id="contrib-menu-item">
-    <li><a href="#" data-bind="text: name, click: $parent.open"></a></li>
-</script>
+
 
 <script data-main="/app/main" src="/assets/js/require.js"></script>
 
 </body>
+
 </html>

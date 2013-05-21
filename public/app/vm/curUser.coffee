@@ -9,6 +9,7 @@ define ["ural/vm/itemVM"
     constructor: ->
       @_id = ko.observable()
       @name = ko.observable()
+      @img = ko.observable()
       @graphs = ko.observableArray()
       @popular = ko.observableArray()
 

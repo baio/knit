@@ -15,6 +15,7 @@
         this._id = ko.observable();
         this.contribs = new contribs();
         this.graphs = new graphs(this.contribs);
+        this.img = ko.observable();
         this.name = ko.computed(function() {
           if (_this._id()) {
             return _this._id().split("@")[1];

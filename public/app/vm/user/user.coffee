@@ -11,6 +11,7 @@ define ["ural/vm/itemVM",
       @_id = ko.observable()
       @contribs = new contribs()
       @graphs = new graphs(@contribs)
+      @img = ko.observable()
       @name = ko.computed =>
          if @_id() then @_id().split("@")[1] else null
 

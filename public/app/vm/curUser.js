@@ -12,6 +12,7 @@
       function User() {
         this._id = ko.observable();
         this.name = ko.observable();
+        this.img = ko.observable();
         this.graphs = ko.observableArray();
         this.popular = ko.observableArray();
       }
