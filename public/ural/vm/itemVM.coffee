@@ -133,8 +133,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if f
         console.log "REAL start edit - store src"
         @stored_data = @toData()
-        if ko.isObservable(@isModifyed)
-          @isModifyed @getIsModifyed()
+        if ko.isObservable(@_isModifyed)
+          @_isModifyed @getIsModifyed()
           if !@_isModifyedActivated
             @activateIsModifyed()
             @_isModifyedActivated = true
@@ -172,13 +172,15 @@ define ["ural/modules/pubSub"], (pubSub) ->
         #if property name starts with _, this is private property, don't map (recursive index <-> item problem)
         if prop.indexOf("_") != 0 and @[prop] and @[prop].list
           data[prop] = @[prop].list().map (m) -> m.toData()
+        else if prop == "_isModifyed" or prop == "_isAdded"
+          delete data[prop]
       data
 
     activateIsModifyed: ->
       for own prop of @
         if prop != "isModifyed" and ko.isObservable @[prop]
           @[prop].subscribe =>
-            @isModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
+            @_isModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
 
     getIsModifyed: ->
       if !@stored_data then return false

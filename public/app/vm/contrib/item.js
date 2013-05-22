@@ -57,7 +57,7 @@
             params: [this.family_rel, this.prof_rel, this.priv_rel]
           }
         });
-        this.isModifyed = ko.observable();
+        this._isModifyed = ko.observable();
         this._isRemoved = ko.observable();
         ItemVM.__super__.constructor.call(this, resource, index);
         this._isEditing = ko.observable();

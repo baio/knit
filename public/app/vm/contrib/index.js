@@ -21,7 +21,7 @@
         this.contrib = new Contrib();
         this.editItem = new itemVM("contrib");
         this.editItem.map(this.defItem);
-        this.isModifyed = ko.observable();
+        this._isModifyed = ko.observable();
         IndexVM.__super__.constructor.call(this, "contrib");
       }
 

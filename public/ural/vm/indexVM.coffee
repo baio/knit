@@ -96,31 +96,31 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     listenItemIsModifyed: (item) ->
       if @_isModifyedActivated
-        item.isModifyed.subscribe (val) =>
+        item._isModifyed.subscribe (val) =>
           @updateIsModifyed val
 
     updateIsModifyed: (val) ->
       if @_isModifyedActivated
         f = val || @getIsModifyed()
         console.log f
-        @isModifyed(f)
+        @_isModifyed(f)
 
     getIsModifyed: ->
       for item in @list()
-        if item.isModifyed()
+        if item._isModifyed()
           return true
       return false
 
     getModifyedItems: ->
       res = []
       for item in @list()
-        if item.isModifyed()
+        if item._isModifyed()
           res.push item
       res
 
     startEdit: ->
-      if ko.isObservable(@isModifyed)
-        @isModifyed false
+      if ko.isObservable(@_isModifyed)
+        @_isModifyed false
         if !@_isModifyedActivated
           @_isModifyedActivated = true
           @activateIsModifyed()

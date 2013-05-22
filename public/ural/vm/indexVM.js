@@ -162,7 +162,7 @@
         var _this = this;
 
         if (this._isModifyedActivated) {
-          return item.isModifyed.subscribe(function(val) {
+          return item._isModifyed.subscribe(function(val) {
             return _this.updateIsModifyed(val);
           });
         }
@@ -174,7 +174,7 @@
         if (this._isModifyedActivated) {
           f = val || this.getIsModifyed();
           console.log(f);
-          return this.isModifyed(f);
+          return this._isModifyed(f);
         }
       };
 
@@ -184,7 +184,7 @@
         _ref = this.list();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
-          if (item.isModifyed()) {
+          if (item._isModifyed()) {
             return true;
           }
         }
@@ -198,7 +198,7 @@
         _ref = this.list();
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           item = _ref[_i];
-          if (item.isModifyed()) {
+          if (item._isModifyed()) {
             res.push(item);
           }
         }
@@ -206,8 +206,8 @@
       };
 
       ViewModel.prototype.startEdit = function() {
-        if (ko.isObservable(this.isModifyed)) {
-          this.isModifyed(false);
+        if (ko.isObservable(this._isModifyed)) {
+          this._isModifyed(false);
           if (!this._isModifyedActivated) {
             this._isModifyedActivated = true;
             return this.activateIsModifyed();

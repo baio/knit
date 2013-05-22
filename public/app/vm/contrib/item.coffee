@@ -34,7 +34,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
             @family_rel() or @private_rel() or @prof_rel()
           message : "Одна из связей должна быть выбрана."
           params : [@family_rel, @prof_rel, @priv_rel]
-      @isModifyed = ko.observable()
+      @_isModifyed = ko.observable()
       @_isRemoved = ko.observable()
       super resource, index
       @_isEditing = ko.observable()

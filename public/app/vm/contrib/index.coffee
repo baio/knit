@@ -12,7 +12,7 @@ define ["ural/vm/indexVM",
       @contrib = new Contrib()
       @editItem = new itemVM("contrib")
       @editItem.map(@defItem)
-      @isModifyed = ko.observable()
+      @_isModifyed = ko.observable()
       super "contrib"
 
     onCreateItem: ->

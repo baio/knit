@@ -196,8 +196,8 @@
         if (f) {
           console.log("REAL start edit - store src");
           this.stored_data = this.toData();
-          if (ko.isObservable(this.isModifyed)) {
-            this.isModifyed(this.getIsModifyed());
+          if (ko.isObservable(this._isModifyed)) {
+            this._isModifyed(this.getIsModifyed());
             if (!this._isModifyedActivated) {
               this.activateIsModifyed();
               this._isModifyedActivated = true;
@@ -258,6 +258,8 @@
             data[prop] = this[prop].list().map(function(m) {
               return m.toData();
             });
+          } else if (prop === "_isModifyed" || prop === "_isAdded") {
+            delete data[prop];
           }
         }
         return data;
@@ -272,7 +274,7 @@
           if (!__hasProp.call(this, prop)) continue;
           if (prop !== "isModifyed" && ko.isObservable(this[prop])) {
             _results.push(this[prop].subscribe(function() {
-              return _this.isModifyed((_this._isRemoved() || _this.isValid()) && _this.getIsModifyed());
+              return _this._isModifyed((_this._isRemoved() || _this.isValid()) && _this.getIsModifyed());
             }));
           } else {
             _results.push(void 0);
