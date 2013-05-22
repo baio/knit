@@ -134,11 +134,18 @@ define ["ural/modules/pubSub"], (pubSub) ->
         console.log "REAL start edit - store src"
         @stored_data = @toData()
         if ko.isObservable(@_isModifyed)
-          @_isModifyed @getIsModifyed()
+          @updateIsModifyed @getIsModifyed()
           if !@_isModifyedActivated
             @activateIsModifyed()
             @_isModifyedActivated = true
       f
+
+    updateIsModifyed: (val) ->
+      if @_isModifyed() != val
+        @onIsModifyedChanged val
+
+    onIsModifyedChanged: (val) ->
+      @_isModifyed val
 
     cancelEdit: (data, event) ->
       f = @confirmEvent event, "cancel-edit"
@@ -180,7 +187,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of @
         if prop != "isModifyed" and ko.isObservable @[prop]
           @[prop].subscribe =>
-            @_isModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
+            @updateIsModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
 
     getIsModifyed: ->
       if !@stored_data then return false

@@ -56,3 +56,8 @@ define ["ural/vm/itemVM"], (itemVM) ->
           console.log "start edit COMPLETE"
           @_isEditing true
           $(".edit-item-focus", event.currentTarget).focus()
+
+    onIsModifyedChanged: (val) ->
+      console.log "modifyed changed"
+      if !val then @_isEditing val
+      super val

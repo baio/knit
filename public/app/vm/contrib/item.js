@@ -91,6 +91,14 @@
         }
       };
 
+      ItemVM.prototype.onIsModifyedChanged = function(val) {
+        console.log("modifyed changed");
+        if (!val) {
+          this._isEditing(val);
+        }
+        return ItemVM.__super__.onIsModifyedChanged.call(this, val);
+      };
+
       return ItemVM;
 
     })(itemVM);
