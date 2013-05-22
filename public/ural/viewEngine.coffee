@@ -39,6 +39,7 @@ define ["ural/viewRender"], (viewRender) ->
     if isApply
       for lmd in layoutModelsData
         lt = $("#" + lmd.layout)[0]
+        if !lt then throw "Layout [#{lmd.layout}] to apply bindings not found"
         ko.applyBindings lmd.data, lt
       _layoutModelsData = layoutModelsData
 

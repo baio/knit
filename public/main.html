@@ -58,6 +58,7 @@
             <!-- Site name for smallar screens -->
             <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span class="bold">Knit</span></a>
             <a href="#/graph/panel" class="brand" data-bind="link: null"><span class="bold">Knit</span></a>
+
             <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
                 <li class="dropdown dropdown-big" data-bind="with: activeGraph">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="text: name">
@@ -78,6 +79,7 @@
                     </ul>
                 </li>
             </ul>
+
             <div class="nav-collapse collapse" data-bind="with: user">
 
                 <ul class="nav pull-right">

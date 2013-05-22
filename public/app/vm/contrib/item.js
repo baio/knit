@@ -32,19 +32,19 @@
         });
         this.family_rel = ko.observable().extend({
           pattern: {
-            message: 'Таг \'семья\' должен содержать только прописные, кирилические символы.',
+            message: 'Связь \'семья\' должна содержать только прописные, кирилические символы.',
             params: '^[а-я]+$'
           }
         });
         this.private_rel = ko.observable().extend({
           pattern: {
-            message: 'Таг \'частные\' должен содержать только прописные, кирилические символы.',
+            message: 'Связь \'частные\' должна содержать только прописные, кирилические символы.',
             params: '^[а-я]+$'
           }
         });
         this.prof_rel = ko.observable().extend({
           pattern: {
-            message: 'Таг \'проффесиональные\' должен содержать только прописные, кирилические символы.',
+            message: 'Связь \'професиональные\' должна содержать только прописные, кирилические символы.',
             params: '^[а-я]+$'
           }
         });
@@ -53,7 +53,7 @@
             validator: function() {
               return _this.family_rel() || _this.private_rel() || _this.prof_rel();
             },
-            message: "Один из тагов должен быть выбран.",
+            message: "Одна из связей должна быть выбрана.",
             params: [this.family_rel, this.prof_rel, this.priv_rel]
           }
         });
@@ -68,3 +68,7 @@
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=item.map
+*/

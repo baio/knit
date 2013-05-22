@@ -70,3 +70,7 @@ body {
 .mainbar {
     margin-left: 0px;
 }
+
+tr.row-input > td > input{
+    margin-bottom: 0px;
+}

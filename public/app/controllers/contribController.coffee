@@ -18,4 +18,5 @@ define ["app/controllers/controllerBase",
           _body: {loader : new contrib(), filter : {id : id}}
 
 
+
   Controller : ContribController
