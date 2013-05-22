@@ -23,7 +23,7 @@ define ["ural/vm/indexVM",
         if !err
           items = data.items
           delete data.items
-          @contrib.map data
+          @contrib.map data, true
           done err, items
         else
           done null
@@ -34,6 +34,7 @@ define ["ural/vm/indexVM",
         done err, data
 
     render: ->
+      @editItem.startEdit()
       @startEdit()
       Mousetrap.bind ['tab'], (e) =>
         if $(e.target).attr("id") == "append_item_trigger"
@@ -43,4 +44,6 @@ define ["ural/vm/indexVM",
             @editItem.map(@defItem)
             $("#append_item_focus").focus()
           return false
+        else if $(e.target).hasClass "edit_item_trigger"
+          return @editItem.isValid()
         return true

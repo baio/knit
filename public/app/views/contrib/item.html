@@ -24,9 +24,9 @@
                     <th>Проф.<br/>связи</th>
                     <th style="width: 2%"></th>
                 </tr>
-                <tr data-bind="template: {name: 'contrib-edit-item-template', data: editItem}" class="row-input"></tr>
+                <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input"></tr>
                 </thead>
-                <tbody id="items_list" data-bind="template: { name: 'contrib-item-template', foreach: list}">
+                <tbody id="items_list" data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
                 </tbody>
             </table>
 
@@ -36,26 +36,63 @@
 
 </div>
 
-<script type="text/html" id="contrib-edit-item-template">
+<script type="text/html" id="contrib-item-row-template">
+    <tr data-bind="visible: !_isRemoved(), template: {name: displayMode, data: $data}, click: edit" class="row-input">
+    </tr>
+</script>
+
+<script type="text/html" id="contrib-append-item-template">
     <td>
         <input type="text" class="input-large" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
-               id="append_item_focus"/>
+               id="append_item_focus" />
     </td>
     <td>
         <input type="text" class="input-large" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"/>
     </td>
     <td>
         <input type="text" class="input-small"
-               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}"/>
+               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" />
     </td>
     <td>
         <input type="text" class="input-small"
-               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}"/>
+               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" />
     </td>
     <td>
         <input type="text" class="input-small mousetrap"
                data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"
-               id="append_item_trigger"/>
+               id="append_item_trigger" />
+    </td>
+    <td>
+        <div data-bind="ifnot: isValid()">
+            <a href="#" data-bind="tooltip : errors">
+                <button class="btn btn-mini btn-warning"><i class="icon-warning-sign"></i></button>
+            </a>
+            <!--<p data-bind="text: errors().length"></p>-->
+        </div>
+    </td>
+</script>
+
+<script type="text/html" id="contrib-edit-item-template">
+    <td>
+        <input type="text" class="input-large edit-item-focus" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
+               data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-large" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"
+               data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-small"
+               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-small"
+               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" data-bind-event="input-edit"/>
+    </td>
+    <td>
+        <input type="text" class="input-small edit-item-trigger mousetrap"
+               data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"
+               data-bind-event="input-edit"/>
     </td>
     <td>
         <div data-bind="ifnot: isValid()">
@@ -68,34 +105,32 @@
 </script>
 
 <script type="text/html" id="contrib-item-template">
-    <tr data-bind="visible: !_isRemoved()">
-        <td>
-            <span data-bind="text: name_1"></span>
-        </td>
-        <td>
-            <span data-bind="text: name_2"></span>
-        </td>
-        <td>
-            <span class="label label-info" data-bind="text: family_rel"></span>
-        </td>
-        <td>
-            <span class="label label-info" data-bind="text: private_rel"></span>
-        </td>
-        <td>
-            <span class="label label-info" data-bind="text: prof_rel"></span>
-        </td>
-        <td>
-            <!--
-            <div data-bind="ifnot: isValid()">
-                <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
-                <p data-bind="text: errors().length"></p>
-            </div>
-            -->
-            <a href="#" data-bind="click: remove">
-                <button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button>
-            </a>
-        </td>
-    </tr>
+    <td>
+        <span data-bind="text: name_1"></span>
+    </td>
+    <td>
+        <span data-bind="text: name_2"></span>
+    </td>
+    <td>
+        <span class="label label-info" data-bind="text: family_rel"></span>
+    </td>
+    <td>
+        <span class="label label-info" data-bind="text: private_rel"></span>
+    </td>
+    <td>
+        <span class="label label-info" data-bind="text: prof_rel"></span>
+    </td>
+    <td>
+        <!--
+        <div data-bind="ifnot: isValid()">
+            <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
+            <p data-bind="text: errors().length"></p>
+        </div>
+        -->
+        <a href="#" data-bind="click: remove">
+            <button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button>
+        </a>
+    </td>
 </script>
 
 <div class="modal hide fade" data-form-type='update' data-form-resource='contrib'>
@@ -126,3 +161,4 @@
         <a href="#" class="btn btn-primary" data-bind="click: save">Save</a>
     </div>
 </div>
+

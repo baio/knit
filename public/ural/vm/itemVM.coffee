@@ -36,7 +36,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @src.item._index.list.remove @src.item
       @setSrc null, null
 
-    map: (data, skipStratEdit) ->
+    map: (data) ->
 
       data = data[0] if $.isArray()
       dataIndexVM = {}
@@ -60,9 +60,6 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @[prop].map dataIndexVM[prop]
 
       @errors = ko.validation?.group @
-
-      if !skipStratEdit
-        @startEdit()
 
     tryDate: (str) ->
       if str and typeof str == "string"
@@ -91,6 +88,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
         type: @src.status
 
     confirmEvent: (event, eventName) ->
+      if !event then return true
       attr = $(event.target).attr "data-bind-event"
       !attr or attr == eventName
 
@@ -130,18 +128,25 @@ define ["ural/modules/pubSub"], (pubSub) ->
         event.preventDefault()
         pubSub.pub "crud", "details", item : @clone "details"
 
-    startEdit: ->
-      @stored_data = @toData()
-      if ko.isObservable(@isModifyed)
-        @isModifyed @getIsModifyed()
-        if !@_isModifyedActivated
-          @activateIsModifyed()
-          @_isModifyedActivated = true
+    startEdit: (data, event) ->
+      f = @confirmEvent event, "start-edit"
+      if f
+        console.log "REAL start edit - store src"
+        @stored_data = @toData()
+        if ko.isObservable(@isModifyed)
+          @isModifyed @getIsModifyed()
+          if !@_isModifyedActivated
+            @activateIsModifyed()
+            @_isModifyedActivated = true
+      f
 
-    cancelEdit: (item, event) ->
-      event.preventDefault()
-      if @stored_data
-        @map @stored_data
+    cancelEdit: (data, event) ->
+      f = @confirmEvent event, "cancel-edit"
+      if f and @stored_data
+        console.log "REAL cancel edit - map from src"
+        @map @stored_data, true
+      f
+
 
     setErrors: (errs) ->
       for err in errs

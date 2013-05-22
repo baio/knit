@@ -60,7 +60,36 @@
         this.isModifyed = ko.observable();
         this._isRemoved = ko.observable();
         ItemVM.__super__.constructor.call(this, resource, index);
+        this._isEditing = ko.observable();
+        this.displayMode = function() {
+          if (_this._isEditing()) {
+            return "contrib-edit-item-template";
+          } else {
+            return "contrib-item-template";
+          }
+        };
       }
+
+      ItemVM.prototype.edit = function(data, event) {
+        if (event) {
+          event.preventDefault();
+        }
+        console.log("just edit");
+        if (this._isEditing()) {
+          console.log("item in editing state");
+          if (this.cancelEdit(data, event)) {
+            console.log("cancel edit COMPLETE");
+            return this._isEditing(false);
+          }
+        } else {
+          console.log("item is NOT in editing state");
+          if (this.startEdit(data, event)) {
+            console.log("start edit COMPLETE");
+            this._isEditing(true);
+            return $(".edit-item-focus", event.currentTarget).focus();
+          }
+        }
+      };
 
       return ItemVM;
 

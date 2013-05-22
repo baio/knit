@@ -97,11 +97,13 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     listenItemIsModifyed: (item) ->
       if @_isModifyedActivated
         item.isModifyed.subscribe (val) =>
-          @isModifyed(val or @getIsModifyed())
+          @updateIsModifyed val
 
-    updateIsModifyed: ->
+    updateIsModifyed: (val) ->
       if @_isModifyedActivated
-        @isModifyed(@getIsModifyed())
+        f = val || @getIsModifyed()
+        console.log f
+        @isModifyed(f)
 
     getIsModifyed: ->
       for item in @list()

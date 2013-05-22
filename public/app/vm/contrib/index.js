@@ -38,7 +38,7 @@
           if (!err) {
             items = data.items;
             delete data.items;
-            _this.contrib.map(data);
+            _this.contrib.map(data, true);
             return done(err, items);
           } else {
             return done(null);
@@ -61,6 +61,7 @@
       IndexVM.prototype.render = function() {
         var _this = this;
 
+        this.editItem.startEdit();
         this.startEdit();
         return Mousetrap.bind(['tab'], function(e) {
           if ($(e.target).attr("id") === "append_item_trigger") {
@@ -71,6 +72,8 @@
               $("#append_item_focus").focus();
             }
             return false;
+          } else if ($(e.target).hasClass("edit_item_trigger")) {
+            return _this.editItem.isValid();
           }
           return true;
         });

@@ -58,7 +58,7 @@
         return this.setSrc(null, null);
       };
 
-      ViewModel.prototype.map = function(data, skipStratEdit) {
+      ViewModel.prototype.map = function(data) {
         var d, dataIndexVM, prop, _ref;
 
         if ($.isArray()) {
@@ -84,10 +84,7 @@
           if (!__hasProp.call(dataIndexVM, prop)) continue;
           this[prop].map(dataIndexVM[prop]);
         }
-        this.errors = (_ref = ko.validation) != null ? _ref.group(this) : void 0;
-        if (!skipStratEdit) {
-          return this.startEdit();
-        }
+        return this.errors = (_ref = ko.validation) != null ? _ref.group(this) : void 0;
       };
 
       ViewModel.prototype.tryDate = function(str) {
@@ -132,6 +129,9 @@
       ViewModel.prototype.confirmEvent = function(event, eventName) {
         var attr;
 
+        if (!event) {
+          return true;
+        }
         attr = $(event.target).attr("data-bind-event");
         return !attr || attr === eventName;
       };
@@ -189,22 +189,33 @@
         }
       };
 
-      ViewModel.prototype.startEdit = function() {
-        this.stored_data = this.toData();
-        if (ko.isObservable(this.isModifyed)) {
-          this.isModifyed(this.getIsModifyed());
-          if (!this._isModifyedActivated) {
-            this.activateIsModifyed();
-            return this._isModifyedActivated = true;
+      ViewModel.prototype.startEdit = function(data, event) {
+        var f;
+
+        f = this.confirmEvent(event, "start-edit");
+        if (f) {
+          console.log("REAL start edit - store src");
+          this.stored_data = this.toData();
+          if (ko.isObservable(this.isModifyed)) {
+            this.isModifyed(this.getIsModifyed());
+            if (!this._isModifyedActivated) {
+              this.activateIsModifyed();
+              this._isModifyedActivated = true;
+            }
           }
         }
+        return f;
       };
 
-      ViewModel.prototype.cancelEdit = function(item, event) {
-        event.preventDefault();
-        if (this.stored_data) {
-          return this.map(this.stored_data);
+      ViewModel.prototype.cancelEdit = function(data, event) {
+        var f;
+
+        f = this.confirmEvent(event, "cancel-edit");
+        if (f && this.stored_data) {
+          console.log("REAL cancel edit - map from src");
+          this.map(this.stored_data, true);
         }
+        return f;
       };
 
       ViewModel.prototype.setErrors = function(errs) {
