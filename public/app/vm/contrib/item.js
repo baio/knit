@@ -92,7 +92,7 @@
       };
 
       ItemVM.prototype.onIsModifyedChanged = function(val) {
-        console.log("modifyed changed");
+        console.log("modifyed changed : " + val);
         if (!val) {
           this._isEditing(val);
         }

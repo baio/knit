@@ -34,6 +34,7 @@
         var item;
 
         item = this.createItem(data);
+        item.startEdit();
         if (idx === !void 0) {
           idx = this.list().length - 1;
         }
@@ -148,6 +149,7 @@
       ViewModel.prototype.activateIsModifyed = function() {
         var item, _i, _len, _ref, _results;
 
+        this._isModifyed(false);
         _ref = this.list();
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -173,7 +175,6 @@
 
         if (this._isModifyedActivated) {
           f = val || this.getIsModifyed();
-          console.log(f);
           return this._isModifyed(f);
         }
       };
@@ -207,7 +208,6 @@
 
       ViewModel.prototype.startEdit = function() {
         if (ko.isObservable(this._isModifyed)) {
-          this._isModifyed(false);
           if (!this._isModifyedActivated) {
             this._isModifyedActivated = true;
             return this.activateIsModifyed();

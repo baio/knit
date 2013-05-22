@@ -59,7 +59,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of dataIndexVM
         @[prop].map dataIndexVM[prop]
 
-      @errors = ko.validation?.group @
+      ko.validation?.group @
 
     tryDate: (str) ->
       if str and typeof str == "string"
@@ -133,8 +133,9 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if f
         console.log "REAL start edit - store src"
         @stored_data = @toData()
+        if @_isModifyedActivated
+          @updateIsModifyed false
         if ko.isObservable(@_isModifyed)
-          @updateIsModifyed @getIsModifyed()
           if !@_isModifyedActivated
             @activateIsModifyed()
             @_isModifyedActivated = true
@@ -154,7 +155,6 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @map @stored_data, true
       f
 
-
     setErrors: (errs) ->
       for err in errs
         flag = false
@@ -171,21 +171,27 @@ define ["ural/modules/pubSub"], (pubSub) ->
             message:
               err.message
 
+    _isIgnoreProp: (prop) ->
+      #if property name starts with _, this is private property, don't map and don't listen for onModify
+      #TO DO - use $ for ignore properties
+      prop == "errors" or (prop.indexOf("_") == 0 and prop != "_isRemoved" and prop != ViewModel.KeyFieldName)
+
     toData: ->
       data = ko.mapping.toJS @
       #map children list properties
       for own prop of @
         #TO DO: change property check to instanceof ItemVM (Circular Dependencies problem)
-        #if property name starts with _, this is private property, don't map (recursive index <-> item problem)
-        if prop.indexOf("_") != 0 and @[prop] and @[prop].list
-          data[prop] = @[prop].list().map (m) -> m.toData()
-        else if prop == "_isModifyed" or prop == "_isAdded"
+        if @_isIgnoreProp prop
           delete data[prop]
+        else if @[prop] and @[prop].list
+          data[prop] = @[prop].list().map (m) -> m.toData()
       data
 
     activateIsModifyed: ->
+      @_isModifyed false
+      @updateIsModifyed @getIsModifyed()
       for own prop of @
-        if prop != "isModifyed" and ko.isObservable @[prop]
+        if !@_isIgnoreProp(prop) and ko.isObservable @[prop]
           @[prop].subscribe =>
             @updateIsModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
 

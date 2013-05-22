@@ -18,8 +18,10 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     add: (data, idx) ->
       item = @createItem data
+      item.startEdit()
       idx = @list().length - 1 if idx is not undefined
       @list.splice idx, 0, item
+      #Newly created item is not modifyed when key begins with _ since src_data, won't contain this property
       @updateIsModifyed()
       @listenItemIsModifyed(item)
 
@@ -90,6 +92,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
         type: "create"
 
     activateIsModifyed: ->
+      @_isModifyed false
       for item in @list()
         item.activateIsModifyed()
         @listenItemIsModifyed(item)
@@ -102,7 +105,6 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
     updateIsModifyed: (val) ->
       if @_isModifyedActivated
         f = val || @getIsModifyed()
-        console.log f
         @_isModifyed(f)
 
     getIsModifyed: ->
@@ -120,7 +122,6 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
 
     startEdit: ->
       if ko.isObservable(@_isModifyed)
-        @_isModifyed false
         if !@_isModifyedActivated
           @_isModifyedActivated = true
           @activateIsModifyed()

@@ -40,7 +40,6 @@ define ["ural/vm/itemVM"], (itemVM) ->
       @_isEditing = ko.observable()
       @displayMode = =>
         if @_isEditing() then "contrib-edit-item-template" else "contrib-item-template"
-      #@isModifyed.subscribe((val) => if !val then @_isEditing false)
 
     edit: (data, event) ->
       if event then event.preventDefault()
@@ -58,6 +57,6 @@ define ["ural/vm/itemVM"], (itemVM) ->
           $(".edit-item-focus", event.currentTarget).focus()
 
     onIsModifyedChanged: (val) ->
-      console.log "modifyed changed"
+      console.log "modifyed changed : " + val
       if !val then @_isEditing val
       super val

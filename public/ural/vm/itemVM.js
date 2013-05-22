@@ -84,7 +84,7 @@
           if (!__hasProp.call(dataIndexVM, prop)) continue;
           this[prop].map(dataIndexVM[prop]);
         }
-        return this.errors = (_ref = ko.validation) != null ? _ref.group(this) : void 0;
+        return (_ref = ko.validation) != null ? _ref.group(this) : void 0;
       };
 
       ViewModel.prototype.tryDate = function(str) {
@@ -196,8 +196,10 @@
         if (f) {
           console.log("REAL start edit - store src");
           this.stored_data = this.toData();
+          if (this._isModifyedActivated) {
+            this.updateIsModifyed(false);
+          }
           if (ko.isObservable(this._isModifyed)) {
-            this.updateIsModifyed(this.getIsModifyed());
             if (!this._isModifyedActivated) {
               this.activateIsModifyed();
               this._isModifyedActivated = true;
@@ -258,18 +260,22 @@
         return _results;
       };
 
+      ViewModel.prototype._isIgnoreProp = function(prop) {
+        return prop === "errors" || (prop.indexOf("_") === 0 && prop !== "_isRemoved" && prop !== ViewModel.KeyFieldName);
+      };
+
       ViewModel.prototype.toData = function() {
         var data, prop;
 
         data = ko.mapping.toJS(this);
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
-          if (prop.indexOf("_") !== 0 && this[prop] && this[prop].list) {
+          if (this._isIgnoreProp(prop)) {
+            delete data[prop];
+          } else if (this[prop] && this[prop].list) {
             data[prop] = this[prop].list().map(function(m) {
               return m.toData();
             });
-          } else if (prop === "_isModifyed" || prop === "_isAdded") {
-            delete data[prop];
           }
         }
         return data;
@@ -279,10 +285,12 @@
         var prop, _results,
           _this = this;
 
+        this._isModifyed(false);
+        this.updateIsModifyed(this.getIsModifyed());
         _results = [];
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
-          if (prop !== "isModifyed" && ko.isObservable(this[prop])) {
+          if (!this._isIgnoreProp(prop) && ko.isObservable(this[prop])) {
             _results.push(this[prop].subscribe(function() {
               return _this.updateIsModifyed((_this._isRemoved() || _this.isValid()) && _this.getIsModifyed());
             }));
