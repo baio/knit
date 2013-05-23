@@ -11,8 +11,24 @@
 
       function Contrib(resource, _index) {
         this.ref = ko.observable();
-        this.name = ko.observable();
-        this.url = ko.observable();
+        this.name = ko.observable().extend({
+          required: {
+            message: "Имя должно быть заполнено."
+          },
+          minLength: {
+            message: "Имя должно сотоять как минимум из 3-х символов.",
+            params: 3
+          }
+        });
+        this.url = ko.observable().extend({
+          required: {
+            message: "Ссылка должна быть заполнена."
+          },
+          pattern: {
+            message: "Ссылка имеет неверный формат.",
+            params: "^(https?:\\/\\/)?([\\da-z\\.-]+)\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$"
+          }
+        });
         this.isSelected = ko.observable();
         Contrib.__super__.constructor.call(this, "contrib", _index);
       }

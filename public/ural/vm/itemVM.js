@@ -301,6 +301,26 @@
         return _results;
       };
 
+      ViewModel.prototype.getIsChanged = function() {
+        var data, prop, src_data;
+
+        if (!this.src) {
+          return false;
+        }
+        if (this.src.status === "create") {
+          return true;
+        }
+        src_data = this.src.item.toData();
+        data = this.toData();
+        for (prop in src_data) {
+          if (!__hasProp.call(src_data, prop)) continue;
+          if (src_data[prop] !== data[prop]) {
+            return true;
+          }
+        }
+        return false;
+      };
+
       ViewModel.prototype.getIsModifyed = function() {
         var prop, val, _ref;
 
@@ -321,10 +341,13 @@
         return false;
       };
 
-      ViewModel.prototype.save = function() {
+      ViewModel.prototype.save = function(data, event) {
         var status, _done,
           _this = this;
 
+        if (event) {
+          event.preventDefault();
+        }
         status = this.src.status;
         _done = function(err) {
           return pubSub.pub("crud", "end", {
@@ -334,7 +357,11 @@
             msg: "Success"
           });
         };
-        if (status === "create") {
+        if (!this.getIsChanged()) {
+          return _done();
+        } else if (!this.isValid()) {
+          return _done("Not valid");
+        } else if (status === "create") {
           return this.create(_done);
         } else if (status === "update") {
           return this.update(_done);

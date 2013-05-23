@@ -195,6 +195,16 @@ define ["ural/modules/pubSub"], (pubSub) ->
           @[prop].subscribe =>
             @updateIsModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
 
+    getIsChanged: ->
+      if !@src then return false
+      if @src.status == "create" then return true
+      src_data = @src.item.toData()
+      data = @toData()
+      for own prop of src_data
+        if src_data[prop] != data[prop]
+          return true
+      return false
+
     getIsModifyed: ->
       if !@stored_data then return false
       for own prop of @stored_data
@@ -204,7 +214,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
         if  val != @stored_data[prop] then return true
       return false
 
-    save: ->
+    save: (data, event) ->
+      if event then event.preventDefault()
       status = @src.status
       _done = (err) =>
         pubSub.pub "crud", "end",
@@ -212,7 +223,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
           type: status
           err: err
           msg: "Success"
-      if status == "create"
+      if !@getIsChanged()
+        _done()
+      else if !@isValid()
+        _done "Not valid"
+      else if status == "create"
         @create _done
       else if status == "update"
         @update _done

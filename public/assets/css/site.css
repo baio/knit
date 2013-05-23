@@ -74,3 +74,9 @@ body {
 tr.row-input > td > input{
     margin-bottom: 0px;
 }
+
+.error-message-inline
+{
+    color: #b94a48;
+    display: block !important;
+}
