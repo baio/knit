@@ -18,7 +18,7 @@
           },
           pattern: {
             message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.',
-            params: '^[а-я]+\\s[а-я]+$'
+            params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
           }
         });
         this.name_2 = ko.observable().extend({
@@ -27,25 +27,25 @@
           },
           pattern: {
             message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.',
-            params: '^[а-я]+\\s[а-я]+$'
+            params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
           }
         });
         this.family_rel = ko.observable().extend({
           pattern: {
             message: 'Связь \'семья\' должна содержать только прописные, кирилические символы.',
-            params: '^[а-я]+$'
+            params: '^\\s*[а-я]+\\s*$'
           }
         });
         this.private_rel = ko.observable().extend({
           pattern: {
             message: 'Связь \'частные\' должна содержать только прописные, кирилические символы.',
-            params: '^[а-я]+$'
+            params: '^\\s*[а-я]+\\s*$'
           }
         });
         this.prof_rel = ko.observable().extend({
           pattern: {
             message: 'Связь \'професиональные\' должна содержать только прописные, кирилические символы.',
-            params: '^[а-я]+$'
+            params: '^\\s*[а-я]+\\s*$'
           }
         });
         this._id = ko.observable().extend({
