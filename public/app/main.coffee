@@ -26,6 +26,6 @@ require [
 
     router.Router.StartRouting "app/controllers",
       [
-        { url: "/", path : {controller : "contrib", action : "item", arg : "518b989739ed9714289d0bc1"} }
+        { url: "/", path : {controller : "graph", action : "panel"} }
         { url: "{controller}/{action}/:id:" }
       ]
