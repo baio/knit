@@ -83,6 +83,10 @@
           return item._isAdded() && item._isRemoved();
         });
         list = this._isModifyedActivated ? this.getModifyedItems() : this.list();
+        if (!list.length) {
+          done();
+          return;
+        }
         for (_i = 0, _len = list.length; _i < _len; _i++) {
           item = list[_i];
           if (item.toData) {

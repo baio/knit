@@ -34,16 +34,33 @@ define ["ural/vm/indexVM",
         done err, data
 
     render: ->
+
+      _appendRow = =>
+        if @editItem.isValid()
+          @add @editItem.toData(), 0
+          @editItem.map(@defItem)
+          $("#append_item_focus").focus()
+          return false
+        else
+          return true
+
       @editItem.startEdit()
       @startEdit()
+
+      Mousetrap.bind ['ctrl+s'], (e) =>
+        $(e.target).blur()
+        $(e.target).focus()
+        @save()
+        return false
+      Mousetrap.bind ['ctrl+a'], (e) =>
+        if $(e.target).closest("tr").attr("id") == "append_row"
+          return _appendRow()
+        else
+          return true
       Mousetrap.bind ['tab'], (e) =>
         if $(e.target).attr("id") == "append_item_trigger"
           @editItem.prof_rel($(e.target).val())
-          if @editItem.isValid()
-            @add @editItem.toData(), 0
-            @editItem.map(@defItem)
-            $("#append_item_focus").focus()
-          return false
+          return _appendRow()
         else if $(e.target).hasClass "edit_item_trigger"
           return @editItem.isValid()
         return true

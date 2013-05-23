@@ -59,19 +59,38 @@
       };
 
       IndexVM.prototype.render = function() {
-        var _this = this;
+        var _appendRow,
+          _this = this;
 
+        _appendRow = function() {
+          if (_this.editItem.isValid()) {
+            _this.add(_this.editItem.toData(), 0);
+            _this.editItem.map(_this.defItem);
+            $("#append_item_focus").focus();
+            return false;
+          } else {
+            return true;
+          }
+        };
         this.editItem.startEdit();
         this.startEdit();
+        Mousetrap.bind(['ctrl+s'], function(e) {
+          $(e.target).blur();
+          $(e.target).focus();
+          _this.save();
+          return false;
+        });
+        Mousetrap.bind(['ctrl+a'], function(e) {
+          if ($(e.target).closest("tr").attr("id") === "append_row") {
+            return _appendRow();
+          } else {
+            return true;
+          }
+        });
         return Mousetrap.bind(['tab'], function(e) {
           if ($(e.target).attr("id") === "append_item_trigger") {
             _this.editItem.prof_rel($(e.target).val());
-            if (_this.editItem.isValid()) {
-              _this.add(_this.editItem.toData(), 0);
-              _this.editItem.map(_this.defItem);
-              $("#append_item_focus").focus();
-            }
-            return false;
+            return _appendRow();
           } else if ($(e.target).hasClass("edit_item_trigger")) {
             return _this.editItem.isValid();
           }

@@ -24,7 +24,7 @@
                     <th>Проф.<br/>связи</th>
                     <th style="width: 2%"></th>
                 </tr>
-                <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input"></tr>
+                <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input" id="append_row"></tr>
                 </thead>
                 <tbody id="items_list" data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
                 </tbody>
@@ -43,18 +43,18 @@
 
 <script type="text/html" id="contrib-append-item-template">
     <td>
-        <input type="text" class="input-large" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
+        <input type="text" class="input-large mousetrap" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
                id="append_item_focus" />
     </td>
     <td>
-        <input type="text" class="input-large" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"/>
+        <input type="text" class="input-large mousetrap" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"/>
     </td>
     <td>
-        <input type="text" class="input-small"
+        <input type="text" class="input-small mousetrap"
                data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" />
     </td>
     <td>
-        <input type="text" class="input-small"
+        <input type="text" class="input-small mousetrap"
                data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" />
     </td>
     <td>
@@ -74,19 +74,19 @@
 
 <script type="text/html" id="contrib-edit-item-template">
     <td>
-        <input type="text" class="input-large edit-item-focus" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
+        <input type="text" class="input-large edit-item-focus mousetrap" data-bind="autocomplete: name_1, autocompleteOpts : {url: '/names'}"
                data-bind-event="input-edit"/>
     </td>
     <td>
-        <input type="text" class="input-large" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"
+        <input type="text" class="input-large mousetrap" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"
                data-bind-event="input-edit"/>
     </td>
     <td>
-        <input type="text" class="input-small"
+        <input type="text" class="input-small mousetrap"
                data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" data-bind-event="input-edit"/>
     </td>
     <td>
-        <input type="text" class="input-small"
+        <input type="text" class="input-small mousetrap"
                data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" data-bind-event="input-edit"/>
     </td>
     <td>

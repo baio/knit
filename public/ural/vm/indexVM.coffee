@@ -48,6 +48,9 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       #check isAdded the same time isRemoved, then remove ones from list
       @list.remove (item) -> item._isAdded() and item._isRemoved()
       list = if @_isModifyedActivated then @getModifyedItems() else @list()
+      if !list.length
+        done()
+        return
       for item in list
         if item.toData
           res.push item.toData()
