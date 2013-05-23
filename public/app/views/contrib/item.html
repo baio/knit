@@ -127,9 +127,7 @@
             <p data-bind="text: errors().length"></p>
         </div>
         -->
-        <a href="#" data-bind="click: remove">
-            <button class="btn btn-mini btn-danger"><i class="icon-remove"></i></button>
-        </a>
+        <button class="btn btn-mini btn-danger" data-bind="click: remove"><i class="icon-remove" data-bind-event="button-remove"></i></button>
     </td>
 </script>
 
