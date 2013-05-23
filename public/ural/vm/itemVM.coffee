@@ -193,7 +193,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of @
         if !@_isIgnoreProp(prop) and ko.isObservable @[prop]
           @[prop].subscribe =>
-            @updateIsModifyed (@_isRemoved() or @isValid()) and @getIsModifyed()
+            @updateIsModifyed @_isRemoved() or (@isValid() and @getIsModifyed())
 
     getIsChanged: ->
       if !@src then return false

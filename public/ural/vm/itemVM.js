@@ -292,7 +292,7 @@
           if (!__hasProp.call(this, prop)) continue;
           if (!this._isIgnoreProp(prop) && ko.isObservable(this[prop])) {
             _results.push(this[prop].subscribe(function() {
-              return _this.updateIsModifyed((_this._isRemoved() || _this.isValid()) && _this.getIsModifyed());
+              return _this.updateIsModifyed(_this._isRemoved() || (_this.isValid() && _this.getIsModifyed()));
             }));
           } else {
             _results.push(void 0);
