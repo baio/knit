@@ -6,11 +6,18 @@
             <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
             <li class="divider"></li>
             <!-- ko foreach : tags -->
-            <li>
-                <a href="#" data-bind="text : name" target="_blank"></a>
-                <ul data-bind="foreach: urls">
-                    <li><a href="#" data-bind="attr: {href: $data}" target="_blank">link</a></li>
-                </ul>
+            <li style="text-align: center; margin-top: 10px;">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" target="_blank" id="drop_links">
+                        <span data-bind="text : name" ></span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="drop_links" data-bind="foreach: urls">
+                        <li>
+                            <a href="#" data-bind="attr: {href: $data}" target="_blank">link</a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <!-- /ko -->
         </ul>
