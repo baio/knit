@@ -41,6 +41,14 @@
         };
       }
 
+      Toolbox.prototype.moveToConner = function(data, event) {
+        event.preventDefault();
+        return $("#_toolbox").css({
+          left: '',
+          top: ''
+        });
+      };
+
       return Toolbox;
 
     })();

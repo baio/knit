@@ -23,3 +23,7 @@ define ->
         $("#_toolbox").css(left : x, top: y)
         console.log $("#_toolbox").offset()
 
+
+    moveToConner: (data, event) ->
+      event.preventDefault()
+      $("#_toolbox").css(left : '', top: '')
