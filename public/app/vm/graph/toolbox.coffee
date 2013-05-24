@@ -12,3 +12,6 @@ define ->
         @name_src edge.source.name
         @name_tgt edge.target.name
         @tags edge.tags
+      @panel.onClickEdge = (edge) ->
+        console.log(d3.mouse(@))
+

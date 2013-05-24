@@ -117,7 +117,7 @@
           return d.target.meta.pos[0];
         }).attr("y2", function(d) {
           return d.target.meta.pos[1];
-        }).on("mouseover", this.onHoverEdge);
+        }).on("mouseover", this.onHoverEdge).on("click", this.onClickEdge);
         text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
           return d.name;
         }).attr("x", function(d) {
@@ -156,6 +156,8 @@
       };
 
       Panel.prototype.onHoverEdge = function(edge) {};
+
+      Panel.prototype.onClickEdge = function(edge) {};
 
       Panel.prototype.toData = function() {
         return this.data.nodes;

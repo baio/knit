@@ -69,6 +69,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("x2", (d) -> d.target.meta.pos[0])
         .attr("y2", (d) -> d.target.meta.pos[1])
         .on("mouseover", @onHoverEdge)
+        .on("click", @onClickEdge)
 
       text = svg.selectAll("text")
         .data(grp_nodes)
@@ -106,6 +107,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         return false
 
     onHoverEdge: (edge) ->
+    onClickEdge: (edge) ->
 
     toData: ->
       @data.nodes

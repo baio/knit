@@ -23,6 +23,9 @@
           _this.name_tgt(edge.target.name);
           return _this.tags(edge.tags);
         };
+        this.panel.onClickEdge = function(edge) {
+          return console.log(d3.mouse(this));
+        };
       }
 
       return Toolbox;
