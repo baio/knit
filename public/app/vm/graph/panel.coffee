@@ -101,6 +101,10 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             d.meta.isMoved = true
           ))
 
+      Mousetrap.bind ['ctrl+s'], =>
+        @save()
+        return false
+
     onHoverEdge: (edge) ->
 
     toData: ->

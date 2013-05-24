@@ -88,7 +88,8 @@
       };
 
       Panel.prototype.render = function(data) {
-        var color, grp_edges, grp_nodes, link, node, svg, text;
+        var color, grp_edges, grp_nodes, link, node, svg, text,
+          _this = this;
 
         this.data = data;
         color = d3.scale.category20();
@@ -124,7 +125,7 @@
         }).attr("y", function(d) {
           return d.meta.pos[1] - 10;
         });
-        return node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
+        node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
           return d.meta.pos[0];
         }).attr("cy", function(d) {
           return d.meta.pos[1];
@@ -148,6 +149,10 @@
           d.meta.pos = [x, y];
           return d.meta.isMoved = true;
         }));
+        return Mousetrap.bind(['ctrl+s'], function() {
+          _this.save();
+          return false;
+        });
       };
 
       Panel.prototype.onHoverEdge = function(edge) {};
