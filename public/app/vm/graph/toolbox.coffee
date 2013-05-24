@@ -13,5 +13,13 @@ define ->
         @name_tgt edge.target.name
         @tags edge.tags
       @panel.onClickEdge = (edge) ->
-        console.log(d3.mouse(@))
+        pos = d3.mouse(@)
+        console.log pos
+        offset = $("#_body").offset()
+        x = pos[0] - $("body").scrollLeft() - offset.left
+        y = pos[1] - $("body").scrollTop() - offset.top
+        console.log x
+        console.log y
+        $("#_toolbox").css(left : x, top: y)
+        console.log $("#_toolbox").offset()
 

@@ -24,7 +24,20 @@
           return _this.tags(edge.tags);
         };
         this.panel.onClickEdge = function(edge) {
-          return console.log(d3.mouse(this));
+          var offset, pos, x, y;
+
+          pos = d3.mouse(this);
+          console.log(pos);
+          offset = $("#_body").offset();
+          x = pos[0] - $("body").scrollLeft() - offset.left;
+          y = pos[1] - $("body").scrollTop() - offset.top;
+          console.log(x);
+          console.log(y);
+          $("#_toolbox").css({
+            left: x,
+            top: y
+          });
+          return console.log($("#_toolbox").offset());
         };
       }
 
