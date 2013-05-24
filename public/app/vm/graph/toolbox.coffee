@@ -1,4 +1,4 @@
-define ["app/dataProvider"], (dataProvider) ->
+define ->
 
   class Toolbox
 
@@ -12,6 +12,3 @@ define ["app/dataProvider"], (dataProvider) ->
         @name_src edge.source.name
         @name_tgt edge.target.name
         @tags edge.tags
-
-    save: ->
-      dataProvider.ajax "graphs", "patch", {graph: @nav.activeGraph().id, data : @panel.toData()}, ->

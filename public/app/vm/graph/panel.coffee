@@ -1,10 +1,21 @@
-define ["app/dataProvider"], (dataProvider) ->
+define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
   class Panel
 
+    constructor: ->
+      pubSub.sub "graph", "save", => @save()
+
+    save: ->
+      if @id
+        dataProvider.ajax "graphs", "patch", {graph: @id, data : @toData()}, (err) ->
+          if err then toastr.error err, "Ошибка сохранения" else toastr.success "Сохранено успешно"
+
+
+
     load: (filter, done) ->
-      dataProvider.get "graphs", filter, (err, data) ->
+      dataProvider.get "graphs", filter, (err, data) =>
         if !err
+          @id = data.id
           for edge in data.edges
             edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]
             edge.source = data.nodes.filter((n) -> n.id == edge.source_id)[0]
@@ -27,7 +38,6 @@ define ["app/dataProvider"], (dataProvider) ->
         done err, data
 
     render: (data) ->
-
       @data = data
 
       color = d3.scale.category20()

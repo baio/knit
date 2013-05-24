@@ -16,7 +16,9 @@ define [
           _toolbox: new toolbox(@nav, pl)
       ,(err) =>
         if !err
-          @nav.activeGraph id: pl.data.id, name: pl.data.name, isYours: pl.data.isYours
+          @nav.activeGraph.id pl.data.id
+          @nav.activeGraph.name pl.data.name
+          @nav.activeGraph.isYours pl.data.isYours
 
     data: (graph) ->
       d = new Data()

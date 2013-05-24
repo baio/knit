@@ -31,11 +31,9 @@
           }
         }, function(err) {
           if (!err) {
-            return _this.nav.activeGraph({
-              id: pl.data.id,
-              name: pl.data.name,
-              isYours: pl.data.isYours
-            });
+            _this.nav.activeGraph.id(pl.data.id);
+            _this.nav.activeGraph.name(pl.data.name);
+            return _this.nav.activeGraph.isYours(pl.data.isYours);
           }
         });
       };
