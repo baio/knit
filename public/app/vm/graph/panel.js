@@ -13,10 +13,15 @@
       }
 
       Panel.prototype.save = function() {
+        var data;
+
         if (this.id) {
+          data = this.toData().filter(function(d) {
+            return d.meta.isMoved;
+          });
           return dataProvider.ajax("graphs", "patch", {
             graph: this.id,
-            data: this.toData()
+            data: data
           }, function(err) {
             if (err) {
               return toastr.error(err, "Ошибка сохранения");
@@ -140,7 +145,8 @@
           text.filter(function(t) {
             return t.id === d.id;
           }).attr("x", x).attr("y", y - 10);
-          return d.meta.pos = [x, y];
+          d.meta.pos = [x, y];
+          return d.meta.isMoved = true;
         }));
       };
 

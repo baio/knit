@@ -7,7 +7,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
     save: ->
       if @id
-        dataProvider.ajax "graphs", "patch", {graph: @id, data : @toData()}, (err) ->
+        data = @toData().filter((d) -> d.meta.isMoved)
+        dataProvider.ajax "graphs", "patch", {graph: @id, data : data}, (err) ->
           if err then toastr.error err, "Ошибка сохранения" else toastr.success "Сохранено успешно"
 
 
@@ -97,6 +98,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
             text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
             d.meta.pos = [x, y]
+            d.meta.isMoved = true
           ))
 
     onHoverEdge: (edge) ->
