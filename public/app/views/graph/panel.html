@@ -9,7 +9,7 @@
             <!-- ko foreach : tags -->
             <li style="text-align: center; margin-top: 10px;">
                 <div class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" target="_blank" id="drop_links">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" target="_blank" id="drop_links" data-bind="click : $parent.linksShown">
                         <span data-bind="text : name" ></span>
                         <b class="caret"></b>
                     </a>

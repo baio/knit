@@ -1,4 +1,4 @@
-define ->
+define ["app/vm/graph/linksCache"], (linksCache) ->
 
   class Toolbox
 
@@ -11,7 +11,10 @@ define ->
       @panel.onHoverEdge = (edge) =>
         @name_src edge.source.name
         @name_tgt edge.target.name
-        @tags edge.tags
+        _t = []
+        for tag in edge.tags
+          _t.push( name : ko.observable(tag.name), urls : ko.observableArray(tag.urls))
+        @tags _t
       @panel.onClickEdge = (edge) ->
         pos = d3.mouse(@)
         console.log pos
@@ -23,7 +26,10 @@ define ->
         $("#_toolbox").css(left : x, top: y)
         console.log $("#_toolbox").offset()
 
-
     moveToConner: (data, event) ->
       event.preventDefault()
       $("#_toolbox").css(left : '', top: '')
+
+    linksShown: (data, event) ->
+      console.log "links shown"
+      linksCache.getTitles data.urls
