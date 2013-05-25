@@ -55,11 +55,13 @@ define [
       data = id: @ref(), name: @name(), contribs: @contribs().map((m) -> m.ref())
       dataProvider.ajax "graphs", "put", data, done
 
+    ###
     create: (done) ->
       super (err) =>
         done err
         if !err
           @openGraph()
+    ###
 
     open: (data, event)->
       event.preventDefault()
@@ -68,4 +70,3 @@ define [
     dropUpdate: (list, item) ->
       @update (err) ->
         pubSub.pub "msg", "show", err : err, msg : "Сохранено"
-        if !err then list.remove item

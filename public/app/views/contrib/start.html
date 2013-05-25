@@ -69,7 +69,8 @@
                                 <tr>
                                     <td>
                                         <div class="widget wlightblue"
-                                             data-bind="droppable: contribs, droppableOpts : {compareField : 'ref', afterAppend: function(list, item) { $data.dropUpdate(list, item) }}">
+                                             data-bind="droppable: contribs, droppableOpts : {compareField : 'ref',
+                                             afterAppend: function(list, item) { $data.dropUpdate(list, item) }}">
 
                                             <div class="widget-head"
                                                  style="background-color: #52b9e9; border-color: #52b9e9">
@@ -89,7 +90,7 @@
 
                                                 <table class="table">
                                                     <tbody class="container" data-bind="foreach: contribs">
-                                                    <tr data-bind="draggable: {item: $data, parentList: $parent.contribs}, draggableOpts : {removeFromList : true}">
+                                                    <tr data-bind="draggable: {item: $data, parentList: $parent.contribs}, draggableOpts : {removeFromList : true, afterRemove: function(list, item) { $parent.dropUpdate(list, item) }}">
                                                         <td>
                                                             <a href="#/contrib/item" data-bind="link: ref"><span
                                                                     data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>

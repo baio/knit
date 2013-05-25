@@ -85,16 +85,14 @@
         return dataProvider.ajax("graphs", "put", data, done);
       };
 
-      Graph.prototype.create = function(done) {
-        var _this = this;
+      /*
+      create: (done) ->
+        super (err) =>
+          done err
+          if !err
+            @openGraph()
+      */
 
-        return Graph.__super__.create.call(this, function(err) {
-          done(err);
-          if (!err) {
-            return _this.openGraph();
-          }
-        });
-      };
 
       Graph.prototype.open = function(data, event) {
         event.preventDefault();
@@ -105,13 +103,10 @@
 
       Graph.prototype.dropUpdate = function(list, item) {
         return this.update(function(err) {
-          pubSub.pub("msg", "show", {
+          return pubSub.pub("msg", "show", {
             err: err,
             msg: "Сохранено"
           });
-          if (!err) {
-            return list.remove(item);
-          }
         });
       };
 

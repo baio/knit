@@ -72,6 +72,9 @@ ko.bindingHandlers.sortableItem =
           }
           if (dragOpts && dragOpts.removeFromList) {
             dragList.remove(item);
+            if (dragOpts && dragOpts.afterRemove) {
+              dragOpts.afterRemove(dropList, item);
+            }
           }
           if (opts && opts.appendToList === false) {
             return;

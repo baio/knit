@@ -63,6 +63,8 @@ ko.bindingHandlers.droppable =
             return
         if dragOpts and dragOpts.removeFromList
           dragList.remove item
+          if dragOpts and dragOpts.afterRemove
+            dragOpts.afterRemove dropList, item
         if opts and opts.appendToList == false
           return
         dropList.splice 0, 0, item
