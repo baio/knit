@@ -28,7 +28,7 @@ ko.bindingHandlers.sortableItem =
 
 (function() {
   ko.bindingHandlers.draggable = {
-    init: function(element, valueAccessor) {
+    init: function(element, valueAccessor, allBindingsAccessor) {
       var options;
 
       options = valueAccessor();
@@ -43,6 +43,7 @@ ko.bindingHandlers.sortableItem =
           });
           h.data("ko.draggable.item", options.item);
           h.data("ko.draggable.parentList", options.parentList);
+          h.data("ko.draggable.options", allBindingsAccessor().draggableOpts);
           return h;
         },
         appendTo: 'body'
@@ -52,18 +53,15 @@ ko.bindingHandlers.sortableItem =
 
   ko.bindingHandlers.droppable = {
     init: function(element, valueAccessor, allBindingsAccessor, context) {
-      var dropList, opts;
-
-      opts = allBindingsAccessor().droppableOpts;
-      dropList = valueAccessor();
       return $(element).droppable({
-        tolerance: 'pointer',
-        hoverClass: 'dragHover',
-        activeClass: 'dragActive',
         drop: function(evt, ui) {
-          var f, item;
+          var dragList, dragOpts, dropList, f, item, opts;
 
+          opts = allBindingsAccessor().droppableOpts;
+          dropList = valueAccessor();
           item = ui.helper.data("ko.draggable.item");
+          dragList = ui.helper.data("ko.draggable.parentList");
+          dragOpts = ui.helper.data("ko.draggable.options");
           if (opts && opts.compareField) {
             f = dropList().filter(function(f) {
               return f[opts.compareField]() === item[opts.compareField]();
@@ -72,7 +70,16 @@ ko.bindingHandlers.sortableItem =
               return;
             }
           }
+          if (dragOpts && dragOpts.removeFromList) {
+            dragList.remove(item);
+          }
+          if (opts && opts.appendToList === false) {
+            return;
+          }
           dropList.splice(0, 0, item);
+          if (opts && opts.afterAppend) {
+            opts.afterAppend(dropList, item);
+          }
           return console.log(item);
         }
       });

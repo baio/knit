@@ -5,7 +5,7 @@
   request = require("./request");
 
   exports.get = function(req, res) {
-    return request.req(req, res, "users", true);
+    return request.req(req, res, "users");
   };
 
 }).call(this);

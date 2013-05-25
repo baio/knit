@@ -78,9 +78,7 @@
         data = {
           id: this.ref(),
           name: this.name(),
-          contribs: this._contribs.list().filter(function(f) {
-            return f.isSelected();
-          }).map(function(m) {
+          contribs: this.contribs().map(function(m) {
             return m.ref();
           })
         };
@@ -102,6 +100,18 @@
         event.preventDefault();
         return pubSub.pub("href", "change", {
           href: "/graph/panel/" + (this.ref())
+        });
+      };
+
+      Graph.prototype.dropUpdate = function(list, item) {
+        return this.update(function(err) {
+          pubSub.pub("msg", "show", {
+            err: err,
+            msg: "Сохранено"
+          });
+          if (!err) {
+            return list.remove(item);
+          }
         });
       };
 

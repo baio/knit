@@ -52,7 +52,7 @@ define [
       dataProvider.ajax "graphs", "delete", data, done
 
     onUpdate: (done) ->
-      data = id: @ref(), name: @name(), contribs: @_contribs.list().filter((f) -> f.isSelected()).map((m) -> m.ref())
+      data = id: @ref(), name: @name(), contribs: @contribs().map((m) -> m.ref())
       dataProvider.ajax "graphs", "put", data, done
 
     create: (done) ->
@@ -65,3 +65,7 @@ define [
       event.preventDefault()
       pubSub.pub "href", "change", href: "/graph/panel/#{@ref()}"
 
+    dropUpdate: (list, item) ->
+      @update (err) ->
+        pubSub.pub "msg", "show", err : err, msg : "Сохранено"
+        if !err then list.remove item
