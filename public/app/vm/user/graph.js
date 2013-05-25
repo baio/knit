@@ -23,29 +23,29 @@
         });
         this.date = ko.observable();
         this.contribs = ko.observableArray();
-        this.pushes = new Pushes(this);
-        this.pulls = new Pulls(this);
+        /*
+        @pushes = new Pushes(@)
+        @pulls = new Pulls(@)
+        @_linkedContribs = ko.computed =>
+          if @contribs()
+            @contribs().filter((f) => @_contribs.list().filter((m) -> m.ref() == f)[0])
+          else
+            []
+        */
+
         Graph.__super__.constructor.call(this, "graph", _index);
       }
 
-      Graph.prototype.map = function(data, skipStratEdit) {
-        var contrib, _i, _len, _ref, _results;
+      /*
+      map: (data, skipStratEdit) ->
+        super data, skipStratEdit
+        for contrib in @_contribs.list()
+          if @contribs()
+            contrib.isSelected @contribs().filter((f) -> f == contrib.ref()).length
+          else
+            contrib.isSelected false
+      */
 
-        Graph.__super__.map.call(this, data, skipStratEdit);
-        _ref = this._contribs.list();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          contrib = _ref[_i];
-          if (this.contribs()) {
-            _results.push(contrib.isSelected(this.contribs().filter(function(f) {
-              return f === contrib.ref();
-            }).length));
-          } else {
-            _results.push(contrib.isSelected(false));
-          }
-        }
-        return _results;
-      };
 
       Graph.prototype.onCreateItem = function() {
         return new Graph(this.resource, this._index, this._contribs);

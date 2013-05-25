@@ -68,6 +68,43 @@
                                 <tbody data-bind="foreach: list">
                                 <tr>
                                     <td>
+                                        <div class="widget wlightblue">
+
+                                            <div class="widget-head"
+                                                 style="background-color: #52b9e9; border-color: #52b9e9">
+                                                <div class="pull-left"><a href="#" data-bind="click: startUpdate" style="color: white"><span
+                                                        data-bind="text: name"></span>&nbsp;<span
+                                                        data-bind="text: date"></span></a>
+                                                </div>
+                                                <div class="widget-icons pull-right">
+                                                    <a href="#" class="wminimize" data-bind="click: $parent.switchContentShown"><i class="icon-chevron-down"></i></a>
+                                                    <a href="#" class="wclose" data-bind="click: startRemove"><i
+                                                            class="icon-remove"></i></a>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+
+                                            <div class="widget-content" style="display: none">
+
+                                                <table class="table">
+                                                    <tbody data-bind="foreach: contribs">
+                                                    <tr>
+                                                        <td>
+                                                            <a href="#/contrib/item" data-bind="link: ref"><span
+                                                                    data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!--
+                                <tr>
+                                    <td>
                                         <a class="btn btn-mini btn-danger" href="#" data-bind="click: startRemove">
                                             <i class="icon-remove"></i>
                                         </a>
@@ -77,6 +114,7 @@
                                                 data-bind="text: date"></span></a>
                                     </td>
                                 </tr>
+                                -->
                                 </tbody>
                             </table>
                         </div>

@@ -19,10 +19,18 @@ define [
           params: 3
       @date = ko.observable()
       @contribs = ko.observableArray()
+      ###
       @pushes = new Pushes(@)
       @pulls = new Pulls(@)
+      @_linkedContribs = ko.computed =>
+        if @contribs()
+          @contribs().filter((f) => @_contribs.list().filter((m) -> m.ref() == f)[0])
+        else
+          []
+      ###
       super "graph", _index
 
+    ###
     map: (data, skipStratEdit) ->
       super data, skipStratEdit
       for contrib in @_contribs.list()
@@ -30,6 +38,7 @@ define [
           contrib.isSelected @contribs().filter((f) -> f == contrib.ref()).length
         else
           contrib.isSelected false
+    ###
 
     onCreateItem: ->
       new Graph @resource, @_index, @_contribs
@@ -55,3 +64,4 @@ define [
     open: (data, event)->
       event.preventDefault()
       pubSub.pub "href", "change", href: "/graph/panel/#{@ref()}"
+

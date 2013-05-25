@@ -9,3 +9,15 @@ define ["ural/vm/indexVM", "app/vm/user/graph"]
 
     onCreateItem: ->
       new Graph @resource, @, @contribs
+
+    switchContentShown: (data, event) ->
+      event.preventDefault()
+      t = event.currentTarget
+      $wcontent = $(".widget-content", $(t).closest("table"))
+      if $wcontent.is(':visible')
+        $(t).children('i').removeClass('icon-chevron-up')
+        $(t).children('i').addClass('icon-chevron-down')
+      else
+        $(t).children('i').removeClass('icon-chevron-down')
+        $(t).children('i').addClass('icon-chevron-up')
+      $wcontent.toggle(500);
