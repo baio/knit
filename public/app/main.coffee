@@ -7,6 +7,7 @@ require [
   "ural/vm/itemVM",
   "ural/bindings/_all",
   "app/config",
+  "ural/libs/localization/ru/moment.ru"
 ],
   (localManager, router, itemVM, bindingOpts, config) ->
     localManager.setup "en"
@@ -26,6 +27,6 @@ require [
 
     router.Router.StartRouting "app/controllers",
       [
-        { url: "/", path : {controller : "contrib", action : "start"} }
+        { url: "/", path : {controller : "graph", action : "panel"} }
         { url: "{controller}/{action}/:id:" }
       ]

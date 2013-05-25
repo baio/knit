@@ -44,7 +44,7 @@
                                     </td>
                                     <td data-bind="draggable: { item: $data, parentList: $parent.list }">
                                         <a href="#/contrib/item" data-bind="link: ref"><span
-                                                data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
+                                                data-bind="text: name"></span>&nbsp;<small data-bind="displaydate: date" style="color: gray"></small></a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -75,8 +75,8 @@
                                             <div class="widget-head"
                                                  style="background-color: #52b9e9; border-color: #52b9e9">
                                                 <div class="pull-left"><a href="#" data-bind="click: startUpdate" style="color: white"><span
-                                                        data-bind="text: name"></span>&nbsp;<span
-                                                        data-bind="text: date"></span></a>
+                                                        data-bind="text: name"></span>&nbsp;<small
+                                                        data-bind="displaydate: date"></small></a>
                                                 </div>
                                                 <div class="widget-icons pull-right">
                                                     <a href="#" class="wminimize" data-bind="click: $parent.switchContentShown"><i class="icon-chevron-down"></i></a>

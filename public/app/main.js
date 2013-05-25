@@ -4,7 +4,7 @@
     baseUrl: "/"
   });
 
-  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/config"], function(localManager, router, itemVM, bindingOpts, config) {
+  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/config", "ural/libs/localization/ru/moment.ru"], function(localManager, router, itemVM, bindingOpts, config) {
     localManager.setup("en");
     ko.validation.configure({
       messagesOnModified: true,
@@ -26,8 +26,8 @@
       {
         url: "/",
         path: {
-          controller: "contrib",
-          action: "start"
+          controller: "graph",
+          action: "panel"
         }
       }, {
         url: "{controller}/{action}/:id:"
