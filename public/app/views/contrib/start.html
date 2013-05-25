@@ -42,7 +42,7 @@
                                             <i class="icon-remove"></i>
                                         </a>
                                     </td>
-                                    <td>
+                                    <td data-bind="draggable: { item: $data, parentList: $parent.list }">
                                         <a href="#/contrib/item" data-bind="link: ref"><span
                                                 data-bind="text: name"></span>&nbsp;<span data-bind="text: date"></span></a>
                                     </td>
@@ -68,7 +68,7 @@
                                 <tbody data-bind="foreach: list">
                                 <tr>
                                     <td>
-                                        <div class="widget wlightblue">
+                                        <div class="widget wlightblue" data-bind="droppable: contribs, droppableOpts : {compareField : 'ref'}">
 
                                             <div class="widget-head"
                                                  style="background-color: #52b9e9; border-color: #52b9e9">
@@ -87,7 +87,7 @@
                                             <div class="widget-content" style="display: none">
 
                                                 <table class="table">
-                                                    <tbody data-bind="foreach: contribs">
+                                                    <tbody class="container" data-bind="foreach: contribs">
                                                     <tr>
                                                         <td>
                                                             <a href="#/contrib/item" data-bind="link: ref"><span
@@ -102,19 +102,6 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <!--
-                                <tr>
-                                    <td>
-                                        <a class="btn btn-mini btn-danger" href="#" data-bind="click: startRemove">
-                                            <i class="icon-remove"></i>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="#" data-bind="click: startUpdate"><span data-bind="text: name"></span>&nbsp;<span
-                                                data-bind="text: date"></span></a>
-                                    </td>
-                                </tr>
-                                -->
                                 </tbody>
                             </table>
                         </div>
