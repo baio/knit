@@ -12,7 +12,15 @@
       function Graph(resource, _index, _contribs) {
         this._contribs = _contribs;
         this.ref = ko.observable();
-        this.name = ko.observable();
+        this.name = ko.observable().extend({
+          required: {
+            message: "Имя должно быть заполнено."
+          },
+          minLength: {
+            message: "Имя должно сотоять как минимум из 3-х символов.",
+            params: 3
+          }
+        });
         this.date = ko.observable();
         this.contribs = ko.observableArray();
         this.pushes = new Pushes(this);

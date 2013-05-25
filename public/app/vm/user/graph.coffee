@@ -11,7 +11,12 @@ define [
 
     constructor: (resource, _index, @_contribs) ->
       @ref = ko.observable()
-      @name = ko.observable()
+      @name = ko.observable().extend
+        required:
+          message: "Имя должно быть заполнено."
+        minLength:
+          message: "Имя должно сотоять как минимум из 3-х символов."
+          params: 3
       @date = ko.observable()
       @contribs = ko.observableArray()
       @pushes = new Pushes(@)

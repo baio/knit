@@ -98,6 +98,7 @@
             <div class="control-group">
                 <label class="control-label" for="inputGraphName">Имя</label>
                 <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
                     <input type="text" id="inputGraphName" placeholder="Name" data-bind="value: name">
                 </div>
             </div>
@@ -127,6 +128,7 @@
             <div class="control-group">
                 <label class="control-label" for="inputGraphName">Name</label>
                 <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
                     <input type="text" id="inputUpdGraphName" placeholder="Name" data-bind="value: name">
                 </div>
             </div>
