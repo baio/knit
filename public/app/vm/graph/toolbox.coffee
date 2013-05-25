@@ -13,7 +13,8 @@ define ["app/vm/graph/linksCache"], (linksCache) ->
         @name_tgt edge.target.name
         _t = []
         for tag in edge.tags
-          _t.push( name : ko.observable(tag.name), urls : ko.observableArray(tag.urls))
+          _u = tag.urls.map (m) -> href : ko.observable(m), title : ko.observable(m)
+          _t.push( name : ko.observable(tag.name), urls : ko.observableArray(_u))
         @tags _t
       @panel.onClickEdge = (edge) ->
         pos = d3.mouse(@)

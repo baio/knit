@@ -19,7 +19,7 @@
           return "https://www.google.ru/search?q=" + (_this.name_tgt());
         });
         this.panel.onHoverEdge = function(edge) {
-          var tag, _i, _len, _ref, _t;
+          var tag, _i, _len, _ref, _t, _u;
 
           _this.name_src(edge.source.name);
           _this.name_tgt(edge.target.name);
@@ -27,9 +27,15 @@
           _ref = edge.tags;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             tag = _ref[_i];
+            _u = tag.urls.map(function(m) {
+              return {
+                href: ko.observable(m),
+                title: ko.observable(m)
+              };
+            });
             _t.push({
               name: ko.observable(tag.name),
-              urls: ko.observableArray(tag.urls)
+              urls: ko.observableArray(_u)
             });
           }
           return _this.tags(_t);

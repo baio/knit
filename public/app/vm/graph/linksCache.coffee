@@ -10,9 +10,10 @@ define ->
     getTitles: (links) ->
       async.map links(),
         (link, ck) =>
-          @getTitle link, ck
+          @getTitle link.href(), ck
         , (err, res) ->
-          links res
+          #links res
+          l.title res[i] for l, i in links()
           console.log "get titles done"
 
     getTitle: (link, done) ->
@@ -33,7 +34,7 @@ define ->
         dataType:"jsonp"
         success: (data) ->
           if data.data
-            done null, if data.data.html_title then data.html_title else (if data.data.canonical_url then data.data.canonical_url else link)
+            done null, if data.data.html_title then data.data.html_title else (if data.data.canonical_url then data.data.canonical_url else link)
           else
             done null, link
         error: ->

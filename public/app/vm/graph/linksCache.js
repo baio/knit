@@ -12,9 +12,15 @@
         var _this = this;
 
         return async.map(links(), function(link, ck) {
-          return _this.getTitle(link, ck);
+          return _this.getTitle(link.href(), ck);
         }, function(err, res) {
-          links(res);
+          var i, l, _i, _len, _ref;
+
+          _ref = links();
+          for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+            l = _ref[i];
+            l.title(res[i]);
+          }
           return console.log("get titles done");
         });
       };
@@ -49,7 +55,7 @@
           dataType: "jsonp",
           success: function(data) {
             if (data.data) {
-              return done(null, data.data.html_title ? data.html_title : (data.data.canonical_url ? data.data.canonical_url : link));
+              return done(null, data.data.html_title ? data.data.html_title : (data.data.canonical_url ? data.data.canonical_url : link));
             } else {
               return done(null, link);
             }
