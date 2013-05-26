@@ -7,10 +7,13 @@ define ["ural/modules/pubSub"], (pubSub) ->
       pubSub.sub "href", "change", (data) =>
         @_hash data.href
 
-    @StartRouting:(controllerDirectory, routes) ->
+    @StartRouting: (controllerDirectory, routes) ->
       router = new Router controllerDirectory
+      router.startRouting(routes)
+
+    startRouting:(routes) ->
       for route in routes
-        router.addRoute route.url, (controller, action, index)=>
+        @addRoute route.url, (controller, action, index)=>
           if !controller
             defaultRoute = routes.filter((f) -> f.url == "/")[0]
             if defaultRoute
@@ -18,12 +21,12 @@ define ["ural/modules/pubSub"], (pubSub) ->
               action = defaultRoute.path.action
               index = defaultRoute.path.arg
           if controller
-            router.onRoute controller, action, index, ->
+            @onRoute controller, action, index, ->
               pubSub.pub "href", "changed",
                 controller : controller,
                 action : action,
                 index : index,
-      router.startRouting()
+      @beginRouting()
 
     _hash: (val, silent) ->
       if val == undefined
@@ -49,6 +52,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       try
         index = JSON.parse(index) if index
       catch e
+      @onSwitchLoadingView()
       if !ctl
         require ["#{@controllerDirectory}/#{controllerName}"], (controllerModule) =>
           ctl = eval "new controllerModule.Controller()"
@@ -59,7 +63,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
         ctl[action] index
         if callback then callback()
 
-    startRouting: ->
+    onSwitchLoadingView: ->
+      $("#layout_loading").show()
+      $("#layout_content").hide()
+
+    beginRouting: ->
       crossroads.bypassed.add =>
         console.log "Not found"
       hash = window.location.pathname

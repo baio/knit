@@ -5,6 +5,8 @@
   });
 
   require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/config", "ural/libs/localization/ru/moment.ru"], function(localManager, router, itemVM, bindingOpts, config) {
+    var rr;
+
     localManager.setup("en");
     ko.validation.configure({
       messagesOnModified: true,
@@ -22,7 +24,14 @@
         term: "term"
       }
     };
-    return router.Router.StartRouting("app/controllers", [
+    rr = new router.Router("app/controllers");
+    rr.onSwitchLoadingView = function() {
+      $("#layout_loading").show();
+      $("#layout_content").hide();
+      $(".loading_quote").hide();
+      return $("#loading_quote_" + (Math.floor(Math.random() * (5 - 1 + 1)) + 1)).show();
+    };
+    return rr.startRouting([
       {
         url: "/",
         path: {
@@ -33,6 +42,14 @@
         url: "{controller}/{action}/:id:"
       }
     ]);
+    /*
+    router.Router.StartRouting "app/controllers",
+      [
+        { url: "/", path : {controller : "graph", action : "panel"} }
+        { url: "{controller}/{action}/:id:" }
+      ]
+    */
+
   });
 
 }).call(this);

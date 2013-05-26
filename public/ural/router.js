@@ -15,13 +15,19 @@
       }
 
       Router.StartRouting = function(controllerDirectory, routes) {
-        var route, router, _i, _len,
-          _this = this;
+        var router;
 
         router = new Router(controllerDirectory);
+        return router.startRouting(routes);
+      };
+
+      Router.prototype.startRouting = function(routes) {
+        var route, _i, _len,
+          _this = this;
+
         for (_i = 0, _len = routes.length; _i < _len; _i++) {
           route = routes[_i];
-          router.addRoute(route.url, function(controller, action, index) {
+          this.addRoute(route.url, function(controller, action, index) {
             var defaultRoute;
 
             if (!controller) {
@@ -35,7 +41,7 @@
               }
             }
             if (controller) {
-              return router.onRoute(controller, action, index, function() {
+              return _this.onRoute(controller, action, index, function() {
                 return pubSub.pub("href", "changed", {
                   controller: controller,
                   action: action,
@@ -45,7 +51,7 @@
             }
           });
         }
-        return router.startRouting();
+        return this.beginRouting();
       };
 
       Router.prototype._hash = function(val, silent) {
@@ -86,6 +92,7 @@
         } catch (_error) {
           e = _error;
         }
+        this.onSwitchLoadingView();
         if (!ctl) {
           return require(["" + this.controllerDirectory + "/" + controllerName], function(controllerModule) {
             ctl = eval("new controllerModule.Controller()");
@@ -103,7 +110,12 @@
         }
       };
 
-      Router.prototype.startRouting = function() {
+      Router.prototype.onSwitchLoadingView = function() {
+        $("#layout_loading").show();
+        return $("#layout_content").hide();
+      };
+
+      Router.prototype.beginRouting = function() {
         var hash, match,
           _this = this;
 
