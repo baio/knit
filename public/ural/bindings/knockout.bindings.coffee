@@ -108,8 +108,9 @@ define ->
       format =  option.format if option
       valAccessor = valueAccessor()
       _setDate element, ko.utils.unwrapObservable(valAccessor), format
-      valAccessor.subscribe (newValue) ->
-        _setDate element, newValue, format
+      if ko.isObservable valAccessor
+        valAccessor.subscribe (newValue) ->
+          _setDate element, newValue, format
 
   ko.bindingHandlers.validationCss =
 
