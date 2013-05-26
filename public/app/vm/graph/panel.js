@@ -150,7 +150,9 @@
           return d.meta.isMoved = true;
         }));
         return Mousetrap.bind(['ctrl+s'], function() {
-          _this.save();
+          if (_this.data.isYours) {
+            _this.save();
+          }
           return false;
         });
       };
