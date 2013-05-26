@@ -104,15 +104,20 @@
       };
 
       Router.prototype.startRouting = function() {
-        var _this = this;
+        var hash, match,
+          _this = this;
 
-        window.onpopstate = function(e) {
-          return crossroads.parse(e.state);
-        };
         crossroads.bypassed.add(function() {
           return console.log("Not found");
         });
-        return this._hash(window.location.pathname);
+        hash = window.location.pathname;
+        if (window.location.search) {
+          match = /^[&|?]+hash=([^&^\s]+)/.exec(window.location.search);
+          if (match) {
+            hash = match[1];
+          }
+        }
+        return this._hash(hash);
       };
 
       return Router;

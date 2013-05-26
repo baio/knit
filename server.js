@@ -33,9 +33,10 @@
   };
 
   _router = function(req, res, next) {
-    var match, path, srv_method, srv_path;
+    var match, path, srv_method, srv_path, url_parsed;
 
-    path = url.parse(req.url).pathname;
+    url_parsed = url.parse(req.url, true);
+    path = url_parsed.pathname;
     if (path === "/auth/logout") {
       req.session.destroy();
       req.logout();
@@ -59,9 +60,9 @@
       srv_path = match[1];
       srv_method = req.method.toLowerCase();
       return dispatchers[srv_path][srv_method](req, res);
-    } else if (path.match(/^\/\w+\/\w+$/)) {
+    } else if (path.match(/^[\/\w+]+$/)) {
       res.writeHead(302, {
-        'Location': '/'
+        'Location': '/?hash=' + path
       });
       return res.end();
     } else {

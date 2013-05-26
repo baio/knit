@@ -60,10 +60,13 @@ define ["ural/modules/pubSub"], (pubSub) ->
         if callback then callback()
 
     startRouting: ->
-      window.onpopstate = (e) =>
-        crossroads.parse e.state
       crossroads.bypassed.add =>
         console.log "Not found"
-      @_hash window.location.pathname
+      hash = window.location.pathname
+      if window.location.search
+        match = /^[&|?]+hash=([^&^\s]+)/.exec(window.location.search)
+        if match then hash = match[1]
+
+      @_hash hash
 
   Router : Router
