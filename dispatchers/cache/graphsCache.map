@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "graphsCache.js",
+  "sourceRoot": "",
+  "sources": [
+    "graphsCache.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA,IAAA,CAAA;;CAAA,CAAA,CAAQ,EAAR,EAAQ,EAAA;;CAAR,CAEA,CAAA,CAAc,GAAP,EAAQ;CACP,CAAa,CAAnB,CAAA,CAAK,EAAL,IAAA;CAHF,EAEc;CAFd"
+}

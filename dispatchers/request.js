@@ -4,18 +4,25 @@
 
   request = require("request");
 
-  exports.req = function(req, res, resource, skipAuth) {
+  exports.req = function(req, res, resource, skipAuth, stream) {
+    var r;
+
     if (req.isAuthenticated() || skipAuth) {
       if (req.isAuthenticated()) {
         req.query["user"] = req.user.name;
         req.body["user"] = req.user.name;
       }
-      return request({
+      r = request({
         uri: "" + process.env.DISPATCH_URL + "/" + resource,
         qs: req.query,
         json: req.body,
         method: req.method
-      }).pipe(res);
+      });
+      if (stream) {
+        return r.pipe(stream).pipe(res);
+      } else {
+        return r.pipe(res);
+      }
     } else {
       res.writeHead(401);
       return res.end();
