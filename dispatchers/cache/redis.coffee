@@ -3,7 +3,12 @@ client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST)
 client.auth process.env.REDIS_PASSWORD, (err) ->
   console.log "Redis connect : " + err
 
-_get_key = (type, key) -> type + "_" + key
+_default_graph = "518b989739ed9714289d0bc1"
+
+_get_key = (type, key) ->
+  if !key
+    key = _default_graph
+  type + "_" + key
 
 get = (type, key, done) ->
   client.get _get_key(type, key), (err, reply) ->

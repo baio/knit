@@ -7,8 +7,16 @@ es = require "event-stream"
 #GET: If graph not found in cache, read from links service and then put it into the cache (update isYours before)
 #PUT, PATCH, DELETE - remove graph from cache, if action succesfull
 
+_del = (ref) ->
+  es.join((err) ->
+    console.log "delete graph from cache : " + err
+    if !err
+      console.log ref
+      cache.del "graph", ref
+  )
+
 exports.get = (req, res) ->
-  ref = if !req.query.graph then "_default" else req.query.graph
+  ref = if req.query then req.query.graph else null
   async.waterfall [
     (ck) ->
       if req.query.context != "data"
@@ -35,10 +43,10 @@ exports.post = (req, res) ->
   request.req(req, res, "graphs", true)
 
 exports.put = (req, res) ->
-  request.req(req, res, "graphs", true, _del(req.query.graph))
+  request.req(req, res, "graphs", true, _del(req.body.id))
 
 exports.patch = (req, res) ->
-  request.req(req, res, "graphs", true, _del(req.query.graph))
+  request.req(req, res, "graphs", true, _del(req.body.id))
 
 exports.delete = (req, res) ->
-  request.req(req, res, "graphs", true, _del(req.query.graph))
+  request.req(req, res, "graphs", true, _del(req.body.id))
