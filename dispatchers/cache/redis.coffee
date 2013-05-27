@@ -8,6 +8,8 @@ get = (type, key, done) ->
     done err, reply
 
 set = (type, key, data) ->
+  console.log type + "_" + key
+  console.log data
   client.set type + "_" + key, data,  redis.print
 
 getJSON = (type, key, done) ->

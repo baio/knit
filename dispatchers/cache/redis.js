@@ -17,6 +17,8 @@
   };
 
   set = function(type, key, data) {
+    console.log(type + "_" + key);
+    console.log(data);
     return client.set(type + "_" + key, data, redis.print);
   };
 

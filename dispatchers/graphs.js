@@ -14,7 +14,6 @@
     var ref;
 
     ref = !req.query.graph ? "_default" : req.query.graph;
-    console.log(ref);
     return async.waterfall([
       function(ck) {
         if (req.query.context !== "data") {
@@ -30,13 +29,15 @@
           res.writeHead(200, {
             'Content-Type': 'application/json'
           });
-          res.write(r);
+          r = JSON.parse(r);
+          r.isYours = req.user && req.user.name === r.owner;
+          res.write(JSON.stringify(r));
           res.end();
           return ck(null, null);
         }
       }
     ], function(err, data) {
-      if (!err && data) {
+      if (!err && data && req.query.context !== "data") {
         return cache.set("graph", ref, data);
       }
     });
