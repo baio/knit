@@ -3,6 +3,10 @@ cache = require "./cache/redis"
 async = require "async"
 es = require "event-stream"
 
+#Caching strategy
+#GET: If graph not found in cache, read from links service and then put it into the cache (update isYours before)
+#PUT, PATCH, DELETE - remove graph from cache, if action succesfull
+
 exports.get = (req, res) ->
   ref = if !req.query.graph then "_default" else req.query.graph
   async.waterfall [
@@ -31,10 +35,10 @@ exports.post = (req, res) ->
   request.req(req, res, "graphs", true)
 
 exports.put = (req, res) ->
-  request.req(req, res, "graphs", true)
+  request.req(req, res, "graphs", true, _del(req.query.graph))
 
 exports.patch = (req, res) ->
-  request.req(req, res, "graphs", true)
+  request.req(req, res, "graphs", true, _del(req.query.graph))
 
 exports.delete = (req, res) ->
-  request.req(req, res, "graphs", true)
+  request.req(req, res, "graphs", true, _del(req.query.graph))

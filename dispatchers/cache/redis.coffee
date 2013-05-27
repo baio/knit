@@ -8,9 +8,10 @@ get = (type, key, done) ->
     done err, reply
 
 set = (type, key, data) ->
-  console.log type + "_" + key
-  console.log data
-  client.set type + "_" + key, data,  redis.print
+  client.set type + "_" + key, data, redis.print
+
+del = (type, key) ->
+  client.del type + "_" + key, redis.print
 
 getJSON = (type, key, done) ->
   get type, key, (err, reply) ->
@@ -21,5 +22,6 @@ setJSON = (type, key, data) ->
 
 exports.get = get
 exports.set = set
+exports.del = del
 exports.getJSON = getJSON
 exports.setJSON = setJSON

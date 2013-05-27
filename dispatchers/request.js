@@ -18,13 +18,17 @@
         json: req.body,
         method: req.method
       });
-      r.pipe(res);
+      if (res) {
+        r.pipe(res);
+      }
       if (stream) {
         return r.pipe(stream);
       }
     } else {
-      res.writeHead(401);
-      return res.end();
+      if (res) {
+        res.writeHead(401);
+        return res.end();
+      }
     }
   };
 

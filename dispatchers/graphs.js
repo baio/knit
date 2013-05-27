@@ -48,15 +48,15 @@
   };
 
   exports.put = function(req, res) {
-    return request.req(req, res, "graphs", true);
+    return request.req(req, res, "graphs", true, _del(req.query.graph));
   };
 
   exports.patch = function(req, res) {
-    return request.req(req, res, "graphs", true);
+    return request.req(req, res, "graphs", true, _del(req.query.graph));
   };
 
   exports["delete"] = function(req, res) {
-    return request.req(req, res, "graphs", true);
+    return request.req(req, res, "graphs", true, _del(req.query.graph));
   };
 
 }).call(this);
