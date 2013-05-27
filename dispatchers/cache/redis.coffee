@@ -5,15 +5,19 @@ client.auth process.env.REDIS_PASSWORD, (err) ->
 
 get = (type, key, done) ->
   client.get type + "_" + key, (err, reply) ->
-    if !err and reply
-      reply = JSON.parse reply
     done err, reply
 
-
 set = (type, key, data) ->
-  client.set type + "_" + key, JSON.stringify(data)
+  client.set type + "_" + key, data,  redis.print
+
+getJSON = (type, key, done) ->
+  get type, key, (err, reply) ->
+    done err, (if !err and reply then JSON.parse reply)
+
+setJSON = (type, key, data) ->
+  set type, key, JSON.stringify(data)
 
 exports.get = get
 exports.set = set
-
-
+exports.getJSON = getJSON
+exports.setJSON = setJSON

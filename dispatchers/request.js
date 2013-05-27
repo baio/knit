@@ -18,10 +18,9 @@
         json: req.body,
         method: req.method
       });
+      r.pipe(res);
       if (stream) {
-        return r.pipe(stream).pipe(res);
-      } else {
-        return r.pipe(res);
+        return r.pipe(stream);
       }
     } else {
       res.writeHead(401);

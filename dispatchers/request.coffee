@@ -6,10 +6,9 @@ exports.req = (req, res, resource, skipAuth, stream) ->
       req.query["user"] = req.user.name
       req.body["user"] = req.user.name
     r = request(uri: "#{process.env.DISPATCH_URL}/#{resource}", qs: req.query, json: req.body, method: req.method)
+    r.pipe(res)
     if stream
-      r.pipe(stream).pipe(res)
-    else
-      r.pipe(res)
+      r.pipe(stream)
   else
     res.writeHead(401)
     res.end()

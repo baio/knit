@@ -1,33 +1,29 @@
 request = require("./request")
-cache = require "./cache/graphsCache"
+cache = require "./cache/redis"
 async = require "async"
-Stream = require "stream"
+es = require "event-stream"
 
 exports.get = (req, res) ->
+  ref = if !req.query.ref then "_default" else req.query.ref
+  console.log ref
   async.waterfall [
     (ck) ->
       if req.query.context != "data"
-        cache.get (if !req.query.ref then "_default" else req.query.ref), ck
+        cache.get "graph", ref, ck
       else
         ck null, null
     (r, ck) ->
       if !r
-        #https://github.com/dominictarr/event-stream
-        mstream = new Stream()
-        mstream.writable = true
-        mstream.write = (data) ->
-          console.log data
-          @emit('data', data)
-        mstream.end = ->
-          console.log "end"
-          @emit 'end'
-        request.req(req, res, "graphs", true, mstream)
+        request.req(req, res, "graphs", true, es.join(ck))
       else
-        res.end r
-      ck(null, r)
-    ], (err) ->
-      if !err
-          console.log "err"
+        console.log "graph found in cache it's allrigth!"
+        res.writeHead(200, { 'Content-Type': 'application/json' })
+        res.write r
+        res.end()
+        ck null, null
+    ], (err, data) ->
+        if !err and data
+          cache.set "graph", ref, data
 
 exports.post = (req, res) ->
   request.req(req, res, "graphs", true)
