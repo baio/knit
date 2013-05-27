@@ -54,6 +54,9 @@
           items: data
         };
         return dataProvider.ajax("contribs", "patch", d, function(err, data) {
+          if (!err) {
+            data = data.data;
+          }
           return done(err, data);
         });
       };

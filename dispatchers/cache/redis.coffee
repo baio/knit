@@ -3,15 +3,19 @@ client = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST)
 client.auth process.env.REDIS_PASSWORD, (err) ->
   console.log "Redis connect : " + err
 
+_get_key = (type, key) -> type + "_" + key
+
 get = (type, key, done) ->
-  client.get type + "_" + key, (err, reply) ->
+  client.get _get_key(type, key), (err, reply) ->
     done err, reply
 
 set = (type, key, data) ->
-  client.set type + "_" + key, data, redis.print
+  client.set _get_key(type, key), data, redis.print
 
 del = (type, key) ->
-  client.del type + "_" + key, redis.print
+  key = [key] if  !Array.isArray key
+  key = key.map((k) -> _get_key(type, k))
+  client.del key, redis.print
 
 getJSON = (type, key, done) ->
   get type, key, (err, reply) ->

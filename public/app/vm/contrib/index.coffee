@@ -31,6 +31,8 @@ define ["ural/vm/indexVM",
     onUpdate: (data, done) ->
       d = {id: @contrib.ref(), items: data}
       dataProvider.ajax "contribs", "patch", d, (err, data) ->
+        if !err
+          data = data.data
         done err, data
 
     render: ->

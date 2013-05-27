@@ -8,30 +8,16 @@
 
   es = require("event-stream");
 
-  _del = function(req) {
-    var r;
+  _del = es.join(function(err, data) {
+    var j;
 
-    r = {
-      isAuthenticated: function() {
-        return req.isAuthenticated();
-      },
-      user: req.user,
-      query: {
-        ref: req.body.id
-      },
-      body: {},
-      method: "get"
-    };
-    return request.req(r, null, "contrib_graphs", false, es.join(function(err, data) {
-      var j;
-
-      console.log("delete graph from cache" + err);
-      if (!err) {
-        j = JSON.parse(data);
-        return cache.del("graph", j);
-      }
-    }));
-  };
+    console.log("delete graph from cache : " + err);
+    if (!err) {
+      j = JSON.parse(data);
+      console.log(j);
+      return cache.del("graph", j.graphs);
+    }
+  });
 
   exports.get = function(req, res) {
     return request.req(req, res, "contribs");
@@ -42,15 +28,15 @@
   };
 
   exports.put = function(req, res) {
-    return request.req(req, res, "contribs", _del(req));
+    return request.req(req, res, "contribs");
   };
 
   exports.patch = function(req, res) {
-    return request.req(req, res, "contribs", _del(req));
+    return request.req(req, res, "contribs", false, _del);
   };
 
   exports["delete"] = function(req, res) {
-    return request.req(req, res, "contribs", _del(req));
+    return request.req(req, res, "contribs", false, _del);
   };
 
   exports.copy = function(req, res) {
