@@ -103,7 +103,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
           ))
 
       Mousetrap.bind ['ctrl+s'], =>
-        @save()
+        if @data.isYours
+          @save()
         return false
 
     onHoverEdge: (edge) ->

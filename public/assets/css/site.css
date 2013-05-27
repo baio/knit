@@ -81,3 +81,12 @@ tr.row-input > td > input{
     color: #b94a48;
     display: block !important;
 }
+/*
+h5 a
+{
+    color: forestgreen;
+}
+*/
+body{
+    background-color: #ffffff;
+}

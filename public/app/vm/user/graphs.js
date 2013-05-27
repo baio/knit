@@ -18,9 +18,29 @@
         return new Graph(this.resource, this, this.contribs);
       };
 
+      Graphs.prototype.switchContentShown = function(data, event) {
+        var $wcontent, t;
+
+        event.preventDefault();
+        t = event.currentTarget;
+        $wcontent = $(t).parent().parent().next(".widget-content");
+        if ($wcontent.is(':visible')) {
+          $(t).children('i').removeClass('icon-chevron-up');
+          $(t).children('i').addClass('icon-chevron-down');
+        } else {
+          $(t).children('i').removeClass('icon-chevron-down');
+          $(t).children('i').addClass('icon-chevron-up');
+        }
+        return $wcontent.toggle(500);
+      };
+
       return Graphs;
 
     })(indexVM);
   });
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=graphs.map
+*/

@@ -1,33 +1,53 @@
-<div id="_body">
-    <div class="row-fluid">
-        <div class="span12">
-            <!-- ko with: contrib -->
-            <div class="row-fluid">
-                <h2><span data-bind="text: name"></span>&nbsp;<a href="#" data-bind="click: copy"><small>copy</small></a></h2>
-                <small><a href="#" data-bind="attr : {href : url}, text: date" target="_blank"></a></small>
+<div>
+
+    <div class="widget wviolet" id="_body">
+
+        <div class="widget-head" data-bind="with: contrib">
+            <div class="pull-left">
+                <a href="#" data-bind="text: name" style="color: mediumturquoise">
+                </a>&nbsp;//&nbsp;<span style="font-size: 12px" data-bind="displaydate: date"></span></div>
+            <div class="clearfix"></div>
+            <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
+            <div class="widget-icons pull-right" style="margin-top: -20px">
+                <a type="submit" href="#" data-bind="click: copy" style="font-size: 12px;">копировать к себе</a>
             </div>
-            <!-- /ko -->
-            <div id="items_list" data-bind="template: { name: 'contrib-item-template', foreach: list}">
-            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="widget-content">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Имя 1</th>
+                    <th>Имя 2</th>
+                    <th>Семейные<br/>связи</th>
+                    <th>Частные<br/>связи</th>
+                    <th>Проф.<br/>связи</th>
+                </tr>
+                </thead>
+                <tbody data-bind="template: { name: 'contrib-item-template', foreach: list}">
+                </tbody>
+            </table>
         </div>
     </div>
+
     <script type="text/html" id="contrib-item-template">
-        <div class="row-fluid">
-            <div class="span2">
-                <div data-bind="text: name_1"></div>
-            </div>
-            <div class="span2">
-                <div data-bind="text: name_2"></div>
-            </div>
-            <div class="span2">
-                <div data-bind="text: family_rel"></div>
-            </div>
-            <div class="span2">
-                <div data-bind="text: private_rel"></div>
-            </div>
-            <div class="span2">
-                <div data-bind="text: prof_rel"></div>
-            </div>
-        </div>
+        <tr>
+            <td>
+                <span data-bind="text: name_1"></span>
+            </td>
+            <td>
+                <span data-bind="text: name_2"></span>
+            </td>
+            <td>
+                <span class="label label-info" data-bind="text: family_rel"></span>
+            </td>
+            <td>
+                <span class="label label-info" data-bind="text: private_rel"></span>
+            </td>
+            <td>
+                <span class="label label-info" data-bind="text: prof_rel"></span>
+            </td>
+        </tr>
     </script>
+
 </div>

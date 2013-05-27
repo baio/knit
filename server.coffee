@@ -20,7 +20,8 @@ _redirect = (req, res, next) ->
   next()
 
 _router = (req, res, next) ->
-  path = url.parse(req.url).pathname
+  url_parsed = url.parse(req.url, true)
+  path = url_parsed.pathname
   if path == "/auth/logout"
     req.session.destroy()
     req.logout()
@@ -35,14 +36,20 @@ _router = (req, res, next) ->
     #cookies = new Cookies(req, res)
     #cookies.set("auth", if req.user then req.user.name else null)
     req.url = "/main.html"
+    #console.log url_parsed.query
+    #if url_parsed.query and url_parsed.query.hash
+    #req.url = "/main.html#" + url_parsed.query.hash
+    #console.log req.url
     next()
   else if path.match /^\/srv\/\w+$/
     match = /^\/srv\/(\w+)$/.exec(path)
     srv_path = match[1]
     srv_method = req.method.toLowerCase()
     dispatchers[srv_path][srv_method](req, res)
-  else if path.match /^\/\w+\/\w+$/
-    res.writeHead(302, {'Location' : '/'})
+  else if path.match /^[\/\w+]+$/
+    #req.url = "/main.html"
+    #next()
+    res.writeHead(302, {'Location' : '/?hash=' + path})
     res.end()
   else
     next()

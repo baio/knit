@@ -32,7 +32,11 @@
           }
           ko.applyBindings(lmd.data, lt);
         }
-        return _layoutModelsData = layoutModelsData;
+        _layoutModelsData = layoutModelsData;
+        if ($("#layout_loading").is(":visible")) {
+          $("#layout_loading").hide();
+          return $("#layout_content").show();
+        }
       }
     };
     return {

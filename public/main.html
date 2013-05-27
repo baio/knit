@@ -45,183 +45,236 @@
 </head>
 
 <body>
-
-<div class="navbar navbar-fixed-top navbar-inverse">
-    <div class="navbar-inner" id="_nav">
-        <div class="container">
-            <!-- Menu button for smallar screens -->
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <!-- Site name for smallar screens -->
-            <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span class="bold">Knit</span></a>
-            <a href="#/graph/panel" class="brand" data-bind="link: null"><span class="bold">Knit</span></a>
-
-            <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
-                <li class="dropdown dropdown-big" data-bind="with: activeGraph">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="text: name">
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <h5>Создан <span>1 марта 2012</span></h5>
-                            <p>Здесь описание графа ...</p>
-                        </li>
-                        <li data-bind="visible : isYours">
-                            <hr/>
-                            <a href="#/graph/data" data-bind="link : id"><i class="icon-th-large"></i>Данные графа</a>
-                            <hr/>
-                        </li>
-                        <li data-bind="visible : isYours">
-                            <a href="#" data-bind="click: save"><i class="icon-hdd"></i>Сохранить расположение</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div class="nav-collapse collapse" data-bind="with: user">
-
-                <ul class="nav pull-right">
-                    <li data-bind="ifnot: name">
-                        <a href="/auth/twitter"><i class="icon-home"></i>Вход</a>
-                    </li>
-                    <li class="dropdown pull-right" data-bind="if: name">
-                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <img src="" alt="" data-bind="attr : { src : img } " class="nav-user-pic"/> Привет, <span data-bind="text: name"></span> <b class="caret"></b>
-                        </a>
-
-                        <!-- Dropdown menu -->
-                        <ul class="dropdown-menu">
-                            <li><a href="#/contrib/start" data-bind="link : null"><i class="icon-briefcase"></i>Ваши данные</a></li>
-                            <li><a href="#/public/index" data-bind="link : null"><i class="icon-globe"></i>Данные пользователей</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/auth/logout"><i class="icon-off"></i> Выйти</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-
-                <ul class="nav pull-right">
-
-                    <!-- Message button with number of latest messages count-->
-                    <li class="dropdown dropdown-big">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            <i class="icon-thumbs-up"></i> Популярные
-                        </a>
-
-                        <ul class="dropdown-menu">
-                            <li>
-                                <!-- Heading - h5 -->
-                                <h5><i class="icon-globe"></i> Популярные графы</h5>
-                                <!-- Use hr tag to add border -->
-                                <hr/>
-                            </li>
-                            <!-- ko foreach: popular -->
-                            <li>
-                                <a href="#" data-bind="text: name, click: $parent.open"></a>
-                                <p>Здесь описание графа ...</p>
-                                <hr/>
-                            </li>
-                            <!-- /ko -->
-                            <li>
-                                <div class="drop-foot">
-                                    <a href="#">Смотреть все</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="divider-vertical"></li>
-
-                    <!-- ko if: name -->
-                    <li class="dropdown dropdown-big">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-                            <i class="icon-briefcase"></i> Ваши <span class="badge badge-success">7</span>
-                        </a>
-
-                        <ul class="dropdown-menu">
-                            <li>
-                                <!-- Heading - h5 -->
-                                <h5><i class="icon-briefcase"></i> Ваши графы</h5>
-                                <!-- Use hr tag to add border -->
-                                <hr/>
-                            </li>
-                            <!-- ko foreach: graphs -->
-                            <li>
-                                <a href="#" data-bind="text: name, click: $parent.open"></a>
-                                <p>Здесь описание графа ...</p>
-                                <hr/>
-                            </li>
-                            <!-- /ko -->
-                            <li>
-                                <div class="drop-foot">
-                                    <a href="#">Смотреть все</a>
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="divider-vertical"></li>
-                    <!-- /ko -->
-
-                </ul>
-
+<div id="layout_loading">
+    <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+            <div class="container" style="margin-left: 20px">
+                <a href="#" class="brand"><span class="bold">Knit</span></a>
             </div>
+        </div>
+    </div>
+    <div style="margin: 20px;">
+        <span style="color: #000000">Loading...</span>
 
+        <div style="color: #808080; font-size: 10px">
+            <p id="loading_quote_1" style="display: none" class="loading_quote">
+                If madame my wife undertook to keep the register in her memory alone, she would not lose a word of
+                it--not a
+                syllable of it. Knitted, in her own stitches and her own symbols, it will always be as plain to her as
+                the
+                sun.
+            </p>
+            <p id="loading_quote_2" style="display: none" class="loading_quote">
+                A wonderful fact to reflect upon, that every human creature is constituted to be that profound secret
+                and mystery to every other. A solemn consideration, when I enter a great city by night, that every one
+                of those darkly clustered houses encloses its own secret; that every room in every one of them encloses
+                its own secret; that every beating heart in the hundreds of thousands of breasts there, is, in some of
+                its imaginings, a secret to the heart nearest it!
+            </p>
+            <p id="loading_quote_3" style="display: none" class="loading_quote">
+                It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of
+                foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it
+                was the season of Darkness, it was the spring of hope, it was the winter of despair, we had everything
+                before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the
+                other way.
+            </p>
+            <p id="loading_quote_4" style="display: none" class="loading_quote">
+                No crowd was about the door; no people were discernible at any of the many windows; not even a chance
+                passerby was in the street. An unnatural silence and desertion reigned there. Only one soul was to be
+                seen, and that was Madame Defarge--who leaned against the door-post, knitting, and saw nothing
+            </p>
+            <p id="loading_quote_5" style="display: none" class="loading_quote">
+                Vengeance and retribution require a long time; it is the rule.
+            </p>
         </div>
     </div>
 </div>
+<div id="layout_content" style="display: none">
+    <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner" id="_nav">
+            <div class="container">
+                <!-- Menu button for smallar screens -->
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <!-- Site name for smallar screens -->
+                <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span
+                        class="bold">Knit</span></a>
+                <a href="#/graph/panel" class="brand" data-bind="link: null"><span class="bold">Knit</span></a>
 
-<script type="text/html" id="contrib-menu-item">
-    <li>
-        <a href="#" data-bind="text: name, click: $parent.open"></a>
-        <p>Здесь описание графа ...</p>
-        <hr/>
-    </li>
-</script>
+                <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
+                    <li class="dropdown dropdown-big" data-bind="with: activeGraph">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="text: name">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <h5>Создан <span>1 марта 2012</span></h5>
+
+                                <p>Здесь описание графа ...</p>
+                            </li>
+                            <li data-bind="visible : isYours">
+                                <hr/>
+                                <a href="#/graph/data" data-bind="link : id"><i class="icon-th-large"></i>Данные
+                                    графа</a>
+                                <hr/>
+                            </li>
+                            <li data-bind="visible : isYours">
+                                <a href="#" data-bind="click: save"><i class="icon-hdd"></i>Сохранить расположение</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="nav-collapse collapse" data-bind="with: user">
+
+                    <ul class="nav pull-right">
+                        <li data-bind="ifnot: name">
+                            <a href="/auth/twitter"><i class="icon-home"></i>Вход</a>
+                        </li>
+                        <li class="dropdown pull-right" data-bind="if: name">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <img src="" alt="" data-bind="attr : { src : img } " class="nav-user-pic"/> Привет,
+                                <span data-bind="text: name"></span> <b class="caret"></b>
+                            </a>
+
+                            <!-- Dropdown menu -->
+                            <ul class="dropdown-menu">
+                                <li><a href="#/contrib/start" data-bind="link : null"><i class="icon-briefcase"></i>Ваши
+                                    данные</a></li>
+                                <li><a href="#/public/index" data-bind="link : null"><i class="icon-globe"></i>Данные
+                                    пользователей</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/auth/logout"><i class="icon-off"></i> Выйти</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+
+                    <ul class="nav pull-right">
+
+                        <!-- Message button with number of latest messages count-->
+                        <li class="dropdown dropdown-big">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="icon-thumbs-up"></i> Популярные
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <!-- Heading - h5 -->
+                                    <h5><i class="icon-globe"></i> Популярные графы</h5>
+                                    <!-- Use hr tag to add border -->
+                                    <hr/>
+                                </li>
+                                <!-- ko foreach: popular -->
+                                <li>
+                                    <a href="#" data-bind="text: name, click: $parent.open"></a>
+
+                                    <p>Здесь описание графа ...</p>
+                                    <hr/>
+                                </li>
+                                <!-- /ko -->
+                                <li>
+                                    <div class="drop-foot">
+                                        <a href="#">Смотреть все</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="divider-vertical"></li>
+
+                        <!-- ko if: name -->
+                        <li class="dropdown dropdown-big">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+                                <i class="icon-briefcase"></i> Ваши <span class="badge badge-success">7</span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <!-- Heading - h5 -->
+                                    <h5><i class="icon-briefcase"></i> Ваши графы</h5>
+                                    <!-- Use hr tag to add border -->
+                                    <hr/>
+                                </li>
+                                <!-- ko foreach: graphs -->
+                                <li>
+                                    <a href="#" data-bind="text: name, click: $parent.open"></a>
+
+                                    <p>Здесь описание графа ...</p>
+                                    <hr/>
+                                </li>
+                                <!-- /ko -->
+                                <li>
+                                    <div class="drop-foot">
+                                        <a href="#">Смотреть все</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        <!-- /ko -->
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="text/html" id="contrib-menu-item">
+        <li>
+            <a href="#" data-bind="text: name, click: $parent.open"></a>
+
+            <p>Здесь описание графа ...</p>
+            <hr/>
+        </li>
+    </script>
 
 
-<!-- Main content starts -->
+    <!-- Main content starts -->
 
-<div class="content">
+    <div class="content">
 
 
-    <div class="mainbar">
+        <div class="mainbar">
 
-        <!-- Matter -->
+            <!-- Matter -->
 
-        <div class="matter">
-            <div class="container-fluid">
+            <div class="matter">
+                <div class="container-fluid">
 
-                <div class="row-fluid">
+                    <div class="row-fluid">
 
-                    <div class="span12">
+                        <div class="span12">
 
-                        <div id="_layout">
+                            <div id="_layout">
+                            </div>
+
                         </div>
 
                     </div>
 
+
                 </div>
-
-
             </div>
+
+            <!-- Matter ends -->
+
         </div>
 
-        <!-- Matter ends -->
+
+        <!-- Mainbar ends -->
+        <div class="clearfix"></div>
 
     </div>
 
 
-    <!-- Mainbar ends -->
-    <div class="clearfix"></div>
+    <script data-main="/app/main" src="/assets/js/require.js"></script>
 
 </div>
-
-
-
-<script data-main="/app/main" src="/assets/js/require.js"></script>
-
 </body>
 
 </html>

@@ -12,32 +12,40 @@
       function Graph(resource, _index, _contribs) {
         this._contribs = _contribs;
         this.ref = ko.observable();
-        this.name = ko.observable();
+        this.name = ko.observable().extend({
+          required: {
+            message: "Имя должно быть заполнено."
+          },
+          minLength: {
+            message: "Имя должно сотоять как минимум из 3-х символов.",
+            params: 3
+          }
+        });
         this.date = ko.observable();
         this.contribs = ko.observableArray();
-        this.pushes = new Pushes(this);
-        this.pulls = new Pulls(this);
+        /*
+        @pushes = new Pushes(@)
+        @pulls = new Pulls(@)
+        @_linkedContribs = ko.computed =>
+          if @contribs()
+            @contribs().filter((f) => @_contribs.list().filter((m) -> m.ref() == f)[0])
+          else
+            []
+        */
+
         Graph.__super__.constructor.call(this, "graph", _index);
       }
 
-      Graph.prototype.map = function(data, skipStratEdit) {
-        var contrib, _i, _len, _ref, _results;
+      /*
+      map: (data, skipStratEdit) ->
+        super data, skipStratEdit
+        for contrib in @_contribs.list()
+          if @contribs()
+            contrib.isSelected @contribs().filter((f) -> f == contrib.ref()).length
+          else
+            contrib.isSelected false
+      */
 
-        Graph.__super__.map.call(this, data, skipStratEdit);
-        _ref = this._contribs.list();
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          contrib = _ref[_i];
-          if (this.contribs()) {
-            _results.push(contrib.isSelected(this.contribs().filter(function(f) {
-              return f === contrib.ref();
-            }).length));
-          } else {
-            _results.push(contrib.isSelected(false));
-          }
-        }
-        return _results;
-      };
 
       Graph.prototype.onCreateItem = function() {
         return new Graph(this.resource, this._index, this._contribs);
@@ -70,30 +78,35 @@
         data = {
           id: this.ref(),
           name: this.name(),
-          contribs: this._contribs.list().filter(function(f) {
-            return f.isSelected();
-          }).map(function(m) {
+          contribs: this.contribs().map(function(m) {
             return m.ref();
           })
         };
         return dataProvider.ajax("graphs", "put", data, done);
       };
 
-      Graph.prototype.create = function(done) {
-        var _this = this;
+      /*
+      create: (done) ->
+        super (err) =>
+          done err
+          if !err
+            @openGraph()
+      */
 
-        return Graph.__super__.create.call(this, function(err) {
-          done(err);
-          if (!err) {
-            return _this.openGraph();
-          }
-        });
-      };
 
       Graph.prototype.open = function(data, event) {
         event.preventDefault();
         return pubSub.pub("href", "change", {
           href: "/graph/panel/" + (this.ref())
+        });
+      };
+
+      Graph.prototype.dropUpdate = function(list, item) {
+        return this.update(function(err) {
+          return pubSub.pub("msg", "show", {
+            err: err,
+            msg: "Сохранено"
+          });
         });
       };
 

@@ -43,5 +43,9 @@ define ["ural/viewRender"], (viewRender) ->
         ko.applyBindings lmd.data, lt
       _layoutModelsData = layoutModelsData
 
+      if $("#layout_loading").is(":visible")
+        $("#layout_loading").hide()
+        $("#layout_content").show()
+
   render : render
   applyData : applyData
