@@ -4,24 +4,13 @@
     var _dev, _prod;
 
     _dev = {
-      base_url: "/srv",
-      links: {
-        panel_gexf_url: "http://localhost:8080/gexf",
-        data_upload: "http://localhost:8080/contribs",
-        gexf_download: "http://localhost:8080/gexf",
-        gexf_upload: "http://localhost:8080/gexf"
-      }
+      disable_cache: false,
+      base_url: "/srv"
     };
     _prod = {
-      base_url: "/srv",
-      links: {
-        panel_gexf_url: "http://baio-links.herokuapp.com/gexf",
-        data_upload: "http://baio-links.herokuapp.com/contribs",
-        gexf_download: "http://baio-links.herokuapp.com/gexf",
-        gexf_upload: "http://baio-links.herokuapp.com/gexf"
-      }
+      base_url: "/srv"
     };
-    return _prod;
+    return _dev;
   });
 
 }).call(this);
