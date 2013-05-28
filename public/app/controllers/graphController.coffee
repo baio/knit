@@ -10,7 +10,7 @@ define [
 
     panel: (graph) ->
       pl = new Panel()
-      @view_apply "app/views/graph/panel.html",
+      @view_apply_user_important "app/views/graph/panel.html",
         _layouts:
           _body: {loader : pl, filter : {graph : graph}}
           _toolbox: new toolbox(@nav, pl)

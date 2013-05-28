@@ -206,7 +206,9 @@
           err = _this.onGetError(resp, res);
           if (!err) {
             _this.json2date(resp);
-            _this._cache_upd(resource, (method === "get" ? data : null), resp);
+            if (method === "get") {
+              _this._cache_upd(resource, data, resp);
+            }
           }
           return done(err, resp);
         });

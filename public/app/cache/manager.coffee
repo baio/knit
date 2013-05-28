@@ -1,10 +1,11 @@
-define ["app/cache/graph"],
+define ["app/cache/graph", "app/cache/curUser"],
 (
-  graph
+  graph,
+  curUser
 ) ->
 
   (resource) ->
     switch resource
       when "graphs" then graph
+      when "curUser" then curUser
       else null
-

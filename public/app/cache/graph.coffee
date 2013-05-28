@@ -3,29 +3,24 @@ define ->
   #update every 3 hours
   TTL = 1000 * 60 * 60 * 3
 
-  _getName: (filter) ->
-    if filter then "graph" + JSON.stringify(filter) else "graph"
+  _default_ref = "518b989739ed9714289d0bc1"
+
+  _getName: (ref) ->
+    ref = _default_ref if !ref
+    "graph_" + ref
 
   _auth: ->
     true
 
   get: (filter) ->
     if filter.context != "data"
-      console.log "g : " + filter.graph
+      console.log "get graph cache : " + @_getName filter.graph
       d = $.jStorage.get @_getName filter.graph
-      if d
-        d = JSON.parse(d)
-        #if authorization for user was changed
-        d = null if d and d.auth != _auth()
-      d
+      if d then JSON.parse(d) else null
 
   update: (filter, data) ->
-    return
-    if filter.context != "data" and !data.isYours
-      #cache only graph panel
+    if (!filter or filter.context != "data") and !data.isYours
+      #cache only if this is not graph of the user
+      console.log "update graph cache : " + data.id
       _data = JSON.stringify(data)
-      console.log "u : " + filter.graph + " : " + data.ref
-      $.jStorage.set(@_getName(filter.graph), _data, {TTL: TTL})
-      if filter.graph != data.ref
-        data.auth = _auth()
-        $.jStorage.set(@_getName(data.ref), _data, {TTL: TTL})
+      $.jStorage.set(@_getName(data.id), _data, {TTL: TTL})

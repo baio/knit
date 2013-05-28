@@ -14,6 +14,17 @@
         GraphController.__super__.constructor.apply(this, arguments);
       }
 
+      GraphController.prototype.view_apply_user_important = function(path, model, done) {
+        var _this = this;
+
+        return this.nav.load(null, function(err, data) {
+          model._layouts._nav = {
+            data: (!err ? data : {})
+          };
+          return GraphController.__super__.view_apply.call(_this, path, model, done);
+        });
+      };
+
       GraphController.prototype.view_apply = function(path, model, done) {
         model._layouts._nav = this.nav;
         return GraphController.__super__.view_apply.call(this, path, model, done);

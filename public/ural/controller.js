@@ -85,6 +85,8 @@
           return layoutModel.load(null, done);
         } else if (layoutModel.loader) {
           return layoutModel.loader.load(layoutModel.filter, done);
+        } else if (layoutModel.data) {
+          return done(null, layoutModel.data);
         } else {
           return done(null, layoutModel);
         }

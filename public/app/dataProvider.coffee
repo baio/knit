@@ -111,7 +111,8 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
           err = @onGetError(resp, res)
           if !err
             @json2date resp
-            @_cache_upd resource, (if method == "get" then data else null), resp
+            if method == "get"
+              @_cache_upd resource, data, resp
           done err, resp
 
     _cache_get: (resource, filter) ->

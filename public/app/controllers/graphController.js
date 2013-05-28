@@ -19,7 +19,7 @@
           _this = this;
 
         pl = new Panel();
-        return this.view_apply("app/views/graph/panel.html", {
+        return this.view_apply_user_important("app/views/graph/panel.html", {
           _layouts: {
             _body: {
               loader: pl,

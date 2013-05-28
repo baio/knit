@@ -57,6 +57,8 @@ define ["ural/viewEngine",
         layoutModel.load null, done
       else if layoutModel.loader
         layoutModel.loader.load layoutModel.filter, done
+      else if layoutModel.data
+        done null, layoutModel.data
       else
         done null, layoutModel
 
@@ -87,6 +89,8 @@ define ["ural/viewEngine",
     # `_layout : {_body : model}` - consider this model for `_body` tag
     # Model for each layout will be loaded separatedly by following rules:
     #  + check if it contains `load` method, if so invoke `model.load( callback(err, data) )`
+    #  + check if it contains `loader` field, if so invoke `model.loader.load( model.loader.filter, callback(err, data) )`
+    #  + check if it contains `data` field if so consider it as model
     #  + check if it contains `render` method, if so invoke `model.render( data )`
     #+ If `model` is not presnted, skip model loading
     #+ If `model` doesn't contain `load` method, consider it simple `object` model (just `data`)
