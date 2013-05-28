@@ -39,7 +39,7 @@
               TTL: TTL
             });
           }
-        } else if (method !== "put") {
+        } else {
           console.log("swap user after any NOT PUT graph update");
           $.jStorage.deleteKey("curUser");
           ref = req_data.graph;

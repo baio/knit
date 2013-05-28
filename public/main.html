@@ -55,7 +55,7 @@
     </div>
     <div style="margin: 20px;">
         <span style="color: #000000">Loading...</span>
-
+        <!--
         <div style="color: #808080; font-size: 10px">
             <p id="loading_quote_1" style="display: none" class="loading_quote">
                 If madame my wife undertook to keep the register in her memory alone, she would not lose a word of
@@ -87,6 +87,7 @@
                 Vengeance and retribution require a long time; it is the rule.
             </p>
         </div>
+        -->
     </div>
 </div>
 <div id="layout_content" style="display: none">
@@ -167,14 +168,8 @@
                                     <!-- Use hr tag to add border -->
                                     <hr/>
                                 </li>
-                                <!-- ko foreach: popular -->
-                                <li>
-                                    <a href="#" data-bind="text: name, click: $parent.open"></a>
-
-                                    <p>Здесь описание графа ...</p>
-                                    <hr/>
-                                </li>
-                                <!-- /ko -->
+                                <span data-bind="template: {name : 'contrib-menu-item', foreach: popular}" data-view-engine-clean>
+                                </span>
                                 <li>
                                     <div class="drop-foot">
                                         <a href="#">Смотреть все</a>
@@ -198,14 +193,8 @@
                                     <!-- Use hr tag to add border -->
                                     <hr/>
                                 </li>
-                                <!-- ko foreach: graphs -->
-                                <li>
-                                    <a href="#" data-bind="text: name, click: $parent.open"></a>
-
-                                    <p>Здесь описание графа ...</p>
-                                    <hr/>
-                                </li>
-                                <!-- /ko -->
+                                <span data-bind="template: {name : 'contrib-menu-item', foreach: graphs}" data-view-engine-clean>
+                                </span>
                                 <li>
                                     <div class="drop-foot">
                                         <a href="#">Смотреть все</a>
@@ -275,6 +264,7 @@
     <script data-main="/app/main" src="/assets/js/require.js"></script>
 
 </div>
+
 </body>
 
 </html>

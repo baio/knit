@@ -25,7 +25,7 @@ define ->
         console.log "update graph cache : " + res_data.id
         _data = JSON.stringify(res_data)
         $.jStorage.set(@_getName(res_data.id), _data, {TTL: TTL})
-    else if method != "put"
+    else
       console.log "swap user after any NOT PUT graph update"
       $.jStorage.deleteKey "curUser"
       ref = req_data.graph
