@@ -102,7 +102,7 @@
           .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
         */
 
-        svg = d3.select("#graph").append("svg").attr("height", 900);
+        svg = d3.select("#graph").append("svg").attr("width", 2500).attr("height", 1200);
         link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("family_rel", function(d) {
           return d.isType("family");
         }).classed("private_rel", function(d) {

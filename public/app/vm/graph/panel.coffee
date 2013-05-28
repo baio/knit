@@ -54,7 +54,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       ###
 
       svg = d3.select("#graph").append("svg")
-        .attr("height", 900)
+        .attr("width", 2500)
+        .attr("height", 1200)
 
       link = svg.selectAll("link")
         .data(grp_edges)
