@@ -92,6 +92,7 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
         if c
           done null, c
           return
+      d = data
       if data and !$.isEmptyObject(data)
         if method == "get"
           @onFlatData(data)
@@ -111,16 +112,15 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
           err = @onGetError(resp, res)
           if !err
             @json2date resp
-            if method == "get"
-              @_cache_upd resource, data, resp
+            @_cache_upd resource, method, d, resp
           done err, resp
 
     _cache_get: (resource, filter) ->
       c = cache resource
       if c then c.get filter else null
 
-    _cache_upd: (resource, filter, data) ->
+    _cache_upd: (resource, method, req_data, res_data) ->
       c = cache resource
-      if c then c.update filter, data
+      if c then c.update method, req_data, res_data
 
   new DataProvider()

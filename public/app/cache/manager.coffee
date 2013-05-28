@@ -1,8 +1,9 @@
-define ["app/cache/graph", "app/cache/curUser", "app/config"],
+define ["app/config", "app/cache/graph", "app/cache/curUser", "app/cache/contrib"],
 (
+  config
   graph,
   curUser,
-  config
+  contrib
 ) ->
 
   (resource) ->
@@ -10,4 +11,5 @@ define ["app/cache/graph", "app/cache/curUser", "app/config"],
     switch resource
       when "graphs" then graph
       when "curUser" then curUser
+      when "contribs" then contrib
       else null

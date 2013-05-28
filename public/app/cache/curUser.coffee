@@ -1,12 +1,13 @@
 define ->
 
   get: ->
-    null
+    $.jStorage.get "curUser"
 
-  update: (filter, data) ->
-    console.log "curUser", filter, data
-    strored_user = $.jStorage.get "curUser"
-    if strored_user != data._id
-      console.log "new user, swap cache [was #{strored_user}, become #{data._id}]"
-      $.jStorage.flush()
-      $.jStorage.set "curUser", data._id
+  update: (method, req_data, res_data) ->
+    console.log "curUser", method, req_data, res_data
+    if method == "get"
+      stored_user = $.jStorage.get "curUser"
+      if !stored_user or strored_user._id != res_data._id
+        console.log "new user, swap cache [was #{stored_user}, become #{res_data._id}]"
+        if stored_user then $.jStorage.flush()
+        $.jStorage.set "curUser", res_data

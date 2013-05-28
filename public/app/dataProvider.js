@@ -173,7 +173,7 @@
       };
 
       DataProvider.prototype.ajax = function(resource, method, data, done) {
-        var c,
+        var c, d,
           _this = this;
 
         if (method === "get") {
@@ -183,6 +183,7 @@
             return;
           }
         }
+        d = data;
         if (data && !$.isEmptyObject(data)) {
           if (method === "get") {
             this.onFlatData(data);
@@ -206,9 +207,7 @@
           err = _this.onGetError(resp, res);
           if (!err) {
             _this.json2date(resp);
-            if (method === "get") {
-              _this._cache_upd(resource, data, resp);
-            }
+            _this._cache_upd(resource, method, d, resp);
           }
           return done(err, resp);
         });
@@ -225,12 +224,12 @@
         }
       };
 
-      DataProvider.prototype._cache_upd = function(resource, filter, data) {
+      DataProvider.prototype._cache_upd = function(resource, method, req_data, res_data) {
         var c;
 
         c = cache(resource);
         if (c) {
-          return c.update(filter, data);
+          return c.update(method, req_data, res_data);
         }
       };
 

@@ -3,17 +3,21 @@
   define(function() {
     return {
       get: function() {
-        return null;
+        return $.jStorage.get("curUser");
       },
-      update: function(filter, data) {
-        var strored_user;
+      update: function(method, req_data, res_data) {
+        var stored_user;
 
-        console.log("curUser", filter, data);
-        strored_user = $.jStorage.get("curUser");
-        if (strored_user !== data._id) {
-          console.log("new user, swap cache [was " + strored_user + ", become " + data._id + "]");
-          $.jStorage.flush();
-          return $.jStorage.set("curUser", data._id);
+        console.log("curUser", method, req_data, res_data);
+        if (method === "get") {
+          stored_user = $.jStorage.get("curUser");
+          if (!stored_user || strored_user._id !== res_data._id) {
+            console.log("new user, swap cache [was " + stored_user + ", become " + res_data._id + "]");
+            if (stored_user) {
+              $.jStorage.flush();
+            }
+            return $.jStorage.set("curUser", res_data);
+          }
         }
       }
     };

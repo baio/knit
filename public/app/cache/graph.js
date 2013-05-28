@@ -28,15 +28,29 @@
           }
         }
       },
-      update: function(filter, data) {
-        var _data;
+      update: function(method, req_data, res_data) {
+        var ref, _data;
 
-        if ((!filter || filter.context !== "data") && !data.isYours) {
-          console.log("update graph cache : " + data.id);
-          _data = JSON.stringify(data);
-          return $.jStorage.set(this._getName(data.id), _data, {
-            TTL: TTL
-          });
+        if (method === "get") {
+          if (!req_data || req_data.context !== "data") {
+            console.log("update graph cache : " + res_data.id);
+            _data = JSON.stringify(res_data);
+            return $.jStorage.set(this._getName(res_data.id), _data, {
+              TTL: TTL
+            });
+          }
+        } else if (method !== "put") {
+          console.log("swap user after any NOT PUT graph update");
+          $.jStorage.deleteKey("curUser");
+          ref = req_data.graph;
+          if (ref == null) {
+            ref = req_data.id;
+          }
+          if (ref == null) {
+            ref = req_data.ref;
+          }
+          console.log("swap graph after any graph update " + ref);
+          return $.jStorage.deleteKey(this._getName(ref));
         }
       }
     };
