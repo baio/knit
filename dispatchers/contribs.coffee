@@ -2,7 +2,8 @@ request = require("./request")
 cache = require "./cache/redis"
 es = require "event-stream"
 
-_del = es.join((err, data) ->
+_del = ->
+  es.join((err, data) ->
     console.log "delete graph from cache : " + err
     if !err
       j = JSON.parse(data)
@@ -20,10 +21,10 @@ exports.put = (req, res) ->
   request.req(req, res, "contribs")
 
 exports.patch = (req, res) ->
-  request.req(req, res, "contribs", false, _del)
+  request.req(req, res, "contribs", false, _del())
 
 exports.delete = (req, res) ->
-  request.req(req, res, "contribs", false, _del)
+  request.req(req, res, "contribs", false, _del())
 
 exports.copy = (req, res) ->
   request.req(req, res, "contribs")
