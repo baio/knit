@@ -25,7 +25,7 @@ require [
       data:
         term: "term"
     #swap current user after each reload
-    $.jStorage.deleteKey "curUser"
+    $.jStorage.set "app_reload", "true"
     rr = new router.Router "app/controllers"
     rr.onSwitchLoadingView = ->
       $("#layout_loading").show()

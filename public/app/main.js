@@ -24,7 +24,7 @@
         term: "term"
       }
     };
-    $.jStorage.deleteKey("curUser");
+    $.jStorage.set("app_reload", "true");
     rr = new router.Router("app/controllers");
     rr.onSwitchLoadingView = function() {
       $("#layout_loading").show();
