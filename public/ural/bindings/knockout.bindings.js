@@ -243,7 +243,7 @@
 
           event.preventDefault();
           value = ko.utils.unwrapObservable(valueAccessor());
-          if (value) {
+          if (value && !$.isEmptyObject(vlue)) {
             window.location = "/" + opts.resource + "/" + value;
           }
           return false;

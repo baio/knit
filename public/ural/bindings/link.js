@@ -10,7 +10,7 @@
           href = $(element).attr("href");
           href = href.replace(/^#/, "");
           value = ko.utils.unwrapObservable(valueAccessor());
-          if (value) {
+          if (value && !$.isEmptyObject(value)) {
             if ($.isPlainObject(value)) {
               value = JSON.stringify(value);
             }

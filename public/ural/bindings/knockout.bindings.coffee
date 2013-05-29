@@ -150,17 +150,17 @@ define ->
         validation = [validation] if !Array.isArray validation
         for v in validation
           prop.extend v
-
+###
   ko.bindingHandlers.link =
     init: (element, valueAccessor, allBindingsAccessor) ->
       opts = allBindingsAccessor().linkOpts
       $(element).click (event) ->
         event.preventDefault()
         value = ko.utils.unwrapObservable(valueAccessor())
-        if value
+        if value and !$.isEmptyObject vlue
           window.location = "/#{opts.resource}/#{value}"
         false
-
+###
   ko.bindingHandlers.val =
 
     init: (element, valueAccessor, allBindingsAccessor) ->

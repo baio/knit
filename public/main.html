@@ -103,7 +103,7 @@
                 <!-- Site name for smallar screens -->
                 <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span
                         class="bold">Knit</span></a>
-                <a href="#/graph/panel" class="brand" data-bind="link: null"><span class="bold">Knit</span></a>
+                <a href="#/graph/panel" class="brand" data-bind="link: {}"><span class="bold">Knit</span></a>
 
                 <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
                     <li class="dropdown dropdown-big" data-bind="with: activeGraph">
@@ -142,9 +142,9 @@
 
                             <!-- Dropdown menu -->
                             <ul class="dropdown-menu">
-                                <li><a href="#/contrib/start" data-bind="link : null"><i class="icon-briefcase"></i>Ваши
+                                <li><a href="#/contrib/start" data-bind="link: {}"><i class="icon-briefcase"></i>Ваши
                                     данные</a></li>
-                                <li><a href="#/public/index" data-bind="link : null"><i class="icon-globe"></i>Данные
+                                <li><a href="#/public/index" data-bind="link: {}"><i class="icon-globe"></i>Данные
                                     пользователей</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/auth/logout"><i class="icon-off"></i> Выйти</a></li>
