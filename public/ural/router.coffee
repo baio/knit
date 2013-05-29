@@ -77,4 +77,9 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
       @_hash hash
 
+      window.onpopstate = (e) =>
+        if e.state != null
+          console.log "onpopstate", e
+          crossroads.parse e.state
+
   Router : Router

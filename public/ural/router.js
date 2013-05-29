@@ -129,7 +129,13 @@
             hash = match[1];
           }
         }
-        return this._hash(hash);
+        this._hash(hash);
+        return window.onpopstate = function(e) {
+          if (e.state !== null) {
+            console.log("onpopstate", e);
+            return crossroads.parse(e.state);
+          }
+        };
       };
 
       return Router;
