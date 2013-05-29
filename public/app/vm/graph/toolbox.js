@@ -46,8 +46,8 @@
           pos = d3.mouse(this);
           console.log(pos);
           offset = $("#_body").offset();
-          x = pos[0] - $("body").scrollLeft() - offset.left;
-          y = pos[1] - $("body").scrollTop() - offset.top;
+          x = pos[0] - $(document).scrollLeft() - offset.left;
+          y = pos[1] - $(document).scrollTop() - offset.top;
           console.log(x);
           console.log(y);
           $("#_toolbox").css({
