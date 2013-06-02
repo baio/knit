@@ -16,14 +16,15 @@ require [
       insertMessages: false
     )
     itemVM.KeyFieldName = "_id"
-    bindingOpts.autocomplete =
-      baseUrl: config.base_url
-      fields:
-        key:  "key"
-        value: "val"
-        label: "val"
-      data:
-        term: "term"
+    $.extend bindingOpts.autocomplete,
+        baseUrl: config.base_url
+        fields:
+          key:  "key"
+          value: "val"
+          label: "val"
+        data:
+          term: "term"
+
     #swap current user after each reload
     $.jStorage.set "app_reload", "true"
     rr = new router.Router "app/controllers"

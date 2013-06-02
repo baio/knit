@@ -47,7 +47,7 @@
  */
 {
     "mappings": {
-        "gov-ru": {
+        "name": {
             "properties": {
                 "val": {
                     "fields": {

@@ -13,7 +13,7 @@
       insertMessages: false
     });
     itemVM.KeyFieldName = "_id";
-    bindingOpts.autocomplete = {
+    $.extend(bindingOpts.autocomplete, {
       baseUrl: config.base_url,
       fields: {
         key: "key",
@@ -23,7 +23,7 @@
       data: {
         term: "term"
       }
-    };
+    });
     $.jStorage.set("app_reload", "true");
     rr = new router.Router("app/controllers");
     rr.onSwitchLoadingView = function() {
