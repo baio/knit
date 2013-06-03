@@ -4,7 +4,7 @@
     baseUrl: "/"
   });
 
-  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/config", "ural/libs/localization/ru/moment.ru"], function(localManager, router, itemVM, bindingOpts, config) {
+  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/bindings/autocompleteWithScheme", "app/config", "ural/libs/localization/ru/moment.ru"], function(localManager, router, itemVM, bindingOpts, autocompleteWithScheme, config) {
     var rr;
 
     localManager.setup("en");
@@ -36,8 +36,9 @@
       {
         url: "/",
         path: {
-          controller: "graph",
-          action: "panel"
+          controller: "contrib",
+          action: "item",
+          arg: "518b989739ed9714289d0bc1"
         }
       }, {
         url: "{controller}/{action}/:id:"

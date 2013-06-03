@@ -18,10 +18,8 @@
                 <thead>
                 <tr>
                     <th>Имя 1</th>
+                    <th>Cвязь</th>
                     <th>Имя 2</th>
-                    <th>Семейные<br/>связи</th>
-                    <th>Частные<br/>связи</th>
-                    <th>Проф.<br/>связи</th>
                     <th style="width: 2%"></th>
                 </tr>
                 <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input" id="append_row"></tr>
@@ -43,32 +41,15 @@
 
 <script type="text/html" id="contrib-append-item-template">
     <td>
-        <input type="text" class="input-large mousetrap" data-bind="autocompleteWithScheme: name_1, autocompleteOpts : {url: '/names'}"
-               id="append_item_focus" />
+        <input type="text" class="input-large mousetrap" data-bind="autocompleteWithScheme: name_1,
+            autocompleteOpts : {url: '/index', scheme : $root.scheme().name_1}" id="append_item_focus" />
     </td>
     <td>
-        <input type="text" class="input-large mousetrap" data-bind="autocompleteWithScheme: name_2, autocompleteOpts : {url: '/names'}"/>
+        <input type="text" class="input-large mousetrap"/>
     </td>
     <td>
-        <input type="text" class="input-small mousetrap"
-               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" />
-    </td>
-    <td>
-        <input type="text" class="input-small mousetrap"
-               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" />
-    </td>
-    <td>
-        <input type="text" class="input-small mousetrap"
-               data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"
-               id="append_item_trigger" />
-    </td>
-    <td>
-        <div data-bind="ifnot: isValid()">
-            <a href="#" data-bind="tooltip : errors">
-                <button class="btn btn-mini btn-warning"><i class="icon-warning-sign"></i></button>
-            </a>
-            <!--<p data-bind="text: errors().length"></p>-->
-        </div>
+        <input type="text" class="input-large mousetrap" data-bind="autocompleteWithScheme: name_2,
+            autocompleteOpts : {url: '/index', scheme : $root.scheme().name_2}"/>
     </td>
 </script>
 
@@ -78,20 +59,10 @@
                data-bind-event="input-edit"/>
     </td>
     <td>
+        <input type="text" class="input-small mousetrap"/>
+    </td>
+    <td>
         <input type="text" class="input-large mousetrap" data-bind="autocomplete: name_2, autocompleteOpts : {url: '/names'}"
-               data-bind-event="input-edit"/>
-    </td>
-    <td>
-        <input type="text" class="input-small mousetrap"
-               data-bind="autocomplete: family_rel, autocompleteOpts : {url: '/tags?type=family'}" data-bind-event="input-edit"/>
-    </td>
-    <td>
-        <input type="text" class="input-small mousetrap"
-               data-bind="autocomplete: private_rel, autocompleteOpts : {url: '/tags?type=private'}" data-bind-event="input-edit"/>
-    </td>
-    <td>
-        <input type="text" class="input-small edit-item-trigger mousetrap"
-               data-bind="autocomplete: prof_rel, autocompleteOpts : {url: '/tags?type=prof'}"
                data-bind-event="input-edit"/>
     </td>
     <td>
@@ -99,7 +70,6 @@
             <a href="#" data-bind="tooltip : errors">
                 <button class="btn btn-mini btn-warning"><i class="icon-warning-sign"></i></button>
             </a>
-            <!--<p data-bind="text: errors().length"></p>-->
         </div>
     </td>
 </script>
@@ -109,24 +79,12 @@
         <span data-bind="text: name_1"></span>
     </td>
     <td>
+        <span class="label label-info"></span>
+    </td>
+    <td>
         <span data-bind="text: name_2"></span>
     </td>
     <td>
-        <span class="label label-info" data-bind="text: family_rel"></span>
-    </td>
-    <td>
-        <span class="label label-info" data-bind="text: private_rel"></span>
-    </td>
-    <td>
-        <span class="label label-info" data-bind="text: prof_rel"></span>
-    </td>
-    <td>
-        <!--
-        <div data-bind="ifnot: isValid()">
-            <a href="#" data-bind="tooltip : errors"><i class="icon-warning-sign"></i></a>
-            <p data-bind="text: errors().length"></p>
-        </div>
-        -->
         <button class="btn btn-mini btn-danger" data-bind="click: remove" data-bind-event="button-remove"><i class="icon-remove" data-bind-event="button-remove"></i></button>
     </td>
 </script>

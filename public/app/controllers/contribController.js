@@ -23,7 +23,7 @@
       };
 
       ContribController.prototype.item = function(id) {
-        return this.view_apply("app/views/contrib/item.html", {
+        return this.view_apply("app/views/contrib/index.html", {
           _layouts: {
             _body: {
               loader: new contrib(),

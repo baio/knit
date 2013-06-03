@@ -9,6 +9,7 @@ define ["ural/vm/indexVM",
 
     constructor: ->
       @defItem = _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
+      @scheme = ko.observable()
       @contrib = new Contrib()
       @editItem = new itemVM("contrib")
       @editItem.map(@defItem)
@@ -22,6 +23,8 @@ define ["ural/vm/indexVM",
       dataProvider.get "contribs", filter, (err, data) =>
         if !err
           items = data.items
+          if data.scheme
+            @scheme data.scheme
           delete data.items
           @contrib.map data, true
           done err, items

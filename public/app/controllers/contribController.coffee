@@ -13,7 +13,7 @@ define ["app/controllers/controllerBase",
           _body: new user()
 
     item: (id) ->
-      @view_apply "app/views/contrib/item.html",
+      @view_apply "app/views/contrib/index.html",
         _layouts:
           _body: {loader : new contrib(), filter : {id : id}}
 

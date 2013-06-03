@@ -18,6 +18,7 @@
           private_rel: null,
           prof_rel: null
         };
+        this.scheme = ko.observable();
         this.contrib = new Contrib();
         this.editItem = new itemVM("contrib");
         this.editItem.map(this.defItem);
@@ -37,6 +38,9 @@
 
           if (!err) {
             items = data.items;
+            if (data.scheme) {
+              _this.scheme(data.scheme);
+            }
             delete data.items;
             _this.contrib.map(data, true);
             return done(err, items);
