@@ -4,8 +4,8 @@
     baseUrl: "/"
   });
 
-  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/bindings/autocompleteWithScheme", "app/config", "ural/libs/localization/ru/moment.ru"], function(localManager, router, itemVM, bindingOpts, autocompleteWithScheme, config) {
-    var rr;
+  require(["ural/localization/localizationManager", "ural/router", "ural/vm/itemVM", "ural/bindings/_all", "app/bindings/autocompleteWithScheme", "app/bindings/tag-editWithScheme", "app/config", "ural/libs/localization/ru/moment.ru"], function(localManager, router, itemVM, bindingOpts, autocompleteWithScheme, tagedit, config) {
+    var autocmpleteConfig, rr;
 
     localManager.setup("en");
     ko.validation.configure({
@@ -13,7 +13,7 @@
       insertMessages: false
     });
     itemVM.KeyFieldName = "_id";
-    $.extend(bindingOpts.autocomplete, {
+    autocmpleteConfig = {
       baseUrl: config.base_url,
       fields: {
         key: "key",
@@ -23,7 +23,9 @@
       data: {
         term: "term"
       }
-    });
+    };
+    $.extend(bindingOpts.autocomplete, autocmpleteConfig);
+    $.extend(bindingOpts.tagedit, autocmpleteConfig);
     $.jStorage.set("app_reload", "true");
     rr = new router.Router("app/controllers");
     rr.onSwitchLoadingView = function() {

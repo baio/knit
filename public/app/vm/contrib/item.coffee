@@ -28,6 +28,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
           pattern:
             message: 'Связь \'професиональные\' должна содержать только прописные, кирилические символы.'
             params: '^\\s*[а-я]+\\s*$'
+      @relations = ko.observableArray()
       @_id = ko.observable().extend
         validation:
           validator: =>

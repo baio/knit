@@ -1,4 +1,4 @@
-define ["ural/bindings/autocomplete"], (autocomplete) ->
+define ["ural/bindings/autocomplete"], ->
 
 
   ko.bindingHandlers.autocompleteWithScheme =
@@ -7,6 +7,7 @@ define ["ural/bindings/autocomplete"], (autocomplete) ->
       _opts = allBindingsAccessor().autocompleteOpts
       _opts ?= {}
       _opts.filterParams = {index: (-> _opts.scheme.index), type: (-> _opts.scheme.type)}
+
       ko.bindingHandlers.autocomplete.init element, valueAccessor, allBindingsAccessor, viewModel
       opts = allBindingsAccessor()
       console.log opts.autocompleteOpts.scheme

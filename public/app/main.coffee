@@ -7,24 +7,27 @@ require [
   "ural/vm/itemVM",
   "ural/bindings/_all",
   "app/bindings/autocompleteWithScheme",
+  "app/bindings/tag-editWithScheme",
   "app/config",
   "ural/libs/localization/ru/moment.ru"
 ],
-  (localManager, router, itemVM, bindingOpts, autocompleteWithScheme, config) ->
+  (localManager, router, itemVM, bindingOpts, autocompleteWithScheme, tagedit, config) ->
     localManager.setup "en"
     ko.validation.configure(
       messagesOnModified: true
       insertMessages: false
     )
     itemVM.KeyFieldName = "_id"
-    $.extend bindingOpts.autocomplete,
-        baseUrl: config.base_url
-        fields:
-          key:  "key"
-          value: "val"
-          label: "val"
-        data:
-          term: "term"
+    autocmpleteConfig =
+      baseUrl: config.base_url
+      fields:
+        key:  "key"
+        value: "val"
+        label: "val"
+      data:
+        term: "term"
+    $.extend bindingOpts.autocomplete, autocmpleteConfig
+    $.extend bindingOpts.tagedit, autocmpleteConfig
 
     #swap current user after each reload
     $.jStorage.set "app_reload", "true"

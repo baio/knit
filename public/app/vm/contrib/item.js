@@ -48,6 +48,7 @@
             params: '^\\s*[а-я]+\\s*$'
           }
         });
+        this.relations = ko.observableArray();
         this._id = ko.observable().extend({
           validation: {
             validator: function() {
