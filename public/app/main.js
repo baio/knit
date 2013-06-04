@@ -22,6 +22,12 @@
       },
       data: {
         term: "term"
+      },
+      toData: function(d) {
+        return {
+          type: d.data.type,
+          val: d.data.val
+        };
       }
     };
     $.extend(bindingOpts.autocomplete, autocmpleteConfig);

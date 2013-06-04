@@ -56,6 +56,9 @@ define ->
               d = gopts.getDefault(ui.tagLabel)
             else
               d = ui.tagLabel
+          if gopts.toData
+            d = gopts.toData(d)
+          valueAccessor().push d
           console.log d
 
     update: (element, valueAccessor, allBindingsAccessor) ->

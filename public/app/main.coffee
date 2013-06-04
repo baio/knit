@@ -26,6 +26,9 @@ require [
         label: "val"
       data:
         term: "term"
+      toData: (d) ->
+        type: d.data.type
+        val: d.data.val
     $.extend bindingOpts.autocomplete, autocmpleteConfig
     $.extend bindingOpts.tagedit, autocmpleteConfig
 

@@ -96,6 +96,10 @@
                 d = ui.tagLabel;
               }
             }
+            if (gopts.toData) {
+              d = gopts.toData(d);
+            }
+            valueAccessor().push(d);
             return console.log(d);
           }
         });
