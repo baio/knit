@@ -3,8 +3,20 @@
   define(["ural/bindings/autocomplete"], function(autocomplete) {
     return ko.bindingHandlers.autocompleteWithScheme = {
       init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
-        var opts;
+        var opts, _opts;
 
+        _opts = allBindingsAccessor().autocompleteOpts;
+        if (_opts == null) {
+          _opts = {};
+        }
+        _opts.filterParams = {
+          index: (function() {
+            return _opts.scheme.index;
+          }),
+          type: (function() {
+            return _opts.scheme.type;
+          })
+        };
         ko.bindingHandlers.autocomplete.init(element, valueAccessor, allBindingsAccessor, viewModel);
         opts = allBindingsAccessor();
         return console.log(opts.autocompleteOpts.scheme);

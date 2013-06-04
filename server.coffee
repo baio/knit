@@ -12,6 +12,7 @@ dispatchers =
   tags : require("./dispatchers/tags")
   pushes : require("./dispatchers/pushes")
   curUser : require("./dispatchers/curUser")
+  index : require("./dispatchers/index")
 
 _redirect = (req, res, next) ->
   res.redirect = (url) ->

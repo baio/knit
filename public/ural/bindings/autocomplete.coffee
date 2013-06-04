@@ -22,6 +22,13 @@ define ->
       data[field] = viewModel[fields[field]]()
     data
 
+  _filterParams = (filterParams) ->
+    data = {}
+    for own field of filterParams
+      data[field] = filterParams[field]()
+    data
+
+
   ko.bindingHandlers.autocomplete =
 
     init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
@@ -35,6 +42,8 @@ define ->
           data[gopts.data.term] = $(element).val()
           if opts.filterFields
             data = $.extend false, data, _filterFields(viewModel, opts.filterFields)
+          if opts.filterParams
+            data = $.extend false, data, _filterParams(opts.filterParams)
           $.ajax
             url: gopts.baseUrl + opts.url
             data: data

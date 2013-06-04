@@ -19,7 +19,8 @@
     names: require("./dispatchers/names"),
     tags: require("./dispatchers/tags"),
     pushes: require("./dispatchers/pushes"),
-    curUser: require("./dispatchers/curUser")
+    curUser: require("./dispatchers/curUser"),
+    index: require("./dispatchers/index")
   };
 
   _redirect = function(req, res, next) {

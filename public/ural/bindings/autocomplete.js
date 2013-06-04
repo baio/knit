@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty;
 
   define(function() {
-    var gOpts, _filterFields, _updateAutocompleteFields;
+    var gOpts, _filterFields, _filterParams, _updateAutocompleteFields;
 
     gOpts = {
       baseUrl: null,
@@ -48,6 +48,16 @@
       }
       return data;
     };
+    _filterParams = function(filterParams) {
+      var data, field;
+
+      data = {};
+      for (field in filterParams) {
+        if (!__hasProp.call(filterParams, field)) continue;
+        data[field] = filterParams[field]();
+      }
+      return data;
+    };
     ko.bindingHandlers.autocomplete = {
       init: function(element, valueAccessor, allBindingsAccessor, viewModel) {
         var gopts, opts;
@@ -66,6 +76,9 @@
             data[gopts.data.term] = $(element).val();
             if (opts.filterFields) {
               data = $.extend(false, data, _filterFields(viewModel, opts.filterFields));
+            }
+            if (opts.filterParams) {
+              data = $.extend(false, data, _filterParams(opts.filterParams));
             }
             return $.ajax({
               url: gopts.baseUrl + opts.url,
