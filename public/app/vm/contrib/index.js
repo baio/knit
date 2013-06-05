@@ -10,20 +10,10 @@
       __extends(IndexVM, _super);
 
       function IndexVM() {
-        this.defItem = {
-          _id: null,
-          name_1: null,
-          name_2: null,
-          family_rel: null,
-          private_rel: null,
-          prof_rel: null
-        };
-        this.scheme = ko.observable();
+        this._scheme = ko.observable();
         this.contrib = new Contrib();
-        this.editItem = new itemVM("contrib");
-        this.editItem.map(this.defItem);
         this._isModifyed = ko.observable();
-        IndexVM.__super__.constructor.call(this, "contrib");
+        IndexVM.__super__.constructor.call(this, "contrib-item");
       }
 
       IndexVM.prototype.onCreateItem = function() {
@@ -39,7 +29,7 @@
           if (!err) {
             items = data.items;
             if (data.scheme) {
-              _this.scheme(data.scheme);
+              _this._scheme(data.scheme);
             }
             delete data.items;
             _this.contrib.map(data, true);
@@ -65,45 +55,40 @@
         });
       };
 
-      IndexVM.prototype.render = function() {
-        var _appendRow,
-          _this = this;
+      /*
+      render: ->
+      
+        _appendRow = =>
+          if @editItem.isValid()
+            @add @editItem.toData(), 0
+            @editItem.map(@defItem)
+            $("#append_item_focus").focus()
+            return false
+          else
+            return true
+      
+        @editItem.startEdit()
+        @startEdit()
+      
+        Mousetrap.bind ['ctrl+s'], (e) =>
+          $(e.target).blur()
+          $(e.target).focus()
+          @save()
+          return false
+        Mousetrap.bind ['ctrl+a'], (e) =>
+          if $(e.target).closest("tr").attr("id") == "append_row"
+            return _appendRow()
+          else
+            return true
+        Mousetrap.bind ['tab'], (e) =>
+          if $(e.target).attr("id") == "append_item_trigger"
+            @editItem.prof_rel($(e.target).val())
+            return _appendRow()
+          else if $(e.target).hasClass "edit_item_trigger"
+            return @editItem.isValid()
+          return true
+      */
 
-        _appendRow = function() {
-          if (_this.editItem.isValid()) {
-            _this.add(_this.editItem.toData(), 0);
-            _this.editItem.map(_this.defItem);
-            $("#append_item_focus").focus();
-            return false;
-          } else {
-            return true;
-          }
-        };
-        this.editItem.startEdit();
-        this.startEdit();
-        Mousetrap.bind(['ctrl+s'], function(e) {
-          $(e.target).blur();
-          $(e.target).focus();
-          _this.save();
-          return false;
-        });
-        Mousetrap.bind(['ctrl+a'], function(e) {
-          if ($(e.target).closest("tr").attr("id") === "append_row") {
-            return _appendRow();
-          } else {
-            return true;
-          }
-        });
-        return Mousetrap.bind(['tab'], function(e) {
-          if ($(e.target).attr("id") === "append_item_trigger") {
-            _this.editItem.prof_rel($(e.target).val());
-            return _appendRow();
-          } else if ($(e.target).hasClass("edit_item_trigger")) {
-            return _this.editItem.isValid();
-          }
-          return true;
-        });
-      };
 
       return IndexVM;
 

@@ -50,7 +50,7 @@
         opts = allBindingsAccessor().tageditOpts;
         gopts = $.extend(gopts, opts);
         _data = [];
-        return $(element).tagit({
+        $(element).tagit({
           tagSource: function(req, res) {
             var data;
 
@@ -101,7 +101,22 @@
             }
             valueAccessor().push(d);
             return console.log(d);
+          },
+          afterTagRemoved: function(event, ui) {
+            var d;
+
+            if (gopts.labelField) {
+              d = ko.utils.arrayFirst(valueAccessor()(), function(item) {
+                return item[gopts.labelField]() === ui.tagLabel;
+              });
+              valueAccessor().remove(d);
+            }
+            return console.log(ui);
           }
+        });
+        return ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+          console.log("destroy");
+          return $(element).tagit("destroy");
         });
       },
       update: function(element, valueAccessor, allBindingsAccessor) {}

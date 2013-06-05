@@ -7,7 +7,7 @@
             <div class="clearfix"></div>
             <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
             <div class="widget-icons pull-right" style="margin-top: -20px">
-                <button type="submit" class="btn  btn-large btn-info" data-bind="click: save, visible : _isModifyed">Сохранить</button>
+                <button type="submit" class="btn  btn-large btn-info" data-bind="click: startCreate">Добавить</button>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -20,10 +20,11 @@
                     <th>Имя 1</th>
                     <th>Cвязь</th>
                     <th>Имя 2</th>
-                    <th style="width: 2%"></th>
                 </tr>
+                <!--
                 <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input" id="append_row"></tr>
                 </thead>
+                -->
                 <tbody id="items_list" data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
                 </tbody>
             </table>
@@ -34,6 +35,115 @@
 
 </div>
 
+<script type="text/html" id="contrib-item-row-template">
+    <tr>
+        <td>
+            <span data-bind="text: name_1"></span>
+        </td>
+        <td data-bind="foreach: relations">
+           <span class="badge badge-info" data-bind="text: val"></span>
+        </td>
+        <td>
+            <span data-bind="text: name_2"></span>
+        </td>
+    </tr>
+</script>
+
+<div class="modal hide fade" data-form-type='update' data-form-resource='contrib'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Набор данных</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Имя</label>
+
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
+                    <input type="text" id="inputName" data-bind="value: name">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputUrl">Ссылка</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
+                    <input type="text" id="inputUrl" data-bind="value: url">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+
+<div class="modal hide fade" data-form-type='create' data-form-resource='contrib-item'>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Новая связь</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form">
+            <div class="control-group">
+                <label class="control-label" for="create_name_1">Имя 1</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name_1" style="display: none;"></div>
+                    <input type="text" id="create_name_1" data-bind="autocompleteWithScheme: name_1,
+                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_1}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="create_relations">Связи</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: relations" style="display: none;"></div>
+                    <!--
+                    <input type="text" id="create_relations" class="input-large"
+                           data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}"/>
+                    -->
+                    <ul id="create_relations" data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}">
+                    </ul>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="create_name_2">Имя 2</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name_2" style="display: none;"></div>
+                    <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
+                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="date">Дата</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: date" style="display: none;"></div>
+                    <input type="text" id="date" data-bind="datetime: date">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="dateTo">Дата по</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo" style="display: none;"></div>
+                    <input type="text" id="dateTo" data-bind="datetime: date">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="url">Ссылка</label>
+                <div class="controls">
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo" style="display: none;"></div>
+                    <input type="text" id="url" data-bind="value: url">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
+        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
+    </div>
+</div>
+
+<!--
 <script type="text/html" id="contrib-item-row-template">
     <tr data-bind="visible: !_isRemoved(), template: {name: displayMode, data: $data}, click: edit" class="row-input">
     </tr>
@@ -89,33 +199,4 @@
     </td>
 </script>
 
-<div class="modal hide fade" data-form-type='update' data-form-resource='contrib'>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Набор данных</h3>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="inputName">Имя</label>
-
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
-                    <input type="text" id="inputName" data-bind="value: name">
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="inputUrl">Ссылка</label>
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
-                    <input type="text" id="inputUrl" data-bind="value: url">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
-        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
-    </div>
-</div>
-
+-->

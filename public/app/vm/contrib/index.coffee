@@ -8,13 +8,13 @@ define ["ural/vm/indexVM",
   class IndexVM extends indexVM
 
     constructor: ->
-      @defItem = _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null
-      @scheme = ko.observable()
+      #@defItem = _id : null,  name_1 : null, name_2 : null, family_rel : null, private_rel : null, prof_rel : null, relations : []
+      @_scheme = ko.observable()
       @contrib = new Contrib()
-      @editItem = new itemVM("contrib")
-      @editItem.map(@defItem)
+      #@editItem = new itemVM("contrib")
+      #@editItem.map(@defItem)
       @_isModifyed = ko.observable()
-      super "contrib"
+      super "contrib-item"
 
     onCreateItem: ->
       new itemVM(@resource, @)
@@ -24,7 +24,7 @@ define ["ural/vm/indexVM",
         if !err
           items = data.items
           if data.scheme
-            @scheme data.scheme
+            @_scheme data.scheme
           delete data.items
           @contrib.map data, true
           done err, items
@@ -38,6 +38,7 @@ define ["ural/vm/indexVM",
           data = data.data
         done err, data
 
+    ###
     render: ->
 
       _appendRow = =>
@@ -69,3 +70,4 @@ define ["ural/vm/indexVM",
         else if $(e.target).hasClass "edit_item_trigger"
           return @editItem.isValid()
         return true
+    ###

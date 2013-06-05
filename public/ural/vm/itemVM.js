@@ -29,7 +29,11 @@
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
           if (ko.isObservable(this[prop])) {
-            data[prop] = null;
+            if (this[prop].destroyAll) {
+              data[prop] = [];
+            } else {
+              data[prop] = null;
+            }
           }
         }
         return ko.mapping.fromJS(data, {}, this);

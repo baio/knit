@@ -48,7 +48,11 @@
             params: '^\\s*[а-я]+\\s*$'
           }
         });
-        this.relations = ko.observableArray();
+        this.relations = ko.observableArray([]);
+        this.date = ko.observable();
+        this.dateTo = ko.observable();
+        this.url = ko.observable();
+        this.comment = ko.observable();
         this._id = ko.observable().extend({
           validation: {
             validator: function() {

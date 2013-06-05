@@ -24,6 +24,7 @@ define ->
   ko.bindingHandlers.tagedit =
 
     init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
+
       gopts = gOpts
       opts = allBindingsAccessor().tageditOpts
       gopts = $.extend(gopts, opts)
@@ -60,6 +61,15 @@ define ->
             d = gopts.toData(d)
           valueAccessor().push d
           console.log d
+        afterTagRemoved: (event, ui) ->
+          if gopts.labelField
+            d = ko.utils.arrayFirst(valueAccessor()(), (item) -> item[gopts.labelField]() == ui.tagLabel)
+            valueAccessor().remove d
+          console.log ui
+
+      ko.utils.domNodeDisposal.addDisposeCallback element, ->
+        console.log "destroy"
+        $(element).tagit("destroy")
 
     update: (element, valueAccessor, allBindingsAccessor) ->
 

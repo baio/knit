@@ -90,3 +90,8 @@ h5 a
 body{
     background-color: #ffffff;
 }
+
+.ui-autocomplete
+{
+  z-index: 1051;
+}

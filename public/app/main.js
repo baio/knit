@@ -25,10 +25,11 @@
       },
       toData: function(d) {
         return {
-          type: d.data.type,
-          val: d.data.val
+          type: ko.observable(d.data.type),
+          val: ko.observable(d.data.val)
         };
-      }
+      },
+      labelField: "val"
     };
     $.extend(bindingOpts.autocomplete, autocmpleteConfig);
     $.extend(bindingOpts.tagedit, autocmpleteConfig);

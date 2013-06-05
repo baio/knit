@@ -304,6 +304,8 @@
         destroy: function() {
             $.Widget.prototype.destroy.apply(this, arguments);
             // default destroy now do other stuff particular to this widget
+            $(".tagit-new").remove()
+            $(".tagit:not(ul)").remove()
         },
 
         _cleanedInput: function() {
