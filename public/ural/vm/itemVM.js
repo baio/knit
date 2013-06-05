@@ -29,11 +29,15 @@
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
           if (ko.isObservable(this[prop])) {
-            if (this[prop].destroyAll) {
-              data[prop] = [];
-            } else {
-              data[prop] = null;
-            }
+            /*
+            if @[prop].destroyAll
+              #check observable array
+              data[prop] = []
+            else
+              data[prop] = null
+            */
+
+            data[prop] = this[prop]();
           }
         }
         return ko.mapping.fromJS(data, {}, this);

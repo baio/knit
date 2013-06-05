@@ -3,7 +3,9 @@
     <div class="widget wviolet" id="_body">
 
         <div class="widget-head">
-            <div class="pull-left" data-bind="with: contrib"><a href="#" data-bind="text: name, click: startUpdate" style="color: mediumturquoise"></a>&nbsp;//<span style="font-size: 12px"> 21 марта 2013</span></div>
+            <div class="pull-left" data-bind="with: contrib"><a href="#" data-bind="text: name, click: startUpdate"
+                                                                style="color: mediumturquoise"></a>&nbsp;//<span
+                    style="font-size: 12px"> 21 марта 2013</span></div>
             <div class="clearfix"></div>
             <div class="pull-left" style="font-size: 12px">Описание набора данных здесь</div>
             <div class="widget-icons pull-right" style="margin-top: -20px">
@@ -41,7 +43,7 @@
             <span data-bind="text: name_1"></span>
         </td>
         <td data-bind="foreach: relations">
-           <span class="badge badge-info" data-bind="text: val"></span>
+            <span class="badge badge-info" data-bind="text: val"></span>
         </td>
         <td>
             <span data-bind="text: name_2"></span>
@@ -60,14 +62,17 @@
                 <label class="control-label" for="inputName">Имя</label>
 
                 <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: name" style="display: none;"></div>
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name"
+                         style="display: none;"></div>
                     <input type="text" id="inputName" data-bind="value: name">
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="inputUrl">Ссылка</label>
+
                 <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: url"
+                         style="display: none;"></div>
                     <input type="text" id="inputUrl" data-bind="value: url">
                 </div>
             </div>
@@ -87,52 +92,84 @@
     <div class="modal-body">
         <form class="form">
             <div class="control-group">
-                <label class="control-label" for="create_name_1">Имя 1</label>
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: name_1" style="display: none;"></div>
-                    <input type="text" id="create_name_1" data-bind="autocompleteWithScheme: name_1,
-                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_1}">
+                <div class="help-inline error-message-inline" data-bind="validationMessage: url"></div>
+                <div class="controls controls-row">
+                    <select id="create_scheme" data-bind="options: _availableTypes,
+                optionsValue: function(item) {return item.id;},
+                optionsText: function(item) {return item.label;},
+                optionsCaption: 'Тип связи...'">
+                    </select>
+                    <input type="text" id="url" data-bind="value: url" placeholder="Ссылка">
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="create_relations">Связи</label>
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: relations" style="display: none;"></div>
-                    <!--
-                    <input type="text" id="create_relations" class="input-large"
-                           data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}"/>
-                    -->
-                    <ul id="create_relations" data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}">
+                <!--<label class="control-label" for="create_name_1">Имя 1</label>-->
+                <div class="help-inline error-message-inline" data-bind="validationMessage: name_1"></div>
+                <div class="help-inline error-message-inline" data-bind="validationMessage: name_2"></div>
+                <div class="controls controls-row">
+                    <input type="text" id="create_name_1" data-bind="autocompleteWithScheme: name_1,
+                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_1}" placeholder="Имя 1">
+                    <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
+                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}" placeholder="Имя 2">
+                </div>
+            </div>
+            <div class="control-group">
+                <!--<label class="control-label" for="create_relations">Связи</label>-->
+                <div class="help-inline error-message-inline" data-bind="validationMessage: relations"></div>
+                <div class="controls controls-row">
+                    <ul id="create_relations"
+                        data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}">
                     </ul>
                 </div>
             </div>
+            <!--
             <div class="control-group">
                 <label class="control-label" for="create_name_2">Имя 2</label>
+
                 <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: name_2" style="display: none;"></div>
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: name_2"
+                         style="display: none;"></div>
                     <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
                      autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}">
                 </div>
             </div>
+            -->
             <div class="control-group">
-                <label class="control-label" for="date">Дата</label>
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: date" style="display: none;"></div>
-                    <input type="text" id="date" data-bind="datetime: date">
+                <!--<label class="control-label" for="date">Дата</label>-->
+                <div class="help-inline error-message-inline" data-bind="validationMessage: date"></div>
+                <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo"></div>
+                <div class="controls controls-row">
+                    <input type="text" id="date" data-bind="datetime: date" placeholder="Дата">
+                    <input type="text" id="dateTo" data-bind="datetime: dateTo" placeholder="Дата по">
                 </div>
             </div>
+            <!--
             <div class="control-group">
                 <label class="control-label" for="dateTo">Дата по</label>
+
                 <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo" style="display: none;"></div>
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo"
+                         style="display: none;"></div>
                     <input type="text" id="dateTo" data-bind="datetime: date">
                 </div>
             </div>
+            -->
+            <!--
             <div class="control-group">
                 <label class="control-label" for="url">Ссылка</label>
                 <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo" style="display: none;"></div>
+                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
                     <input type="text" id="url" data-bind="value: url">
+                </div>
+            </div>
+            -->
+            <div class="control-group">
+                <div class="help-inline error-message-inline" data-bind="validationMessage: comment"
+                     style="display: none;"></div>
+                <!--<label class="control-label" for="comment">Комментарий</label>-->
+                <div class="controls">
+                    <textarea type="text" id="comment" data-bind="text: comment" placeholder="Комментарий" style="width: 432px">
+                    </textarea>
                 </div>
             </div>
         </form>

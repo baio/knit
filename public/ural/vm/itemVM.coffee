@@ -15,12 +15,14 @@ define ["ural/modules/pubSub"], (pubSub) ->
       data = {}
       for own prop of @
         if ko.isObservable @[prop]
+          ###
           if @[prop].destroyAll
             #check observable array
             data[prop] = []
           else
             data[prop] = null
-
+          ###
+          data[prop] = @[prop]()
       ko.mapping.fromJS data, {}, @
 
     completeUpdate: (data, skipStratEdit) ->

@@ -41,6 +41,9 @@ define ["ural/vm/itemVM"], (itemVM) ->
           params : [@family_rel, @prof_rel, @priv_rel]
       @_isModifyed = ko.observable()
       @_isRemoved = ko.observable()
+      @_availableTypes = ko.observableArray([{id: "pp", label: "Персона - Персона"},
+                                             {id: "po", label: "Персона - Организация"},
+                                             {id: "oo", label: "Организация - Организация"}])
       super resource, index
       @_isEditing = ko.observable()
       @displayMode = =>

@@ -45,7 +45,7 @@
       {
         url: "/",
         path: {
-          controller: "contrib",
+          "contrib": "contrib",
           action: "item",
           arg: "518b989739ed9714289d0bc1"
         }

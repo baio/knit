@@ -64,6 +64,18 @@
         });
         this._isModifyed = ko.observable();
         this._isRemoved = ko.observable();
+        this._availableTypes = ko.observableArray([
+          {
+            id: "pp",
+            label: "Персона - Персона"
+          }, {
+            id: "po",
+            label: "Персона - Организация"
+          }, {
+            id: "oo",
+            label: "Организация - Организация"
+          }
+        ]);
         ItemVM.__super__.constructor.call(this, resource, index);
         this._isEditing = ko.observable();
         this.displayMode = function() {

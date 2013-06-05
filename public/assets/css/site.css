@@ -95,3 +95,14 @@ body{
 {
   z-index: 1051;
 }
+
+.tagit {
+    width: 432px;
+    border-color: rgb(204, 204, 204);
+}
+
+ul.tagit.ui-widget.ui-widget-content.ui-corner-all
+{
+    width: 432px !important;
+    border-color: rgb(204, 204, 204);
+}
