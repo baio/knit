@@ -1,4 +1,4 @@
-<div>
+<div xmlns="http://www.w3.org/1999/html">
 
     <div class="widget wviolet" id="_body">
 
@@ -97,9 +97,9 @@
                     <select id="create_scheme" data-bind="options: _availableTypes,
                 optionsValue: function(item) {return item.id;},
                 optionsText: function(item) {return item.label;},
-                optionsCaption: 'Тип связи...'">
+                optionsCaption: 'Тип связи...', value: _selectedType">
                     </select>
-                    <input type="text" id="url" data-bind="value: url" placeholder="Ссылка">
+                    <input type="text" id="url" data-bind="value: url, disable: _readOnly" placeholder="Ссылка">
                 </div>
             </div>
             <div class="control-group">
@@ -108,19 +108,21 @@
                 <div class="help-inline error-message-inline" data-bind="validationMessage: name_2"></div>
                 <div class="controls controls-row">
                     <input type="text" id="create_name_1" data-bind="autocompleteWithScheme: name_1,
-                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_1}" placeholder="Имя 1">
+                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_1}, disable: _readOnly" placeholder="Имя 1">
                     <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
-                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}" placeholder="Имя 2">
+                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}, disable: _readOnly" placeholder="Имя 2">
                 </div>
             </div>
             <div class="control-group">
                 <!--<label class="control-label" for="create_relations">Связи</label>-->
+
                 <div class="help-inline error-message-inline" data-bind="validationMessage: relations"></div>
                 <div class="controls controls-row">
-                    <ul id="create_relations"
-                        data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}">
-                    </ul>
+                    <input id="create_relations" name="create_relations" class="tm-input tm-input-small" type="text"
+                        data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}, disable: _readOnly" placeholder="Связь">
+                    </input>
                 </div>
+
             </div>
             <!--
             <div class="control-group">
@@ -139,8 +141,8 @@
                 <div class="help-inline error-message-inline" data-bind="validationMessage: date"></div>
                 <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo"></div>
                 <div class="controls controls-row">
-                    <input type="text" id="date" data-bind="datetime: date" placeholder="Дата">
-                    <input type="text" id="dateTo" data-bind="datetime: dateTo" placeholder="Дата по">
+                    <input type="text" id="date" data-bind="datetime: date, disable: _readOnly" placeholder="Дата">
+                    <input type="text" id="dateTo" data-bind="datetime: dateTo, disable: _readOnly" placeholder="Дата по">
                 </div>
             </div>
             <!--
@@ -164,17 +166,18 @@
             </div>
             -->
             <div class="control-group">
-                <div class="help-inline error-message-inline" data-bind="validationMessage: comment"
+                <div class="help-inline error-message-inline" data-bind="validationMessage: source"
                      style="display: none;"></div>
                 <!--<label class="control-label" for="comment">Комментарий</label>-->
                 <div class="controls">
-                    <textarea type="text" id="comment" data-bind="text: comment" placeholder="Комментарий" style="width: 432px">
+                    <textarea type="text" id="source" data-bind="text: source, disable: _readOnly" placeholder="Текст источника" style="width: 432px" rows="5">
                     </textarea>
                 </div>
             </div>
         </form>
     </div>
     <div class="modal-footer">
+        <span class="pull-left"><input type="checkbox" checked></a> Создать следующую</span>
         <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
         <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
     </div>

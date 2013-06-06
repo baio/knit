@@ -49,6 +49,14 @@
         gopts = gOpts;
         opts = allBindingsAccessor().tageditOpts;
         gopts = $.extend(gopts, opts);
+        /*
+        $(element).tagsManager(
+          prefilled: ["aaa"]
+          typeahead: true,
+          typeaheadSource: ["aaa"]
+        )
+        */
+
         _data = [];
         $(element).tagit({
           tagSource: function(req, res) {
@@ -116,7 +124,7 @@
         });
         return ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
           console.log("destroy");
-          return $(element).tagit("destroy");
+          return $(element).tagsManager("destroy");
         });
       },
       update: function(element, valueAccessor, allBindingsAccessor) {}

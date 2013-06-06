@@ -32,7 +32,7 @@ define ["ural/vm/itemVM"], (itemVM) ->
       @date = ko.observable()
       @dateTo = ko.observable()
       @url = ko.observable()
-      @comment = ko.observable()
+      @source = ko.observable()
       @_id = ko.observable().extend
         validation:
           validator: =>
@@ -44,6 +44,14 @@ define ["ural/vm/itemVM"], (itemVM) ->
       @_availableTypes = ko.observableArray([{id: "pp", label: "Персона - Персона"},
                                              {id: "po", label: "Персона - Организация"},
                                              {id: "oo", label: "Организация - Организация"}])
+      @_selectedType = ko.observable()
+      @_selectedType.subscribe (val) =>
+        if val
+          @_readOnly false
+        else
+          @_readOnly true
+        console.log val
+      @_readOnly = ko.observable(true)
       super resource, index
       @_isEditing = ko.observable()
       @displayMode = =>

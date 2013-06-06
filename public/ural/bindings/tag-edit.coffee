@@ -28,6 +28,15 @@ define ->
       gopts = gOpts
       opts = allBindingsAccessor().tageditOpts
       gopts = $.extend(gopts, opts)
+
+      ###
+      $(element).tagsManager(
+        prefilled: ["aaa"]
+        typeahead: true,
+        typeaheadSource: ["aaa"]
+      )
+      ###
+
       _data = []
       $(element).tagit
         tagSource: (req, res) ->
@@ -69,7 +78,7 @@ define ->
 
       ko.utils.domNodeDisposal.addDisposeCallback element, ->
         console.log "destroy"
-        $(element).tagit("destroy")
+        $(element).tagsManager("destroy")
 
     update: (element, valueAccessor, allBindingsAccessor) ->
 

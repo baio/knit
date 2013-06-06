@@ -52,7 +52,7 @@
         this.date = ko.observable();
         this.dateTo = ko.observable();
         this.url = ko.observable();
-        this.comment = ko.observable();
+        this.source = ko.observable();
         this._id = ko.observable().extend({
           validation: {
             validator: function() {
@@ -76,6 +76,16 @@
             label: "Организация - Организация"
           }
         ]);
+        this._selectedType = ko.observable();
+        this._selectedType.subscribe(function(val) {
+          if (val) {
+            _this._readOnly(false);
+          } else {
+            _this._readOnly(true);
+          }
+          return console.log(val);
+        });
+        this._readOnly = ko.observable(true);
         ItemVM.__super__.constructor.call(this, resource, index);
         this._isEditing = ko.observable();
         this.displayMode = function() {

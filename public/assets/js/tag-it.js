@@ -124,6 +124,10 @@
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
 
+            this.tagList.bind("disable", function(){
+               console.log("disable");
+            });
+
             this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
 
             if (this.options.readOnly) this.tagInput.attr('disabled', 'disabled');
@@ -241,7 +245,7 @@
                     // Tab will also create a tag, unless the tag input is empty,
                     // in which case it isn't caught.
                     if (
-                        event.which === $.ui.keyCode.COMMA ||
+                        /*event.which === $.ui.keyCode.COMMA ||*/
                         event.which === $.ui.keyCode.ENTER ||
                         (
                             event.which == $.ui.keyCode.TAB &&

@@ -42,7 +42,8 @@ require [
       $(".loading_quote").hide()
       $("#loading_quote_#{Math.floor(Math.random() * (5 - 1 + 1)) + 1}").show()
     rr.startRouting [
-        { url: "/", path : {"contrib", action : "item", arg : "518b989739ed9714289d0bc1"} }
+        #{ url: "/", path : {"contrib", action : "item", arg : "518b989739ed9714289d0bc1"} }
+        { url: "/", path : {controller : "graph", action : "panel"} }
         { url: "{controller}/{action}/:id:" }
       ]
 
