@@ -29,15 +29,11 @@
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
           if (ko.isObservable(this[prop])) {
-            /*
-            if @[prop].destroyAll
-              #check observable array
-              data[prop] = []
-            else
-              data[prop] = null
-            */
-
-            data[prop] = this[prop]();
+            if (this[prop]() === void 0) {
+              data[prop] = null;
+            } else {
+              data[prop] = this[prop]();
+            }
           }
         }
         return ko.mapping.fromJS(data, {}, this);
@@ -185,7 +181,7 @@
       };
 
       ViewModel.prototype.onRemove = function(done) {
-        return done();
+        throw "not implemented";
       };
 
       ViewModel.prototype.details = function(item, event) {
@@ -390,7 +386,7 @@
       };
 
       ViewModel.prototype.onCreate = function(done) {
-        return done();
+        throw "not implemented";
       };
 
       ViewModel.prototype.update = function(done) {
@@ -405,7 +401,7 @@
       };
 
       ViewModel.prototype.onUpdate = function(done) {
-        return done();
+        throw "not implemented";
       };
 
       ViewModel.prototype.load = function(filter, done) {
