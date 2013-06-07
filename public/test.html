@@ -10,7 +10,6 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="assets/css/bootstrap-tagmanager.css" rel="stylesheet">
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/font-awesome.css">
     <link rel="stylesheet" href="assets/css/jquery-ui.min.css">
@@ -18,7 +17,7 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/widgets.css" rel="stylesheet">
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <!--<link href="assets/css/jquery.tagit.css" rel="stylesheet">-->
+    <link href="assets/css/jquery.tagit.css" rel="stylesheet">
     <link href="assets/css/site.css" rel="stylesheet">
 
 
@@ -37,12 +36,11 @@
     <script src="assets/js/mousetrap.min.js"></script>
     <script src="assets/js/moment.min.js"></script>
     <script src="assets/js/jstorage.min.js"></script>
-    <!--<script src="assets/js/tag-it.js"></script>-->
-    <script src="assets/js/bootstrap-tagmanager.js"></script>
+    <script src="assets/js/tag-it.js"></script>
     <script type="text/javascript" src="assets/js/d3.v2.js"></script>
+    <script type="text/javascript" src="assets/js/tag-it.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.watch-2.0.js"></script>
 
-    <script src="assets/js/jquery.tagsinput.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets/css/jquery.tagsinput.css" />
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -53,21 +51,38 @@
 
 <body>
 
-<input type="text" autocomplete="off" class="tm-input" name="tag-nput">
+<input type="text" autocomplete="off" class="tm-input" name="tag-input" id="tag_input">
 <!--<input name="tags" id="tags" value="foo,bar,baz" placeholder="Связь" disabled="disabled" />-->
+<ul id="myTags">
+    <li>Tag1</li>
+    <li>Tag2</li>
+</ul>
+
 
 <script type="text/javascript">
+    $("#myTags").tagit();
+    $("#myTags").watch('disabled', function(){
+       console.log("disabled 1");
+    });
+    $("#tag_input").watch('disabled', function(){
+        console.log("disabled 2");
+    });
+    $("#myTags").attr('disabled', 'disabled');
+    $("#tag_input").attr('disabled', 'disabled');
+
     /*
     $('#tags').tagsInput({
         height: '10px',
         'defaultText':'Связь'
     });
     */
+    /*
     jQuery(".tm-input").tagsManager({
         typeahead: true,
         typeaheadSource: ["Pisa", "Rome", "Milan", "Florence", "New York", "Paris", "Berlin", "London", "Madrid"],
         prefilled: ["Pisa", "Rome"]
     });
+    */
 </script>
 </body>
 

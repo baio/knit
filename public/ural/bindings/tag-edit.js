@@ -124,7 +124,7 @@
         });
         return ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
           console.log("destroy");
-          return $(element).tagsManager("destroy");
+          return $(element).tagit("destroy");
         });
       },
       update: function(element, valueAccessor, allBindingsAccessor) {}

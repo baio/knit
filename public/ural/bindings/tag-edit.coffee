@@ -78,7 +78,7 @@ define ->
 
       ko.utils.domNodeDisposal.addDisposeCallback element, ->
         console.log "destroy"
-        $(element).tagsManager("destroy")
+        $(element).tagit("destroy")
 
     update: (element, valueAccessor, allBindingsAccessor) ->
 
