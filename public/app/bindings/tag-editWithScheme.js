@@ -10,14 +10,23 @@
           _opts = {};
         }
         _opts.filterParams = {
-          index: (function() {
-            return _opts.scheme.index;
-          }),
-          type: (function() {
-            return _opts.scheme.type.join(",");
-          })
+          index: function() {
+            var opts;
+
+            opts = allBindingsAccessor().tageditOpts;
+            return opts.scheme.index;
+          },
+          type: function() {
+            var opts;
+
+            opts = allBindingsAccessor().tageditOpts;
+            return opts.scheme.type.join(",");
+          }
         };
         _opts.getDefault = function(label) {
+          var opts;
+
+          opts = allBindingsAccessor().tageditOpts;
           return {
             key: label,
             label: label,
@@ -26,7 +35,7 @@
               key: label,
               label: label,
               val: label,
-              type: _opts.scheme.default_type
+              type: opts.scheme.default_type
             }
           };
         };
