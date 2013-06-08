@@ -94,10 +94,10 @@
             <div class="control-group">
                 <div class="help-inline error-message-inline" data-bind="validationMessage: url"></div>
                 <div class="controls controls-row">
-                    <select id="create_scheme" data-bind="options: _availableTypes,
+                    <select id="create_scheme" data-bind="options: _availableSchemes,
                 optionsValue: function(item) {return item.id;},
                 optionsText: function(item) {return item.label;},
-                optionsCaption: 'Тип связи...', value: _selectedType">
+                optionsCaption: 'Тип связи...', value: scheme">
                     </select>
                     <input type="text" id="url" data-bind="value: url, disable: _readOnly" placeholder="Ссылка">
                 </div>
@@ -108,9 +108,9 @@
                 <div class="help-inline error-message-inline" data-bind="validationMessage: name_2"></div>
                 <div class="controls controls-row">
                     <input type="text" id="create_name_1" data-bind="autocompleteWithScheme: name_1,
-                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_1}, disable: _readOnly" placeholder="Имя 1">
+                     autocompleteOpts : {url: '/index', scheme : _scheme().name_1}, disable: _readOnly" placeholder="Имя 1">
                     <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
-                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}, disable: _readOnly" placeholder="Имя 2">
+                     autocompleteOpts : {url: '/index', scheme : _scheme().name_2}, disable: _readOnly" placeholder="Имя 2">
                 </div>
             </div>
             <div class="control-group">
@@ -119,7 +119,7 @@
                 <div class="help-inline error-message-inline" data-bind="validationMessage: relations"></div>
                 <div class="controls controls-row">
                     <input id="create_relations" name="create_relations" class="tm-input tm-input-small" type="text"
-                        data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _index._scheme().relations}, disable: _readOnly" placeholder="Связь">
+                        data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _scheme().relations}, disable: _readOnly" placeholder="Связь">
                     </input>
                 </div>
 

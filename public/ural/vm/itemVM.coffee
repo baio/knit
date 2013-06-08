@@ -14,9 +14,12 @@ define ["ural/modules/pubSub"], (pubSub) ->
       # `ko.mapping.toJS` - works only after `ko.mapping.fromJS` was executed
       data = {}
       for own prop of @
-        if ko.isObservable @[prop]
+        if ko.isObservable(@[prop]) and !ko.isComputed(@[prop])
           if @[prop]() is undefined
-            data[prop] = null
+            if @[prop].destroyAll
+              data[prop] = []
+            else
+              data[prop] = null
           else
             data[prop] = @[prop]()
 

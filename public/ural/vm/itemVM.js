@@ -28,9 +28,13 @@
         data = {};
         for (prop in this) {
           if (!__hasProp.call(this, prop)) continue;
-          if (ko.isObservable(this[prop])) {
+          if (ko.isObservable(this[prop]) && !ko.isComputed(this[prop])) {
             if (this[prop]() === void 0) {
-              data[prop] = null;
+              if (this[prop].destroyAll) {
+                data[prop] = [];
+              } else {
+                data[prop] = null;
+              }
             } else {
               data[prop] = this[prop]();
             }

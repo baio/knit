@@ -35,23 +35,35 @@
         this.dateTo = ko.observable();
         this.url = ko.observable();
         this.source = ko.observable();
+        this.scheme = ko.observable();
         this._id = ko.observable();
         this._isModifyed = ko.observable();
         this._isRemoved = ko.observable();
-        this._availableTypes = ko.observableArray([
+        this._scheme = ko.computed(function() {
+          var res;
+
+          res = index.schemes.filter(function(f) {
+            return f["_id"] === _this.scheme();
+          })[0];
+          if (res == null) {
+            res = {};
+          }
+          console.log(res);
+          return res;
+        });
+        this._availableSchemes = ko.observableArray([
           {
-            id: "pp",
+            id: "person-person.ru",
             label: "Персона - Персона"
           }, {
-            id: "po",
+            id: "person-org.ru",
             label: "Персона - Организация"
           }, {
-            id: "oo",
+            id: "org-org.ru",
             label: "Организация - Организация"
           }
         ]);
-        this._selectedType = ko.observable();
-        this._selectedType.subscribe(function(val) {
+        this.scheme.subscribe(function(val) {
           if (val) {
             return _this._readOnly(false);
           } else {

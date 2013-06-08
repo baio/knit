@@ -20,18 +20,25 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
       @dateTo = ko.observable()
       @url = ko.observable()
       @source = ko.observable()
+      @scheme = ko.observable()
       @_id = ko.observable()
       @_isModifyed = ko.observable()
       @_isRemoved = ko.observable()
-      @_availableTypes = ko.observableArray([{id: "pp", label: "Персона - Персона"},
-                                             {id: "po", label: "Персона - Организация"},
-                                             {id: "oo", label: "Организация - Организация"}])
-      @_selectedType = ko.observable()
-      @_selectedType.subscribe (val) =>
+      @_scheme = ko.computed =>
+        res = index.schemes.filter((f) => f["_id"] == @scheme())[0]
+        res ?= {}
+        console.log res
+        return res
+      @_availableSchemes = ko.observableArray(
+        [{id: "person-person.ru", label: "Персона - Персона"},
+         {id: "person-org.ru", label: "Персона - Организация"},
+         {id: "org-org.ru", label: "Организация - Организация"}])
+      @scheme.subscribe (val) =>
         if val
           @_readOnly false
         else
           @_readOnly true
+
       @_readOnly = ko.observable(true)
       super resource, index
 

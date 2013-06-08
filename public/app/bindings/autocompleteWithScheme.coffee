@@ -6,7 +6,13 @@ define ["ural/bindings/autocomplete"], ->
     init: (element, valueAccessor, allBindingsAccessor, viewModel) ->
       _opts = allBindingsAccessor().autocompleteOpts
       _opts ?= {}
-      _opts.filterParams = {index: (-> _opts.scheme.index), type: (-> _opts.scheme.type)}
+      _opts.filterParams =
+        index: ->
+          opts = allBindingsAccessor().autocompleteOpts
+          opts.scheme.index
+        type: ->
+          opts = allBindingsAccessor().autocompleteOpts
+          opts.scheme.type
 
       ko.bindingHandlers.autocomplete.init element, valueAccessor, allBindingsAccessor, viewModel
       opts = allBindingsAccessor()

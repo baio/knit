@@ -10,7 +10,7 @@
       __extends(IndexVM, _super);
 
       function IndexVM() {
-        this._scheme = ko.observable();
+        this.schemes = null;
         this.contrib = new Contrib();
         this._isModifyed = ko.observable();
         IndexVM.__super__.constructor.call(this, "contrib-item");
@@ -28,9 +28,7 @@
 
           if (!err) {
             items = data.items;
-            if (data.scheme) {
-              _this._scheme(data.scheme);
-            }
+            _this.schemes = data.schemes;
             delete data.items;
             _this.contrib.map(data, true);
             return done(err, items);
@@ -54,41 +52,6 @@
           return done(err, data);
         });
       };
-
-      /*
-      render: ->
-      
-        _appendRow = =>
-          if @editItem.isValid()
-            @add @editItem.toData(), 0
-            @editItem.map(@defItem)
-            $("#append_item_focus").focus()
-            return false
-          else
-            return true
-      
-        @editItem.startEdit()
-        @startEdit()
-      
-        Mousetrap.bind ['ctrl+s'], (e) =>
-          $(e.target).blur()
-          $(e.target).focus()
-          @save()
-          return false
-        Mousetrap.bind ['ctrl+a'], (e) =>
-          if $(e.target).closest("tr").attr("id") == "append_row"
-            return _appendRow()
-          else
-            return true
-        Mousetrap.bind ['tab'], (e) =>
-          if $(e.target).attr("id") == "append_item_trigger"
-            @editItem.prof_rel($(e.target).val())
-            return _appendRow()
-          else if $(e.target).hasClass "edit_item_trigger"
-            return @editItem.isValid()
-          return true
-      */
-
 
       return IndexVM;
 

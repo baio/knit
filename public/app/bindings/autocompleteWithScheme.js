@@ -10,12 +10,18 @@
           _opts = {};
         }
         _opts.filterParams = {
-          index: (function() {
-            return _opts.scheme.index;
-          }),
-          type: (function() {
-            return _opts.scheme.type;
-          })
+          index: function() {
+            var opts;
+
+            opts = allBindingsAccessor().autocompleteOpts;
+            return opts.scheme.index;
+          },
+          type: function() {
+            var opts;
+
+            opts = allBindingsAccessor().autocompleteOpts;
+            return opts.scheme.type;
+          }
         };
         ko.bindingHandlers.autocomplete.init(element, valueAccessor, allBindingsAccessor, viewModel);
         opts = allBindingsAccessor();
