@@ -31,6 +31,15 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
         else if Array.isArray data[prop]
           @date2json d for d in data[prop]
 
+    undef2null: (data) ->
+      for own prop of data
+        if data[prop] is undefined
+          data[prop] = null
+        else if typeof data[prop] == "object"
+          @undef2null data[prop]
+        else if Array.isArray data[prop]
+          @undef2null d for d in data[prop]
+
     json2date: (data) ->
       #though in this instance object is flat in derived it could be not, so recursive
       for own prop of data
@@ -97,7 +106,7 @@ define ["app/config", "app/cache/manager"], (config, cache) ->
         if method == "get"
           @onFlatData(data)
         else
-          @json2date data
+          @undef2null(@json2date data)
           data = JSON.stringify(data)
       else
         data = undefined

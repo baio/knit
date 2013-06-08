@@ -15,14 +15,11 @@ define ["ural/modules/pubSub"], (pubSub) ->
       data = {}
       for own prop of @
         if ko.isObservable @[prop]
-          ###
-          if @[prop].destroyAll
-            #check observable array
-            data[prop] = []
-          else
+          if @[prop]() is undefined
             data[prop] = null
-          ###
-          data[prop] = @[prop]()
+          else
+            data[prop] = @[prop]()
+
       ko.mapping.fromJS data, {}, @
 
     completeUpdate: (data, skipStratEdit) ->
@@ -128,7 +125,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
             resource: @resource
 
     onRemove: (done)->
-      done()
+      #done()
+      throw "not implemented"
 
     details: (item, event) ->
       if @confirmEvent event, "details"
@@ -248,7 +246,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
         done err
 
     onCreate: (done) ->
-      done()
+      throw "not implemented"
+      #done()
 
     update: (done) ->
       @onUpdate (err, data) =>
@@ -257,7 +256,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
         done err
 
     onUpdate: (done) ->
-      done()
+      throw "not implemented"
+      #done()
 
     load: (filter, done) ->
       @onLoad filter, (err, data) =>

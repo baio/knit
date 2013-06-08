@@ -69,6 +69,35 @@
         return _results;
       };
 
+      DataProvider.prototype.undef2null = function(data) {
+        var d, prop, _results;
+
+        _results = [];
+        for (prop in data) {
+          if (!__hasProp.call(data, prop)) continue;
+          if (data[prop] === void 0) {
+            _results.push(data[prop] = null);
+          } else if (typeof data[prop] === "object") {
+            _results.push(this.undef2null(data[prop]));
+          } else if (Array.isArray(data[prop])) {
+            _results.push((function() {
+              var _i, _len, _ref, _results1;
+
+              _ref = data[prop];
+              _results1 = [];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                d = _ref[_i];
+                _results1.push(this.undef2null(d));
+              }
+              return _results1;
+            }).call(this));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      };
+
       DataProvider.prototype.json2date = function(data) {
         var d, dt, prop, _results;
 
@@ -188,7 +217,7 @@
           if (method === "get") {
             this.onFlatData(data);
           } else {
-            this.json2date(data);
+            this.undef2null(this.json2date(data));
             data = JSON.stringify(data);
           }
         } else {

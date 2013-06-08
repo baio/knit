@@ -94,7 +94,6 @@
             onTagClicked        : null,
             onTagLimitExceeded  : null,
 
-
             // DEPRECATED:
             //
             // /!\ These event callbacks are deprecated and WILL BE REMOVED at some
@@ -123,10 +122,6 @@
             } else {
                 this.tagList = this.element.find('ul, ol').andSelf().last();
             }
-
-            this.tagList.bind("disable", function(){
-               console.log("disable");
-            });
 
             this.tagInput = $('<input type="text" />').addClass('ui-widget-content');
 
@@ -303,13 +298,33 @@
                     that.tagInput.data('autocomplete-open', false)
                 });
             }
+
+            //this will work only if jquery.watch plugin included
+            //track disable event
+            if ($.fn.watch){
+                $(this.element).watch('disabled', function(){
+                    that.disable()
+                })
+            }
+
+            $(this.tagInput).attr("placeholder", $(this.element).attr("placeholder"))
+
         },
 
         destroy: function() {
+            this.removeAll();
             $.Widget.prototype.destroy.apply(this, arguments);
             // default destroy now do other stuff particular to this widget
             $(".tagit-new").remove()
-            $(".tagit:not(ul)").remove()
+            if ($(this.element).is("ul")){
+                $(".tagit:not(ul)").remove()
+            }
+            else{
+                $(".tagit").remove()
+            }
+            if ($(this.element).watch){
+                $(this.element).destroyWatch();
+            }
         },
 
         _cleanedInput: function() {
@@ -448,7 +463,9 @@
                     .append(removeTagIcon)
                     .click(function(e) {
                         // Removes a tag when the little 'x' is clicked.
-                        that.removeTag(tag);
+                        if (!$(that.element).attr("disabled")){
+                            that.removeTag(tag);
+                        }
                     });
                 tag.append(removeTag);
             }
@@ -545,6 +562,17 @@
             this._tags().each(function(index, tag) {
                 that.removeTag(tag, false);
             });
+        },
+
+        disable: function(){
+            if ($(this.element).attr("disabled")){
+                $(this.tagList).attr("disabled", "disabled");
+                $(this.tagInput).attr("disabled", "disabled");
+            }
+            else{
+                $(this.tagList).removeAttr("disabled");
+                $(this.tagInput).removeAttr("disabled");
+            }
         }
 
     });

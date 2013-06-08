@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/itemVM"], function(itemVM) {
+  define(["ural/vm/itemVM", "app/dataProvider"], function(itemVM, dataProvider) {
     var ItemVM;
 
     return ItemVM = (function(_super) {
@@ -12,7 +12,7 @@
       function ItemVM(resource, index) {
         var _this = this;
 
-        this.name_1 = ko.observable().extend({
+        this.name_1 = ko.observable("").extend({
           required: {
             message: "Имя 1 должно быть заполнено."
           },
@@ -21,7 +21,7 @@
             params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
           }
         });
-        this.name_2 = ko.observable().extend({
+        this.name_2 = ko.observable("").extend({
           required: {
             message: "Имя 2 должно быть заполнено."
           },
@@ -30,38 +30,12 @@
             params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
           }
         });
-        this.family_rel = ko.observable().extend({
-          pattern: {
-            message: 'Связь \'семья\' должна содержать только прописные, кирилические символы.',
-            params: '^\\s*[а-я]+\\s*$'
-          }
-        });
-        this.private_rel = ko.observable().extend({
-          pattern: {
-            message: 'Связь \'частные\' должна содержать только прописные, кирилические символы.',
-            params: '^\\s*[а-я]+\\s*$'
-          }
-        });
-        this.prof_rel = ko.observable().extend({
-          pattern: {
-            message: 'Связь \'професиональные\' должна содержать только прописные, кирилические символы.',
-            params: '^\\s*[а-я]+\\s*$'
-          }
-        });
         this.relations = ko.observableArray([]);
         this.date = ko.observable();
         this.dateTo = ko.observable();
         this.url = ko.observable();
         this.source = ko.observable();
-        this._id = ko.observable().extend({
-          validation: {
-            validator: function() {
-              return _this.family_rel() || _this.private_rel() || _this.prof_rel();
-            },
-            message: "Одна из связей должна быть выбрана.",
-            params: [this.family_rel, this.prof_rel, this.priv_rel]
-          }
-        });
+        this._id = ko.observable();
         this._isModifyed = ko.observable();
         this._isRemoved = ko.observable();
         this._availableTypes = ko.observableArray([
@@ -79,51 +53,37 @@
         this._selectedType = ko.observable();
         this._selectedType.subscribe(function(val) {
           if (val) {
-            _this._readOnly(false);
+            return _this._readOnly(false);
           } else {
-            _this._readOnly(true);
+            return _this._readOnly(true);
           }
-          return console.log(val);
         });
         this._readOnly = ko.observable(true);
         ItemVM.__super__.constructor.call(this, resource, index);
-        this._isEditing = ko.observable();
-        this.displayMode = function() {
-          if (_this._isEditing()) {
-            return "contrib-edit-item-template";
-          } else {
-            return "contrib-item-template";
-          }
-        };
       }
 
-      ItemVM.prototype.edit = function(data, event) {
-        if (event) {
-          event.preventDefault();
-        }
-        console.log("just edit");
-        if (this._isEditing()) {
-          console.log("item in editing state");
-          if (this.cancelEdit(data, event)) {
-            console.log("cancel edit COMPLETE");
-            return this._isEditing(false);
-          }
-        } else {
-          console.log("item is NOT in editing state");
-          if (this.startEdit(data, event)) {
-            console.log("start edit COMPLETE");
-            this._isEditing(true);
-            return $(".edit-item-focus", event.currentTarget).focus();
-          }
-        }
+      ItemVM.prototype.onCreate = function(done) {
+        var data;
+
+        data = {
+          id: this._index.contrib.ref(),
+          items: [this.toData()]
+        };
+        return dataProvider.ajax("contribs", "patch", data, done);
       };
 
-      ItemVM.prototype.onIsModifyedChanged = function(val) {
-        console.log("modifyed changed : " + val);
-        if (!val) {
-          this._isEditing(val);
-        }
-        return ItemVM.__super__.onIsModifyedChanged.call(this, val);
+      ItemVM.prototype.onRemove = function(done) {
+        var data;
+
+        data = this.toData();
+        return dataProvider.ajax("contribs", "patch", data, done);
+      };
+
+      ItemVM.prototype.onUpdate = function(done) {
+        var data;
+
+        data = this.toData();
+        return dataProvider.ajax("contribs", "patch", data, done);
       };
 
       return ItemVM;
