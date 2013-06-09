@@ -49,14 +49,6 @@
         gopts = gOpts;
         opts = allBindingsAccessor().tageditOpts;
         gopts = $.extend(gopts, opts);
-        /*
-        $(element).tagsManager(
-          prefilled: ["aaa"]
-          typeahead: true,
-          typeaheadSource: ["aaa"]
-        )
-        */
-
         _data = [];
         $(element).tagit({
           tagSource: function(req, res) {
@@ -80,9 +72,9 @@
                 m = data.map(function(d) {
                   return {
                     data: d,
-                    label: $.isFunction(gopts.fields.label) ? gopts.fields.label(d) : d[gopts.fields.label],
-                    value: $.isFunction(gopts.fields.value) ? gopts.fields.value(d) : d[gopts.fields.value],
-                    key: $.isFunction(gopts.fields.key) ? gopts.fields.key(d) : d[gopts.fields.key]
+                    label: $.isFunction(gopts.fields.label) ? gopts.fields.label(d) : d[gopts.fields.label](),
+                    value: $.isFunction(gopts.fields.value) ? gopts.fields.value(d) : d[gopts.fields.value](),
+                    key: $.isFunction(gopts.fields.key) ? gopts.fields.key(d) : d[gopts.fields.key]()
                   };
                 });
                 _data = m;
@@ -94,6 +86,10 @@
           afterTagAdded: function(event, ui) {
             var d;
 
+            if (ui.duringInitialization) {
+              return;
+            }
+            console.log("tag added " + ui.duringInitialization);
             d = _data.filter(function(f) {
               return f.value === ui.tagLabel;
             })[0];
@@ -127,7 +123,27 @@
           return $(element).tagit("destroy");
         });
       },
-      update: function(element, valueAccessor, allBindingsAccessor) {}
+      update: function(element, valueAccessor, allBindingsAccessor) {
+        var assignedTags, gopts, label, opts, tag, value, _i, _len, _results;
+
+        gopts = gOpts;
+        opts = allBindingsAccessor().tageditOpts;
+        gopts = $.extend(gopts, opts);
+        value = ko.utils.unwrapObservable(valueAccessor());
+        console.log(value);
+        _results = [];
+        for (_i = 0, _len = value.length; _i < _len; _i++) {
+          tag = value[_i];
+          label = $.isFunction(gopts.fields.label) ? gopts.fields.label(tag) : tag[gopts.fields.label]();
+          assignedTags = $(element).tagit("assignedTags");
+          if (assignedTags.indexOf(label) === -1) {
+            _results.push($(element).tagit("createTag", label, null, true));
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
+      }
     };
     return gOpts;
   });

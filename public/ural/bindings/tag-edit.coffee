@@ -29,14 +29,6 @@ define ->
       opts = allBindingsAccessor().tageditOpts
       gopts = $.extend(gopts, opts)
 
-      ###
-      $(element).tagsManager(
-        prefilled: ["aaa"]
-        typeahead: true,
-        typeaheadSource: ["aaa"]
-      )
-      ###
-
       _data = []
       $(element).tagit
         tagSource: (req, res) ->
@@ -53,13 +45,15 @@ define ->
             success: (data) ->
               m = data.map (d) ->
                 data: d
-                label: if $.isFunction(gopts.fields.label) then gopts.fields.label(d) else d[gopts.fields.label]
-                value: if $.isFunction(gopts.fields.value) then gopts.fields.value(d) else d[gopts.fields.value]
-                key: if $.isFunction(gopts.fields.key) then gopts.fields.key(d) else d[gopts.fields.key]
+                label: if $.isFunction(gopts.fields.label) then gopts.fields.label(d) else d[gopts.fields.label]()
+                value: if $.isFunction(gopts.fields.value) then gopts.fields.value(d) else d[gopts.fields.value]()
+                key: if $.isFunction(gopts.fields.key) then gopts.fields.key(d) else d[gopts.fields.key]()
               _data = m
               res m
             minLength: 2
         afterTagAdded: (event, ui) ->
+          if ui.duringInitialization then return
+          console.log "tag added " + ui.duringInitialization
           d = _data.filter((f) ->f.value == ui.tagLabel)[0]
           if !d
             if gopts.getDefault
@@ -81,5 +75,16 @@ define ->
         $(element).tagit("destroy")
 
     update: (element, valueAccessor, allBindingsAccessor) ->
+      gopts = gOpts
+      opts = allBindingsAccessor().tageditOpts
+      gopts = $.extend(gopts, opts)
+
+      value = ko.utils.unwrapObservable valueAccessor()
+      console.log value
+      for tag in value
+        label = if $.isFunction(gopts.fields.label) then gopts.fields.label(tag) else tag[gopts.fields.label]()
+        assignedTags = $(element).tagit("assignedTags")
+        if assignedTags.indexOf(label) == -1
+          $(element).tagit("createTag", label, null, true)
 
   gOpts
