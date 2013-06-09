@@ -17,7 +17,7 @@
                     <select id="create_scheme" data-bind="options: _availableSchemes,
                 optionsValue: function(item) {return item.id;},
                 optionsText: function(item) {return item.label;},
-                optionsCaption: 'Тип связи...', value: scheme">
+                optionsCaption: 'Тип связи...', value: scheme" data-default-focus>
                     </select>
                     <input type="text" id="url" data-bind="value: url, disable: _readOnly" placeholder="Ссылка">
                 </div>

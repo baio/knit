@@ -67,7 +67,15 @@
           throw "Required form not implemented";
         }
         ko.applyBindings(item, form[0]);
-        return form.modal("show").on("hidden", function() {
+        return form.modal("show").on("shown", function() {
+          var $focused;
+
+          $focused = $("[data-default-focus]", this);
+          if (!$focused.length) {
+            $focused = $("input:visible:first", this);
+          }
+          return $focused.focus();
+        }).on("hidden", function() {
           ko.cleanNode(form[0]);
           return $("[data-view-engine-clean]", form[0]).empty();
         });

@@ -43,10 +43,17 @@ define ["ural/viewEngine",
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       if !form[0] then throw "Required form not implemented"
       ko.applyBindings item, form[0]
-      form.modal("show").on("hidden", ->
-        ko.cleanNode form[0]
-        $("[data-view-engine-clean]", form[0]).empty()
-      )
+      form.modal("show")
+        .on("shown", ->
+          $focused = $("[data-default-focus]", @)
+          if (!$focused.length)
+            $focused = $("input:visible:first", @)
+          $focused.focus()
+        )
+        .on("hidden", ->
+          ko.cleanNode form[0]
+          $("[data-view-engine-clean]", form[0]).empty()
+        )
 
     hideForm: (resource, formType) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
