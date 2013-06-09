@@ -43,11 +43,11 @@
         return ko.mapping.fromJS(data, {}, this);
       };
 
-      ViewModel.prototype.completeUpdate = function(data, skipStratEdit) {
+      ViewModel.prototype.completeUpdate = function(data) {
         if (this.src) {
-          return this.src.item.map(data, skipStratEdit);
+          return this.src.item.map(!data ? this.toData() : data);
         } else {
-          return this.map(data, skipStratEdit);
+          return this.map(data);
         }
       };
 

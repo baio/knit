@@ -25,13 +25,13 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
       ko.mapping.fromJS data, {}, @
 
-    completeUpdate: (data, skipStratEdit) ->
+    completeUpdate: (data) ->
       if @src
         #item was in edit mode
-        @src.item.map data, skipStratEdit
+        @src.item.map if !data then @toData() else data
       else
         #direct update
-        @map data, skipStratEdit
+        @map data
 
     completeCreate: (data) ->
       if @_index then @_index.add data, 0

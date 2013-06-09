@@ -84,14 +84,19 @@
         return dataProvider.ajax("contribs", "patch", data, done);
       };
 
-      ItemVM.prototype.onRemove = function(done) {
+      ItemVM.prototype.onUpdate = function(done) {
         var data;
 
-        data = this.toData();
-        return dataProvider.ajax("contribs", "patch", data, done);
+        data = {
+          id: this._index.contrib.ref(),
+          items: [this.toData()]
+        };
+        return dataProvider.ajax("contribs", "patch", data, function(err, data) {
+          return done(err, null);
+        });
       };
 
-      ItemVM.prototype.onUpdate = function(done) {
+      ItemVM.prototype.onRemove = function(done) {
         var data;
 
         data = this.toData();
