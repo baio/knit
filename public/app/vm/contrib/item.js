@@ -98,6 +98,10 @@
         return dataProvider.ajax("contribs", "patch", data, done);
       };
 
+      ItemVM.prototype.onCreateItem = function() {
+        return new ItemVM(this.resource, this._index);
+      };
+
       return ItemVM;
 
     })(itemVM);

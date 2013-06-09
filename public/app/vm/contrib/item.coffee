@@ -55,3 +55,6 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
     onUpdate: (done) ->
       data = @toData()
       dataProvider.ajax "contribs", "patch", data, done
+
+    onCreateItem: ->
+      new ItemVM @resource, @_index

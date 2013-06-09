@@ -23,10 +23,6 @@
                     <th>Cвязь</th>
                     <th>Имя 2</th>
                 </tr>
-                <!--
-                <tr data-bind="template: {name: 'contrib-append-item-template', data: editItem}" class="row-input" id="append_row"></tr>
-                </thead>
-                -->
                 <tbody id="items_list" data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
                 </tbody>
             </table>
@@ -38,7 +34,7 @@
 </div>
 
 <script type="text/html" id="contrib-item-row-template">
-    <tr>
+    <tr data-bind="click: startUpdate">
         <td>
             <span data-bind="text: name_1"></span>
         </td>
@@ -84,103 +80,9 @@
     </div>
 </div>
 
-<div class="modal hide fade" data-form-type='create' data-form-resource='contrib-item'>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Новая связь</h3>
-    </div>
-    <div class="modal-body">
-        <form class="form">
-            <div class="control-group">
-                <div class="help-inline error-message-inline" data-bind="validationMessage: url"></div>
-                <div class="controls controls-row">
-                    <select id="create_scheme" data-bind="options: _availableSchemes,
-                optionsValue: function(item) {return item.id;},
-                optionsText: function(item) {return item.label;},
-                optionsCaption: 'Тип связи...', value: scheme">
-                    </select>
-                    <input type="text" id="url" data-bind="value: url, disable: _readOnly" placeholder="Ссылка">
-                </div>
-            </div>
-            <div class="control-group">
-                <!--<label class="control-label" for="create_name_1">Имя 1</label>-->
-                <div class="help-inline error-message-inline" data-bind="validationMessage: name_1"></div>
-                <div class="help-inline error-message-inline" data-bind="validationMessage: name_2"></div>
-                <div class="controls controls-row">
-                    <input type="text" id="create_name_1" data-bind="autocompleteWithScheme: name_1,
-                     autocompleteOpts : {url: '/index', scheme : _scheme().name_1}, disable: _readOnly" placeholder="Имя 1">
-                    <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
-                     autocompleteOpts : {url: '/index', scheme : _scheme().name_2}, disable: _readOnly" placeholder="Имя 2">
-                </div>
-            </div>
-            <div class="control-group">
-                <!--<label class="control-label" for="create_relations">Связи</label>-->
-
-                <div class="help-inline error-message-inline" data-bind="validationMessage: relations"></div>
-                <div class="controls controls-row">
-                    <input id="create_relations" name="create_relations" class="tm-input tm-input-small" type="text"
-                        data-bind="tageditWithScheme: relations, tageditOpts : {url: '/index', scheme : _scheme().relations}, disable: _readOnly" placeholder="Связь">
-                    </input>
-                </div>
-
-            </div>
-            <!--
-            <div class="control-group">
-                <label class="control-label" for="create_name_2">Имя 2</label>
-
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: name_2"
-                         style="display: none;"></div>
-                    <input type="text" id="create_name_2" data-bind="autocompleteWithScheme: name_2,
-                     autocompleteOpts : {url: '/index', scheme : _index._scheme().name_2}">
-                </div>
-            </div>
-            -->
-            <div class="control-group">
-                <!--<label class="control-label" for="date">Дата</label>-->
-                <div class="help-inline error-message-inline" data-bind="validationMessage: date"></div>
-                <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo"></div>
-                <div class="controls controls-row">
-                    <input type="text" id="date" data-bind="datetime: date, disable: _readOnly" placeholder="Дата">
-                    <input type="text" id="dateTo" data-bind="datetime: dateTo, disable: _readOnly" placeholder="Дата по">
-                </div>
-            </div>
-            <!--
-            <div class="control-group">
-                <label class="control-label" for="dateTo">Дата по</label>
-
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo"
-                         style="display: none;"></div>
-                    <input type="text" id="dateTo" data-bind="datetime: date">
-                </div>
-            </div>
-            -->
-            <!--
-            <div class="control-group">
-                <label class="control-label" for="url">Ссылка</label>
-                <div class="controls">
-                    <div class="help-inline error-message-inline" data-bind="validationMessage: url" style="display: none;"></div>
-                    <input type="text" id="url" data-bind="value: url">
-                </div>
-            </div>
-            -->
-            <div class="control-group">
-                <div class="help-inline error-message-inline" data-bind="validationMessage: source"
-                     style="display: none;"></div>
-                <!--<label class="control-label" for="comment">Комментарий</label>-->
-                <div class="controls">
-                    <textarea type="text" id="source" data-bind="text: source, disable: _readOnly" placeholder="Текст источника" style="width: 432px" rows="5">
-                    </textarea>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <span class="pull-left"><input type="checkbox" checked></a> Создать следующую</span>
-        <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
-        <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>
-    </div>
+<div data-partial-view='app/views/contrib/_editForm.html' data-partial-view-bag="{type: 'create'}">
+</div>
+<div data-partial-view='app/views/contrib/_editForm.html' data-partial-view-bag="{type: 'update'}">
 </div>
 
 <!--

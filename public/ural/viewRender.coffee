@@ -51,7 +51,7 @@ define ->
           html = "<div>#{html}</div>"
         async.forEachSeries partialHtmls
         ,(ph, ck) ->
-          ControllerBase.__renderPartialViews html, (err, renderedHtml) ->
+          __renderPartialViews $h[0], (err, renderedHtml) ->
             html = renderedHtml
             ck err
         ,(err) -> callback err, html
