@@ -46,7 +46,11 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
       data =
         id: @_index.contrib.ref()
         items: [@toData()]
-      dataProvider.ajax "contribs", "patch", data, done
+      dataProvider.ajax "contribs", "patch", data, (err, data) =>
+        if !err
+          @_id data.data[0]._id
+        #we don't wont map item from response here, since responce doesn't return item content
+        done err, null
 
     onUpdate: (done) ->
       data =

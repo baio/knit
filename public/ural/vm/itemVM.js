@@ -45,13 +45,15 @@
 
       ViewModel.prototype.completeUpdate = function(data) {
         if (this.src) {
-          return this.src.item.map(!data ? this.toData() : data);
+          data = !data ? this.toData() : data;
+          return this.src.item.map(data);
         } else {
           return this.map(data);
         }
       };
 
       ViewModel.prototype.completeCreate = function(data) {
+        data = !data ? this.toData() : data;
         if (this._index) {
           this._index.add(data, 0);
         }

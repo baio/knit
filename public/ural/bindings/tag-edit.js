@@ -72,9 +72,9 @@
                 m = data.map(function(d) {
                   return {
                     data: d,
-                    label: $.isFunction(gopts.fields.label) ? gopts.fields.label(d) : d[gopts.fields.label](),
-                    value: $.isFunction(gopts.fields.value) ? gopts.fields.value(d) : d[gopts.fields.value](),
-                    key: $.isFunction(gopts.fields.key) ? gopts.fields.key(d) : d[gopts.fields.key]()
+                    label: $.isFunction(gopts.fields.label) ? gopts.fields.label(d) : ko.utils.unwrapObservable(d[gopts.fields.label]),
+                    value: $.isFunction(gopts.fields.value) ? gopts.fields.value(d) : ko.utils.unwrapObservable(d[gopts.fields.value]),
+                    key: $.isFunction(gopts.fields.key) ? gopts.fields.key(d) : ko.utils.unwrapObservable(d[gopts.fields.key])
                   };
                 });
                 _data = m;

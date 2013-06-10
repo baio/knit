@@ -28,12 +28,14 @@ define ["ural/modules/pubSub"], (pubSub) ->
     completeUpdate: (data) ->
       if @src
         #item was in edit mode
-        @src.item.map if !data then @toData() else data
+        data = if !data then @toData() else data
+        @src.item.map data
       else
         #direct update
         @map data
 
     completeCreate: (data) ->
+      data = if !data then @toData() else data
       if @_index then @_index.add data, 0
       @setSrc null, null
       @map data

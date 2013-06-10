@@ -75,13 +75,19 @@
       }
 
       ItemVM.prototype.onCreate = function(done) {
-        var data;
+        var data,
+          _this = this;
 
         data = {
           id: this._index.contrib.ref(),
           items: [this.toData()]
         };
-        return dataProvider.ajax("contribs", "patch", data, done);
+        return dataProvider.ajax("contribs", "patch", data, function(err, data) {
+          if (!err) {
+            _this._id(data.data[0]._id);
+          }
+          return done(err, null);
+        });
       };
 
       ItemVM.prototype.onUpdate = function(done) {

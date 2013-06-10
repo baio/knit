@@ -45,9 +45,9 @@ define ->
             success: (data) ->
               m = data.map (d) ->
                 data: d
-                label: if $.isFunction(gopts.fields.label) then gopts.fields.label(d) else d[gopts.fields.label]()
-                value: if $.isFunction(gopts.fields.value) then gopts.fields.value(d) else d[gopts.fields.value]()
-                key: if $.isFunction(gopts.fields.key) then gopts.fields.key(d) else d[gopts.fields.key]()
+                label: if $.isFunction(gopts.fields.label) then gopts.fields.label(d) else ko.utils.unwrapObservable(d[gopts.fields.label])
+                value: if $.isFunction(gopts.fields.value) then gopts.fields.value(d) else ko.utils.unwrapObservable(d[gopts.fields.value])
+                key: if $.isFunction(gopts.fields.key) then gopts.fields.key(d) else ko.utils.unwrapObservable(d[gopts.fields.key])
               _data = m
               res m
             minLength: 2
