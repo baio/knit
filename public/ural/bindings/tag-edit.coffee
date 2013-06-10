@@ -62,12 +62,16 @@ define ->
               d = ui.tagLabel
           if gopts.toData
             d = gopts.toData(d)
+          $(element).data("tag-it.frozen", true)
           valueAccessor().push d
+          $(element).data("tag-it.frozen", false)
           console.log d
         afterTagRemoved: (event, ui) ->
           if gopts.labelField
             d = ko.utils.arrayFirst(valueAccessor()(), (item) -> item[gopts.labelField]() == ui.tagLabel)
+            $(element).data("tag-it.frozen", true)
             valueAccessor().remove d
+            $(element).data("tag-it.frozen", false)
           console.log ui
 
       ko.utils.domNodeDisposal.addDisposeCallback element, ->
@@ -75,16 +79,18 @@ define ->
         $(element).tagit("destroy")
 
     update: (element, valueAccessor, allBindingsAccessor) ->
+      if $(element).data("tag-it.frozen") then return
       gopts = gOpts
       opts = allBindingsAccessor().tageditOpts
       gopts = $.extend(gopts, opts)
 
       value = ko.utils.unwrapObservable valueAccessor()
       console.log value
+      $(element).tagit("removeAll")
       for tag in value
         label = if $.isFunction(gopts.fields.label) then gopts.fields.label(tag) else tag[gopts.fields.label]()
-        assignedTags = $(element).tagit("assignedTags")
-        if assignedTags.indexOf(label) == -1
-          $(element).tagit("createTag", label, null, true)
+        #assignedTags = $(element).tagit("assignedTags")
+        #if assignedTags.indexOf(label) == -1
+        $(element).tagit("createTag", label, null, true)
 
   gOpts

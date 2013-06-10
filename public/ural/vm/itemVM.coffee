@@ -230,11 +230,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if event then event.preventDefault()
       status = @src.status
       _done = (err) =>
-        pubSub.pub "crud", "end",
-          resource: @resource
-          type: status
-          err: err
-          msg: "Success"
+        @onSaved err, status
       if !@getIsChanged()
         _done()
       else if !@isValid()
@@ -245,6 +241,13 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @update _done
       else
         throw new Error("Item not in edit state")
+
+    onSaved: (err, status) ->
+      pubSub.pub "crud", "end",
+        resource: @resource
+        type: status
+        err: err
+        msg: "Success"
 
     create: (done) ->
       @onCreate (err, data) =>

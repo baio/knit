@@ -103,7 +103,9 @@
             if (gopts.toData) {
               d = gopts.toData(d);
             }
+            $(element).data("tag-it.frozen", true);
             valueAccessor().push(d);
+            $(element).data("tag-it.frozen", false);
             return console.log(d);
           },
           afterTagRemoved: function(event, ui) {
@@ -113,7 +115,9 @@
               d = ko.utils.arrayFirst(valueAccessor()(), function(item) {
                 return item[gopts.labelField]() === ui.tagLabel;
               });
+              $(element).data("tag-it.frozen", true);
               valueAccessor().remove(d);
+              $(element).data("tag-it.frozen", false);
             }
             return console.log(ui);
           }
@@ -124,23 +128,22 @@
         });
       },
       update: function(element, valueAccessor, allBindingsAccessor) {
-        var assignedTags, gopts, label, opts, tag, value, _i, _len, _results;
+        var gopts, label, opts, tag, value, _i, _len, _results;
 
+        if ($(element).data("tag-it.frozen")) {
+          return;
+        }
         gopts = gOpts;
         opts = allBindingsAccessor().tageditOpts;
         gopts = $.extend(gopts, opts);
         value = ko.utils.unwrapObservable(valueAccessor());
         console.log(value);
+        $(element).tagit("removeAll");
         _results = [];
         for (_i = 0, _len = value.length; _i < _len; _i++) {
           tag = value[_i];
           label = $.isFunction(gopts.fields.label) ? gopts.fields.label(tag) : tag[gopts.fields.label]();
-          assignedTags = $(element).tagit("assignedTags");
-          if (assignedTags.indexOf(label) === -1) {
-            _results.push($(element).tagit("createTag", label, null, true));
-          } else {
-            _results.push(void 0);
-          }
+          _results.push($(element).tagit("createTag", label, null, true));
         }
         return _results;
       }

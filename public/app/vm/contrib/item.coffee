@@ -22,8 +22,6 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
       @source = ko.observable()
       @scheme = ko.observable()
       @_id = ko.observable()
-      #@_isModifyed = ko.observable()
-      #@_isRemoved = ko.observable()
       @_scheme = ko.computed =>
         res = index.schemes.filter((f) => f["_id"] == @scheme())[0]
         res ?= {}
@@ -72,3 +70,20 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
 
     onCreateItem: ->
       new ItemVM @resource, @_index
+
+    swapFields: ->
+      @name_1("")
+      @name_2("")
+      @relations([])
+      @date(null)
+      @dateTo(null)
+      @source(null)
+      @scheme(null)
+
+    onSaved: (err, status) ->
+      if !err and status == "create"
+        @swapFields()
+        #move focus
+        $("[data-default-focus]", $("[data-form-type='update'][data-form-resource='contrib-item']")).focus()
+      else
+        super err, status

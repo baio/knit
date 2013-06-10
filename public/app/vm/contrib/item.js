@@ -120,6 +120,25 @@
         return new ItemVM(this.resource, this._index);
       };
 
+      ItemVM.prototype.swapFields = function() {
+        this.name_1("");
+        this.name_2("");
+        this.relations([]);
+        this.date(null);
+        this.dateTo(null);
+        this.source(null);
+        return this.scheme(null);
+      };
+
+      ItemVM.prototype.onSaved = function(err, status) {
+        if (!err && status === "create") {
+          this.swapFields();
+          return $("[data-default-focus]", $("[data-form-type='update'][data-form-resource='contrib-item']")).focus();
+        } else {
+          return ItemVM.__super__.onSaved.call(this, err, status);
+        }
+      };
+
       return ItemVM;
 
     })(itemVM);

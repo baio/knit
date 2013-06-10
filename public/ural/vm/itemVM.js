@@ -364,12 +364,7 @@
         }
         status = this.src.status;
         _done = function(err) {
-          return pubSub.pub("crud", "end", {
-            resource: _this.resource,
-            type: status,
-            err: err,
-            msg: "Success"
-          });
+          return _this.onSaved(err, status);
         };
         if (!this.getIsChanged()) {
           return _done();
@@ -382,6 +377,15 @@
         } else {
           throw new Error("Item not in edit state");
         }
+      };
+
+      ViewModel.prototype.onSaved = function(err, status) {
+        return pubSub.pub("crud", "end", {
+          resource: this.resource,
+          type: status,
+          err: err,
+          msg: "Success"
+        });
       };
 
       ViewModel.prototype.create = function(done) {
