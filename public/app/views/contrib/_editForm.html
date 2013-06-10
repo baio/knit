@@ -45,8 +45,8 @@
                 <div class="help-inline error-message-inline" data-bind="validationMessage: date"></div>
                 <div class="help-inline error-message-inline" data-bind="validationMessage: dateTo"></div>
                 <div class="controls controls-row">
-                    <input type="text" id="date" data-bind="datetime: date, disable: _readOnly" placeholder="Дата">
-                    <input type="text" id="dateTo" data-bind="datetime: dateTo, disable: _readOnly" placeholder="Дата по">
+                    <input type="text" data-bind="datetime: date, disable: _readOnly" placeholder="Дата">
+                    <input type="text" data-bind="datetime: dateTo, disable: _readOnly" placeholder="Дата по">
                 </div>
             </div>
             <div class="control-group">
@@ -62,6 +62,8 @@
     <div class="modal-footer">
         {{if type === 'create'}}
         <span class="pull-left"><input type="checkbox" checked></a> Создать следующую</span>
+        {{else}}
+        <a href="#" class="btn  btn-danger pull-left" data-bind="click: remove">Удалить</a>
         {{/if}}
         <a href="#" class="btn" data-bind="click: cancel">Закрыть</a>
         <a href="#" class="btn btn-primary" data-bind="click: save">Сохранить</a>

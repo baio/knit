@@ -1,6 +1,7 @@
 define [
   "ural/bindings/autocomplete"
   "ural/bindings/tag-edit"
+  "ural/bindings/date"
   "ural/bindings/knockout.bindings"
   "ural/bindings/link"
   "ural/bindings/tooltip"

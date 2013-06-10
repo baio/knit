@@ -37,8 +37,6 @@
         this.source = ko.observable();
         this.scheme = ko.observable();
         this._id = ko.observable();
-        this._isModifyed = ko.observable();
-        this._isRemoved = ko.observable();
         this._scheme = ko.computed(function() {
           var res;
 
@@ -103,10 +101,19 @@
       };
 
       ItemVM.prototype.onRemove = function(done) {
-        var data;
+        var data, item;
 
-        data = this.toData();
+        item = this.toData();
+        item._isRemoved = true;
+        data = {
+          id: this._index.contrib.ref(),
+          items: [item]
+        };
         return dataProvider.ajax("contribs", "patch", data, done);
+      };
+
+      ItemVM.prototype.onGetRemoveType = function() {
+        return "update";
       };
 
       ItemVM.prototype.onCreateItem = function() {

@@ -125,13 +125,15 @@ define ["ural/modules/pubSub"], (pubSub) ->
           @completeRemove()
           pubSub.pub "crud", "end",
             err: err
-            type: "delete"
+            type: @onGetRemoveType()
             msg: "Success"
             resource: @resource
 
     onRemove: (done)->
       #done()
       throw "not implemented"
+
+    onGetRemoveType: -> "delete"
 
     details: (item, event) ->
       if @confirmEvent event, "details"

@@ -22,8 +22,8 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
       @source = ko.observable()
       @scheme = ko.observable()
       @_id = ko.observable()
-      @_isModifyed = ko.observable()
-      @_isRemoved = ko.observable()
+      #@_isModifyed = ko.observable()
+      #@_isRemoved = ko.observable()
       @_scheme = ko.computed =>
         res = index.schemes.filter((f) => f["_id"] == @scheme())[0]
         res ?= {}
@@ -61,8 +61,14 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
         done err, null
 
     onRemove: (done) ->
-      data = @toData()
+      item = @toData()
+      item._isRemoved = true
+      data =
+        id: @_index.contrib.ref()
+        items: [item]
       dataProvider.ajax "contribs", "patch", data, done
+
+    onGetRemoveType: -> "update"
 
     onCreateItem: ->
       new ItemVM @resource, @_index

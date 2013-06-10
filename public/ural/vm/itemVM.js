@@ -178,7 +178,7 @@
             _this.completeRemove();
             return pubSub.pub("crud", "end", {
               err: err,
-              type: "delete",
+              type: _this.onGetRemoveType(),
               msg: "Success",
               resource: _this.resource
             });
@@ -188,6 +188,10 @@
 
       ViewModel.prototype.onRemove = function(done) {
         throw "not implemented";
+      };
+
+      ViewModel.prototype.onGetRemoveType = function() {
+        return "delete";
       };
 
       ViewModel.prototype.details = function(item, event) {
