@@ -39,21 +39,23 @@ define ["ural/viewEngine",
     notify: (msg, caption, type) ->
       toastr[type] msg, caption
 
+    _setFormFocus: (form) ->
+      $focused = $("[data-default-focus]", form)
+      if (!$focused.length)
+        $focused = $("input:visible:first", form)
+      $focused.focus()
+
     showForm: (resource, formType, item) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       if !form[0] then throw "Required form not implemented"
       ko.applyBindings item, form[0]
       form.modal("show")
-        .on("shown", ->
-          $focused = $("[data-default-focus]", @)
-          if (!$focused.length)
-            $focused = $("input:visible:first", @)
-          $focused.focus()
-        )
+        .on("shown", => @_setFormFocus(this))
         .on("hidden", ->
           ko.cleanNode form[0]
           $("[data-view-engine-clean]", form[0]).empty()
         )
+      @_setFormFocus form
 
     hideForm: (resource, formType) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")

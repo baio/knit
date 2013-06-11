@@ -1,4 +1,4 @@
-<div class="modal hide fade" data-form-type='{{:type}}' data-form-resource='contrib-item'>
+<div class="modal hide" data-form-type='{{:type}}' data-form-resource='contrib-item'>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>
@@ -61,7 +61,7 @@
     </div>
     <div class="modal-footer">
         {{if type === 'create'}}
-        <span class="pull-left"><input type="checkbox" checked></a> Создать следующую</span>
+        <span class="pull-left"><input type="checkbox" data-bind="checked: _isCreateNext"></a> Создать следующую</span>
         {{else}}
         <a href="#" class="btn  btn-danger pull-left" data-bind="click: remove">Удалить</a>
         {{/if}}

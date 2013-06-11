@@ -3,7 +3,7 @@
   var __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  define(["ural/vm/itemVM", "app/dataProvider"], function(itemVM, dataProvider) {
+  define(["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], function(itemVM, dataProvider, pubSub) {
     var ItemVM;
 
     return ItemVM = (function(_super) {
@@ -12,7 +12,7 @@
       function ItemVM(resource, index) {
         var _this = this;
 
-        this.name_1 = ko.observable("").extend({
+        this.name_1 = ko.observable().extend({
           required: {
             message: "Имя 1 должно быть заполнено."
           },
@@ -21,7 +21,7 @@
             params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
           }
         });
-        this.name_2 = ko.observable("").extend({
+        this.name_2 = ko.observable().extend({
           required: {
             message: "Имя 2 должно быть заполнено."
           },
@@ -37,6 +37,7 @@
         this.source = ko.observable();
         this.scheme = ko.observable();
         this._id = ko.observable();
+        ItemVM.__super__.constructor.call(this, resource, index);
         this._scheme = ko.computed(function() {
           var res;
 
@@ -46,7 +47,6 @@
           if (res == null) {
             res = {};
           }
-          console.log(res);
           return res;
         });
         this._availableSchemes = ko.observableArray([
@@ -69,7 +69,7 @@
           }
         });
         this._readOnly = ko.observable(true);
-        ItemVM.__super__.constructor.call(this, resource, index);
+        this._isCreateNext = ko.observable(true);
       }
 
       ItemVM.prototype.onCreate = function(done) {
@@ -121,19 +121,23 @@
       };
 
       ItemVM.prototype.swapFields = function() {
-        this.name_1("");
-        this.name_2("");
+        this.name_1(null);
+        this.name_2(null);
         this.relations([]);
         this.date(null);
         this.dateTo(null);
         this.source(null);
-        return this.scheme(null);
+        this.scheme(null);
+        return $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus();
       };
 
       ItemVM.prototype.onSaved = function(err, status) {
-        if (!err && status === "create") {
-          this.swapFields();
-          return $("[data-default-focus]", $("[data-form-type='update'][data-form-resource='contrib-item']")).focus();
+        if (!err && status === "create" && this._isCreateNext()) {
+          pubSub.pub("msg", "show", {
+            err: err,
+            msg: "Success"
+          });
+          return this.swapFields();
         } else {
           return ItemVM.__super__.onSaved.call(this, err, status);
         }

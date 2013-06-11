@@ -1,15 +1,15 @@
-define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
+define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, dataProvider, pubSub) ->
 
   class ItemVM extends itemVM
 
     constructor: (resource, index) ->
-      @name_1 = ko.observable("").extend
+      @name_1 = ko.observable().extend
         required:
           message: "Имя 1 должно быть заполнено."
         pattern:
           message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.'
           params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
-      @name_2 = ko.observable("").extend
+      @name_2 = ko.observable().extend
         required:
           message: "Имя 2 должно быть заполнено."
         pattern:
@@ -22,23 +22,22 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
       @source = ko.observable()
       @scheme = ko.observable()
       @_id = ko.observable()
+      super resource, index
       @_scheme = ko.computed =>
         res = index.schemes.filter((f) => f["_id"] == @scheme())[0]
         res ?= {}
-        console.log res
-        return res
+        res
       @_availableSchemes = ko.observableArray(
         [{id: "person-person.ru", label: "Персона - Персона"},
-         {id: "person-org.ru", label: "Персона - Организация"},
-         {id: "org-org.ru", label: "Организация - Организация"}])
+        {id: "person-org.ru", label: "Персона - Организация"},
+        {id: "org-org.ru", label: "Организация - Организация"}])
       @scheme.subscribe (val) =>
         if val
           @_readOnly false
         else
           @_readOnly true
-
       @_readOnly = ko.observable(true)
-      super resource, index
+      @_isCreateNext = ko.observable(true)
 
     onCreate: (done) ->
       data =
@@ -72,18 +71,18 @@ define ["ural/vm/itemVM", "app/dataProvider"], (itemVM, dataProvider) ->
       new ItemVM @resource, @_index
 
     swapFields: ->
-      @name_1("")
-      @name_2("")
+      @name_1(null)
+      @name_2(null)
       @relations([])
       @date(null)
       @dateTo(null)
       @source(null)
       @scheme(null)
+      $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus()
 
     onSaved: (err, status) ->
-      if !err and status == "create"
+      if !err and status == "create" and @_isCreateNext()
+        pubSub.pub "msg", "show", {err: err, msg: "Success"}
         @swapFields()
-        #move focus
-        $("[data-default-focus]", $("[data-form-type='update'][data-form-resource='contrib-item']")).focus()
       else
         super err, status

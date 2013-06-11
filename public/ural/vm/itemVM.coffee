@@ -37,7 +37,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
     completeCreate: (data) ->
       data = if !data then @toData() else data
       if @_index then @_index.add data, 0
-      @setSrc null, null
+      #@setSrc null, null
       @map data
 
     completeRemove: ->

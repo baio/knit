@@ -59,26 +59,32 @@
         return toastr[type](msg, caption);
       };
 
+      Controller.prototype._setFormFocus = function(form) {
+        var $focused;
+
+        $focused = $("[data-default-focus]", form);
+        if (!$focused.length) {
+          $focused = $("input:visible:first", form);
+        }
+        return $focused.focus();
+      };
+
       Controller.prototype.showForm = function(resource, formType, item) {
-        var form;
+        var form,
+          _this = this;
 
         form = $("[data-form-type='" + formType + "'][data-form-resource='" + resource + "']");
         if (!form[0]) {
           throw "Required form not implemented";
         }
         ko.applyBindings(item, form[0]);
-        return form.modal("show").on("shown", function() {
-          var $focused;
-
-          $focused = $("[data-default-focus]", this);
-          if (!$focused.length) {
-            $focused = $("input:visible:first", this);
-          }
-          return $focused.focus();
+        form.modal("show").on("shown", function() {
+          return _this._setFormFocus(_this);
         }).on("hidden", function() {
           ko.cleanNode(form[0]);
           return $("[data-view-engine-clean]", form[0]).empty();
         });
+        return this._setFormFocus(form);
       };
 
       Controller.prototype.hideForm = function(resource, formType) {

@@ -57,7 +57,6 @@
         if (this._index) {
           this._index.add(data, 0);
         }
-        this.setSrc(null, null);
         return this.map(data);
       };
 
