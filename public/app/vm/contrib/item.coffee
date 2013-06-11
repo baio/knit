@@ -40,6 +40,11 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
           @swapFieldsWhenSchemeChanged()
       @_readOnly = ko.observable(true)
       @_isCreateNext = ko.observable(true)
+      @headerCss = ko.computed =>
+        switch @scheme()
+          when "person-person.ru" then "blue"
+          when "person-org.ru" then "green"
+          when "org-org.ru" then "wiolet"
 
     onCreate: (done) ->
       data =

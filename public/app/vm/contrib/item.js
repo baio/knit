@@ -73,6 +73,16 @@
         });
         this._readOnly = ko.observable(true);
         this._isCreateNext = ko.observable(true);
+        this.headerCss = ko.computed(function() {
+          switch (_this.scheme()) {
+            case "person-person.ru":
+              return "blue";
+            case "person-org.ru":
+              return "green";
+            case "org-org.ru":
+              return "wiolet";
+          }
+        });
       }
 
       ItemVM.prototype.onCreate = function(done) {
