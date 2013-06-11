@@ -36,6 +36,8 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
           @_readOnly false
         else
           @_readOnly true
+        if @src and val
+          @swapFieldsWhenSchemeChanged()
       @_readOnly = ko.observable(true)
       @_isCreateNext = ko.observable(true)
 
@@ -79,6 +81,9 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       @source(null)
       @scheme(null)
       $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus()
+
+    swapFieldsWhenSchemeChanged: ->
+      @relations([])
 
     onSaved: (err, status) ->
       if !err and status == "create" and @_isCreateNext()

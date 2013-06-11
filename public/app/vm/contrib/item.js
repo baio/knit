@@ -63,9 +63,12 @@
         ]);
         this.scheme.subscribe(function(val) {
           if (val) {
-            return _this._readOnly(false);
+            _this._readOnly(false);
           } else {
-            return _this._readOnly(true);
+            _this._readOnly(true);
+          }
+          if (_this.src && val) {
+            return _this.swapFieldsWhenSchemeChanged();
           }
         });
         this._readOnly = ko.observable(true);
@@ -129,6 +132,10 @@
         this.source(null);
         this.scheme(null);
         return $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus();
+      };
+
+      ItemVM.prototype.swapFieldsWhenSchemeChanged = function() {
+        return this.relations([]);
       };
 
       ItemVM.prototype.onSaved = function(err, status) {
