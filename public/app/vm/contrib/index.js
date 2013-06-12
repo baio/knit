@@ -12,7 +12,6 @@
       function IndexVM() {
         this.schemes = null;
         this.contrib = new Contrib();
-        this._isModifyed = ko.observable();
         IndexVM.__super__.constructor.call(this, "contrib-item");
       }
 

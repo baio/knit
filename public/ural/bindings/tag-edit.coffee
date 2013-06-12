@@ -83,9 +83,8 @@ define ->
       gopts = gOpts
       opts = allBindingsAccessor().tageditOpts
       gopts = $.extend(gopts, opts)
-
       value = ko.utils.unwrapObservable valueAccessor()
-      console.log value
+      #console.log value
       $(element).tagit("removeAll")
       for tag in value
         label = if $.isFunction(gopts.fields.label) then gopts.fields.label(tag) else tag[gopts.fields.label]()

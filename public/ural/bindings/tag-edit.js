@@ -137,7 +137,6 @@
         opts = allBindingsAccessor().tageditOpts;
         gopts = $.extend(gopts, opts);
         value = ko.utils.unwrapObservable(valueAccessor());
-        console.log(value);
         $(element).tagit("removeAll");
         _results = [];
         for (_i = 0, _len = value.length; _i < _len; _i++) {

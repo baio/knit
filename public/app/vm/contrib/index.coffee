@@ -10,7 +10,7 @@ define ["ural/vm/indexVM",
     constructor: ->
       @schemes = null
       @contrib = new Contrib()
-      @_isModifyed = ko.observable()
+      #@_isModifyed = ko.observable()
       super "contrib-item"
 
     onCreateItem: ->

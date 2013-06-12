@@ -21,7 +21,10 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
         pattern:
           message: 'Ссылка на источник имеет неверный формат.'
           params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
-      @relations = ko.observableArray([])
+      @relations = ko.observableArray([]).extend
+        minLength:
+          params: 1
+          message: "Должна быть указана хоть одна связь."
       @date = ko.observable()
       @dateTo = ko.observable()
       @source = ko.observable()
@@ -94,7 +97,8 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus()
 
     swapFieldsWhenSchemeChanged: ->
-      @relations([])
+      if @relations().length
+        @relations([])
 
     onSaved: (err, status) ->
       if !err and status == "create" and @_isCreateNext()

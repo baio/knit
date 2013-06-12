@@ -39,7 +39,12 @@
             params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
           }
         });
-        this.relations = ko.observableArray([]);
+        this.relations = ko.observableArray([]).extend({
+          minLength: {
+            params: 1,
+            message: "Должна быть указана хоть одна связь."
+          }
+        });
         this.date = ko.observable();
         this.dateTo = ko.observable();
         this.source = ko.observable();
@@ -154,7 +159,9 @@
       };
 
       ItemVM.prototype.swapFieldsWhenSchemeChanged = function() {
-        return this.relations([]);
+        if (this.relations().length) {
+          return this.relations([]);
+        }
       };
 
       ItemVM.prototype.onSaved = function(err, status) {
