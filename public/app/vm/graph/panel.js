@@ -53,13 +53,13 @@
                 var family, priv, prof;
 
                 family = this.tags.filter(function(t) {
-                  return t.type === "family";
+                  return t.type === "pp-family";
                 }).length;
                 priv = this.tags.filter(function(t) {
-                  return t.type === "private";
+                  return t.type === "pp-private";
                 }).length;
                 prof = this.tags.filter(function(t) {
-                  return t.type === "prof";
+                  return t.type === "pp-prof";
                 }).length;
                 switch (type) {
                   case "family":

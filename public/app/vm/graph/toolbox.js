@@ -34,7 +34,7 @@
               };
             });
             _t.push({
-              name: ko.observable(tag.name),
+              name: ko.observable(tag.val),
               urls: ko.observableArray(_u)
             });
           }

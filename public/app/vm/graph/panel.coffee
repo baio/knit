@@ -21,9 +21,9 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]
             edge.source = data.nodes.filter((n) -> n.id == edge.source_id)[0]
             edge.isType = (type) ->
-              family = @tags.filter((t) -> t.type == "family").length
-              priv = @tags.filter((t) -> t.type == "private").length
-              prof = @tags.filter((t) -> t.type == "prof").length
+              family = @tags.filter((t) -> t.type == "pp-family").length
+              priv = @tags.filter((t) -> t.type == "pp-private").length
+              prof = @tags.filter((t) -> t.type == "pp-prof").length
               switch type
                 when "family"
                   family
