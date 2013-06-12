@@ -6,17 +6,21 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       @name_1 = ko.observable().extend
         required:
           message: "Имя 1 должно быть заполнено."
-        pattern:
-          message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.'
-          params: '^\\s*\\w+\\s+\\w+\\s*$'
-          #params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+      ###
+      pattern:
+        message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.'
+        params: '^\\s*\\w+\\s+\\w+\\s*$'
+        params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+      ###
       @name_2 = ko.observable().extend
         required:
           message: "Имя 2 должно быть заполнено."
-        pattern:
-          message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.'
-          params: '^\\s*\\w+\\s+\\w+\\s*$'
-          #params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+      ###
+      pattern:
+        message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.'
+        params: '^\\s*\\w+\\s+\\w+\\s*$'
+        params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+      ###
       @url = ko.observable().extend
         required:
           message: "Ссылка на источник долна быть заполнена."
