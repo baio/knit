@@ -30,10 +30,18 @@
             params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
           }
         });
+        this.url = ko.observable().extend({
+          required: {
+            message: "Ссылка на источник долна быть заполнена."
+          },
+          pattern: {
+            message: 'Ссылка на источник имеет неверный формат.',
+            params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
+          }
+        });
         this.relations = ko.observableArray([]);
         this.date = ko.observable();
         this.dateTo = ko.observable();
-        this.url = ko.observable();
         this.source = ko.observable();
         this.scheme = ko.observable();
         this._id = ko.observable();
@@ -141,6 +149,7 @@
         this.dateTo(null);
         this.source(null);
         this.scheme(null);
+        this.setIsModifyed(false);
         return $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus();
       };
 

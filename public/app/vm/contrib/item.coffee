@@ -15,10 +15,15 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
         pattern:
           message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.'
           params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+      @url = ko.observable().extend
+        required:
+          message: "Ссылка на источник долна быть заполнена."
+        pattern:
+          message: 'Ссылка на источник имеет неверный формат.'
+          params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
       @relations = ko.observableArray([])
       @date = ko.observable()
       @dateTo = ko.observable()
-      @url = ko.observable()
       @source = ko.observable()
       @scheme = ko.observable()
       @_id = ko.observable()
@@ -85,6 +90,7 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       @dateTo(null)
       @source(null)
       @scheme(null)
+      @setIsModifyed(false)
       $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus()
 
     swapFieldsWhenSchemeChanged: ->

@@ -68,7 +68,7 @@
       };
 
       ViewModel.prototype.map = function(data) {
-        var d, dataIndexVM, prop, _ref;
+        var d, dataIndexVM, prop;
 
         if ($.isArray()) {
           data = data[0];
@@ -93,7 +93,25 @@
           if (!__hasProp.call(dataIndexVM, prop)) continue;
           this[prop].map(dataIndexVM[prop]);
         }
-        return (_ref = ko.validation) != null ? _ref.group(this) : void 0;
+        if (ko.validation) {
+          this._validationGroup = ko.validation.group(this);
+          return this.setIsModifyed(false);
+        }
+      };
+
+      ViewModel.prototype.setIsModifyed = function(val) {
+        var prop, _base, _results;
+
+        _results = [];
+        for (prop in this) {
+          if (!__hasProp.call(this, prop)) continue;
+          if (ko.isObservable(this[prop])) {
+            _results.push(typeof (_base = this[prop]).isModified === "function" ? _base.isModified(val) : void 0);
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
       };
 
       ViewModel.prototype.tryDate = function(str) {
@@ -355,7 +373,7 @@
       };
 
       ViewModel.prototype.save = function(data, event) {
-        var status, _done,
+        var status, _done, _ref,
           _this = this;
 
         if (event) {
@@ -368,6 +386,9 @@
         if (!this.getIsChanged()) {
           return _done();
         } else if (!this.isValid()) {
+          if ((_ref = this._validationGroup) != null) {
+            _ref.showAllMessages(true);
+          }
           return _done("Not valid");
         } else if (status === "create") {
           return this.create(_done);

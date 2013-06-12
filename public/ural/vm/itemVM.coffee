@@ -68,7 +68,14 @@ define ["ural/modules/pubSub"], (pubSub) ->
       for own prop of dataIndexVM
         @[prop].map dataIndexVM[prop]
 
-      ko.validation?.group @
+      if ko.validation
+        @_validationGroup = ko.validation.group @
+        @setIsModifyed(false)
+
+    setIsModifyed: (val) ->
+      for own prop of @
+        if ko.isObservable(@[prop])
+          @[prop].isModified?(val)
 
     tryDate: (str) ->
       if str and typeof str == "string"
@@ -234,6 +241,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
       if !@getIsChanged()
         _done()
       else if !@isValid()
+        @_validationGroup?.showAllMessages(true)
         _done "Not valid"
       else if status == "create"
         @create _done
