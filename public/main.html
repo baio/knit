@@ -34,6 +34,7 @@
     <script src="assets/js/toastr.min.js"></script>
     <script src="assets/js/jsrender.js"></script>
     <script src="assets/js/mousetrap.min.js"></script>
+    <script src="assets/js/mousetrap-global-bind.min.js"></script>
     <script src="assets/js/moment.min.js"></script>
     <script src="assets/js/jstorage.min.js"></script>
     <script src="assets/js/tag-it.js"></script>
@@ -105,10 +106,12 @@
                     <span class="icon-bar"></span>
                 </a>
                 <!-- Site name for smallar screens -->
-                <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph"><span
-                        class="bold">Knit</span></a>
-                <a href="#/graph/panel" class="brand" data-bind="link: {}"><span class="bold">Knit</span></a>
-
+                <a href="index.html" class="brand" data-bind="ifnot: $data.activeGraph">
+                    <span class="bold">Knit</span>
+                </a>
+                <a href="#/graph/panel" class="brand" data-bind="link: {}">
+                    <span class="bold">Knit</span>
+                </a>
                 <ul class="nav pull-left" data-bind="visible: active() === '/graph/panel'">
                     <li class="dropdown dropdown-big" data-bind="with: activeGraph">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="text: name">

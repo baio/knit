@@ -69,6 +69,13 @@
         return $focused.focus();
       };
 
+      Controller.prototype._setFocus = function() {
+        var $focused;
+
+        $focused = $("[data-default-focus]:visible");
+        return $focused.focus();
+      };
+
       Controller.prototype.showForm = function(resource, formType, item) {
         var form,
           _this = this;
@@ -82,7 +89,8 @@
           return _this._setFormFocus(_this);
         }).on("hidden", function() {
           ko.cleanNode(form[0]);
-          return $("[data-view-engine-clean]", form[0]).empty();
+          $("[data-view-engine-clean]", form[0]).empty();
+          return _this._setFocus();
         });
         return this._setFormFocus(form);
       };
@@ -171,6 +179,7 @@
                 lmd.lm.render(lmd.data);
               }
             }
+            _this._setFocus();
           }
           if (done) {
             return done(err);

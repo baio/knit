@@ -4,6 +4,7 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     constructor: (@resource, @_index) ->
       @init()
+      @initHotKeys()
 
     @KeyFieldName: null
 
@@ -285,3 +286,8 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     onLoad: (filter, done) ->
       done null, []
+
+    initHotKeys: ->
+      Mousetrap.bindGlobal 'ctrl+s', =>
+        @save()
+        false

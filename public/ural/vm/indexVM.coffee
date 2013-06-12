@@ -6,6 +6,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       @list = ko.observableArray()
       pubSub.sub "crud", "complete_create", (item) => @completeCreate item
       pubSub.sub "crud", "complete_delete", (item) => @completeDelete item
+      @initHotKeys()
 
     completeDelete: (item) ->
       if item.resource == @resource
@@ -88,7 +89,7 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
       new itemVM @resource, @
 
     startCreate: (some, event) ->
-      event.preventDefault()
+      if event then event.preventDefault()
       pubSub.pub "crud", "start",
         resource: @resource
         item: @createItem(@resource, "create")
@@ -128,3 +129,9 @@ define ["ural/vm/itemVM", "ural/modules/pubSub"], (itemVM, pubSub) ->
         if !@_isModifyedActivated
           @_isModifyedActivated = true
           @activateIsModifyed()
+
+    initHotKeys: ->
+      Mousetrap.bindGlobal '+', =>
+        @startCreate()
+        false
+

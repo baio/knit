@@ -45,15 +45,20 @@ define ["ural/viewEngine",
         $focused = $("input:visible:first", form)
       $focused.focus()
 
+    _setFocus: ->
+      $focused = $("[data-default-focus]:visible")
+      $focused.focus()
+
     showForm: (resource, formType, item) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       if !form[0] then throw "Required form not implemented"
       ko.applyBindings item, form[0]
       form.modal("show")
         .on("shown", => @_setFormFocus(this))
-        .on("hidden", ->
+        .on("hidden", =>
           ko.cleanNode form[0]
           $("[data-view-engine-clean]", form[0]).empty()
+          @_setFocus()
         )
       @_setFormFocus form
 
@@ -124,6 +129,7 @@ define ["ural/viewEngine",
               for lmd in layoutModelsData
                 if lmd.lm and $.isFunction(lmd.lm.render)
                   lmd.lm.render lmd.data
+              @_setFocus()
             if done then done err
 
     #Shortcut for view(path, model, `True`, done)

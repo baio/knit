@@ -15,6 +15,7 @@
         pubSub.sub("crud", "complete_delete", function(item) {
           return _this.completeDelete(item);
         });
+        this.initHotKeys();
       }
 
       ViewModel.prototype.completeDelete = function(item) {
@@ -142,7 +143,9 @@
       };
 
       ViewModel.prototype.startCreate = function(some, event) {
-        event.preventDefault();
+        if (event) {
+          event.preventDefault();
+        }
         return pubSub.pub("crud", "start", {
           resource: this.resource,
           item: this.createItem(this.resource, "create"),
@@ -217,6 +220,15 @@
             return this.activateIsModifyed();
           }
         }
+      };
+
+      ViewModel.prototype.initHotKeys = function() {
+        var _this = this;
+
+        return Mousetrap.bindGlobal('+', function() {
+          _this.startCreate();
+          return false;
+        });
       };
 
       return ViewModel;
