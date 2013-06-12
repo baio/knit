@@ -18,7 +18,7 @@
           },
           pattern: {
             message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.',
-            params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+            params: '^\\s*\\w+\\s+\\w+\\s*$'
           }
         });
         this.name_2 = ko.observable().extend({
@@ -27,7 +27,7 @@
           },
           pattern: {
             message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.',
-            params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+            params: '^\\s*\\w+\\s+\\w+\\s*$'
           }
         });
         this.url = ko.observable().extend({
@@ -154,13 +154,14 @@
         this.dateTo(null);
         this.source(null);
         this.scheme(null);
-        this.setIsModifyed(false);
+        this.setIsModified(false);
         return $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus();
       };
 
       ItemVM.prototype.swapFieldsWhenSchemeChanged = function() {
         if (this.relations().length) {
-          return this.relations([]);
+          this.relations([]);
+          return this.relations.isModified(false);
         }
       };
 

@@ -8,13 +8,15 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
           message: "Имя 1 должно быть заполнено."
         pattern:
           message: 'Имя 1 должно состоять из имени и фамилии разделенных пробелом.'
-          params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+          params: '^\\s*\\w+\\s+\\w+\\s*$'
+          #params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
       @name_2 = ko.observable().extend
         required:
           message: "Имя 2 должно быть заполнено."
         pattern:
           message: 'Имя 2 должно состоять из имени и фамилии разделенных пробелом.'
-          params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
+          params: '^\\s*\\w+\\s+\\w+\\s*$'
+          #params: '^\\s*[А-Я]?[а-я]+\\s+[А-Я]?[а-я]+\\s*$'
       @url = ko.observable().extend
         required:
           message: "Ссылка на источник долна быть заполнена."
@@ -93,12 +95,13 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       @dateTo(null)
       @source(null)
       @scheme(null)
-      @setIsModifyed(false)
+      @setIsModified(false)
       $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus()
 
     swapFieldsWhenSchemeChanged: ->
       if @relations().length
         @relations([])
+        @relations.isModified(false)
 
     onSaved: (err, status) ->
       if !err and status == "create" and @_isCreateNext()

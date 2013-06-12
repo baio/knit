@@ -71,9 +71,9 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
       if ko.validation
         @_validationGroup = ko.validation.group @
-        @setIsModifyed(false)
+        @setIsModified(false)
 
-    setIsModifyed: (val) ->
+    setIsModified: (val) ->
       for own prop of @
         if ko.isObservable(@[prop])
           @[prop].isModified?(val)

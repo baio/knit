@@ -96,11 +96,11 @@
         }
         if (ko.validation) {
           this._validationGroup = ko.validation.group(this);
-          return this.setIsModifyed(false);
+          return this.setIsModified(false);
         }
       };
 
-      ViewModel.prototype.setIsModifyed = function(val) {
+      ViewModel.prototype.setIsModified = function(val) {
         var prop, _base, _results;
 
         _results = [];

@@ -85,11 +85,21 @@ define ->
       gopts = $.extend(gopts, opts)
       value = ko.utils.unwrapObservable valueAccessor()
       #console.log value
-      $(element).tagit("removeAll")
-      for tag in value
-        label = if $.isFunction(gopts.fields.label) then gopts.fields.label(tag) else tag[gopts.fields.label]()
-        #assignedTags = $(element).tagit("assignedTags")
-        #if assignedTags.indexOf(label) == -1
-        $(element).tagit("createTag", label, null, true)
+      if value.length
+        valLabels = value.map (m) ->
+          if $.isFunction(gopts.fields.label) then gopts.fields.label(m) else m[gopts.fields.label]()
+        #remove unused
+        assignedTags = $(element).tagit("assignedTags")
+        for label in assignedTags
+          if valLabels.indexOf(label) == -1
+            $(element).tagit("removeTag", label, null, true)
+        #append new
+        assignedTags = $(element).tagit("assignedTags")
+        for label in valLabels
+          #label = if $.isFunction(gopts.fields.label) then gopts.fields.label(tag) else tag[gopts.fields.label]()
+          if assignedTags.indexOf(label) == -1
+            $(element).tagit("createTag", label, null, true)
+      else
+        $(element).tagit("removeAll")
 
   gOpts

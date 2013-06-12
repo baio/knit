@@ -128,7 +128,7 @@
         });
       },
       update: function(element, valueAccessor, allBindingsAccessor) {
-        var gopts, label, opts, tag, value, _i, _len, _results;
+        var assignedTags, gopts, label, opts, valLabels, value, _i, _j, _len, _len1, _results;
 
         if ($(element).data("tag-it.frozen")) {
           return;
@@ -137,14 +137,35 @@
         opts = allBindingsAccessor().tageditOpts;
         gopts = $.extend(gopts, opts);
         value = ko.utils.unwrapObservable(valueAccessor());
-        $(element).tagit("removeAll");
-        _results = [];
-        for (_i = 0, _len = value.length; _i < _len; _i++) {
-          tag = value[_i];
-          label = $.isFunction(gopts.fields.label) ? gopts.fields.label(tag) : tag[gopts.fields.label]();
-          _results.push($(element).tagit("createTag", label, null, true));
+        if (value.length) {
+          valLabels = value.map(function(m) {
+            if ($.isFunction(gopts.fields.label)) {
+              return gopts.fields.label(m);
+            } else {
+              return m[gopts.fields.label]();
+            }
+          });
+          assignedTags = $(element).tagit("assignedTags");
+          for (_i = 0, _len = assignedTags.length; _i < _len; _i++) {
+            label = assignedTags[_i];
+            if (valLabels.indexOf(label) === -1) {
+              $(element).tagit("removeTag", label, null, true);
+            }
+          }
+          assignedTags = $(element).tagit("assignedTags");
+          _results = [];
+          for (_j = 0, _len1 = valLabels.length; _j < _len1; _j++) {
+            label = valLabels[_j];
+            if (assignedTags.indexOf(label) === -1) {
+              _results.push($(element).tagit("createTag", label, null, true));
+            } else {
+              _results.push(void 0);
+            }
+          }
+          return _results;
+        } else {
+          return $(element).tagit("removeAll");
         }
-        return _results;
       }
     };
     return gOpts;
