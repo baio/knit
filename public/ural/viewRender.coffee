@@ -30,7 +30,7 @@ define ->
   __renderPartialViews = (html, callback) ->
     partialViews = $("[data-partial-view]", html)
     rawPaths = $.makeArray(partialViews.map (i, p) -> $(p).attr "data-partial-view")
-    paths = rawPaths.map (p) -> "Ural/Libs/text!#{p}"
+    paths = rawPaths.map (p) -> "ural/libs/text!#{p}"
     if paths.length
       require paths, ->
         partialHtmls = _argsToArray arguments
