@@ -4,10 +4,11 @@
     var _dev, _prod;
 
     _dev = {
-      disable_cache: false,
+      disable_cache: true,
       base_url: "/srv"
     };
     _prod = {
+      disable_cache: true,
       base_url: "/srv"
     };
     return _dev;
