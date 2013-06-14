@@ -18,34 +18,26 @@
                 <thead>
                 <tr>
                     <th>Имя 1</th>
+                    <th>Связь</th>
                     <th>Имя 2</th>
-                    <th>Семейные<br/>связи</th>
-                    <th>Частные<br/>связи</th>
-                    <th>Проф.<br/>связи</th>
                 </tr>
                 </thead>
-                <tbody data-bind="template: { name: 'contrib-item-template', foreach: list}">
+                <tbody data-bind="template: { name: 'contrib-item-row-template', foreach: list}">
                 </tbody>
             </table>
         </div>
     </div>
 
-    <script type="text/html" id="contrib-item-template">
+    <script type="text/html" id="contrib-item-row-template">
         <tr>
             <td>
                 <span data-bind="text: name_1"></span>
             </td>
+            <td data-bind="foreach: relations">
+                <span class="badge badge-info" data-bind="text: val"></span>
+            </td>
             <td>
                 <span data-bind="text: name_2"></span>
-            </td>
-            <td>
-                <span class="label label-info" data-bind="text: family_rel"></span>
-            </td>
-            <td>
-                <span class="label label-info" data-bind="text: private_rel"></span>
-            </td>
-            <td>
-                <span class="label label-info" data-bind="text: prof_rel"></span>
             </td>
         </tr>
     </script>
