@@ -31,7 +31,7 @@
         return $(p).attr("data-partial-view");
       }));
       paths = rawPaths.map(function(p) {
-        return "Ural/Libs/text!" + p;
+        return "ural/libs/text!" + p;
       });
       if (paths.length) {
         return require(paths, function() {

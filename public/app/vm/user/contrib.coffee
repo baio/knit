@@ -15,12 +15,14 @@ define [
         minLength:
           message: "Имя должно сотоять как минимум из 3-х символов."
           params: 3
+      ###
       @url = ko.observable().extend
         required:
           message: "Ссылка должна быть заполнена."
         pattern:
           message: "Ссылка имеет неверный формат."
           params: "^(https?:\\/\\/)?([\\da-z\\.-]+)\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$"
+      ###
       @isSelected = ko.observable()
       super "contrib", _index
 

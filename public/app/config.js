@@ -8,6 +8,7 @@
       base_url: "/srv"
     };
     _prod = {
+      disable_cache: true,
       base_url: "/srv"
     };
     return _dev;
