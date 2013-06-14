@@ -392,12 +392,21 @@
           }
           return _done("Not valid");
         } else if (status === "create") {
+          this.onSaving();
           return this.create(_done);
         } else if (status === "update") {
+          this.onSaving();
           return this.update(_done);
         } else {
           throw new Error("Item not in edit state");
         }
+      };
+
+      ViewModel.prototype.onSaving = function() {
+        return pubSub.pub("crud", "before", {
+          resource: this.resource,
+          type: status
+        });
       };
 
       ViewModel.prototype.onSaved = function(err, status) {

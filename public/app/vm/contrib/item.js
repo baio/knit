@@ -42,7 +42,7 @@
           },
           pattern: {
             message: 'Ссылка на источник имеет неверный формат.',
-            params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
+            params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w\\,_%\\.-]*)*\\/?$'
           }
         });
         this.relations = ko.observableArray([]).extend({
@@ -153,12 +153,8 @@
       };
 
       ItemVM.prototype.swapFields = function() {
-        this.name_1(null);
         this.name_2(null);
         this.relations([]);
-        this.date(null);
-        this.dateTo(null);
-        this.source(null);
         this.scheme(null);
         this.setIsModified(false);
         return $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus();

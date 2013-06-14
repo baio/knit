@@ -15,6 +15,7 @@ define ["ural/viewEngine",
         pubSub.sub "msg", "show", (params) => @msgShow params
         pubSub.sub "crud", "start", (params) => @crudStart params
         pubSub.sub "crud", "end", (params) => @crudEnd params
+        pubSub.sub "crud", "before", (params) => @crudBefore params
 
     @IsSubscribed: false
 
@@ -27,6 +28,11 @@ define ["ural/viewEngine",
         msg = params.msg
       if notifyType
         @notify msg, null, notifyType
+
+    crudBefore: (params) ->
+      console.log "crudBefore",  params
+      $focused = $(":focus")
+      $focused.trigger("blur")
 
     crudStart: (params) ->
       @showForm params.resource, params.type, params.item

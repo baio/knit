@@ -24,6 +24,9 @@
           pubSub.sub("crud", "end", function(params) {
             return _this.crudEnd(params);
           });
+          pubSub.sub("crud", "before", function(params) {
+            return _this.crudBefore(params);
+          });
         }
       }
 
@@ -42,6 +45,14 @@
         if (notifyType) {
           return this.notify(msg, null, notifyType);
         }
+      };
+
+      Controller.prototype.crudBefore = function(params) {
+        var $focused;
+
+        console.log("crudBefore", params);
+        $focused = $(":focus");
+        return $focused.trigger("blur");
       };
 
       Controller.prototype.crudStart = function(params) {

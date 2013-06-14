@@ -21,21 +21,32 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             edge.target = data.nodes.filter((n) -> n.id == edge.target_id)[0]
             edge.source = data.nodes.filter((n) -> n.id == edge.source_id)[0]
             edge.isType = (type) ->
-              family = @tags.filter((t) -> t.type == "pp-family").length
-              priv = @tags.filter((t) -> t.type == "pp-private").length
-              prof = @tags.filter((t) -> t.type == "pp-prof").length
+              pp = @tags.filter((t) -> t.type.indexOf("pp-") == 0).length
+              po = @tags.filter((t) -> t.type.indexOf("po-") == 0).length
+              oo = @tags.filter((t) -> t.type.indexOf("oo-") == 0).length
               switch type
-                when "family"
-                  family
-                when "private"
-                  !family and priv
-                when "prof"
-                  !family and !priv and prof
-
+                when "pp"
+                  pp
+                when "po"
+                  po
+                when "oo"
+                  oo
           for node in data.nodes
             pos = node.meta.pos
             if pos[0] == -1 then pos[0] = 500
             if pos[1] == -1 then pos[1] = 500
+            source_edge = data.edges.filter((f) -> f.source == node)[0]
+            target_edge = data.edges.filter((f) -> f.target == node)[0]
+            if source_edge
+              type = source_edge.tags[0].type
+              node.type = "person" if type.indexOf("pp-") == 0 or type.indexOf("po-") == 0
+              node.type = "org" if type.indexOf("oo-") == 0
+            if target_edge
+              type = target_edge.tags[0].type
+              node.type = "person" if type.indexOf("pp-") == 0
+              node.type = "org" if type.indexOf("po-") == 0 or type.indexOf("oo-") == 0
+            node.isType = (type) ->
+              @type == type
         done err, data
 
     render: (data) ->
@@ -62,9 +73,9 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .enter()
         .append("line")
         .classed("link", true)
-        .classed("family_rel", (d) -> d.isType("family"))
-        .classed("private_rel", (d) -> d.isType("private"))
-        .classed("prof_rel", (d) -> d.isType("prof"))
+        .classed("person-person", (d) -> d.isType("pp"))
+        .classed("person-org", (d) -> d.isType("po"))
+        .classed("org-org", (d) -> d.isType("oo"))
         .attr("x1", (d) -> d.source.meta.pos[0])
         .attr("y1", (d) -> d.source.meta.pos[1])
         .attr("x2", (d) -> d.target.meta.pos[0])
@@ -90,6 +101,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("class", "node")
         .attr("cx", (d) -> d.meta.pos[0])
         .attr("cy", (d) -> d.meta.pos[1])
+        .classed("org", (d) -> d.isType("org"))
+        .classed("person", (d) -> d.isType("person"))
         .call(d3.behavior.drag()
           .origin((d) -> d)
           .on("drag", (d) ->

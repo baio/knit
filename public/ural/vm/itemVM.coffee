@@ -245,11 +245,18 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @_validationGroup?.showAllMessages(true)
         _done "Not valid"
       else if status == "create"
+        @onSaving()
         @create _done
       else if status == "update"
+        @onSaving()
         @update _done
       else
         throw new Error("Item not in edit state")
+
+    onSaving: ->
+      pubSub.pub "crud", "before",
+        resource: @resource
+        type: status
 
     onSaved: (err, status) ->
       pubSub.pub "crud", "end",

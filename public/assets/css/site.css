@@ -47,6 +47,32 @@ body {
     stroke: deepskyblue;
 }
 
+line.person-person
+{
+    stroke: red;
+}
+
+line.person-org
+{
+    stroke: #999;
+}
+
+line.org-org
+{
+    stroke: deepskyblue;
+}
+
+circle.person
+{
+    stroke: red;
+}
+
+circle.org
+{
+    stroke: deepskyblue;
+}
+
+
 .graph-panel
 {
     background-color: lightgray;

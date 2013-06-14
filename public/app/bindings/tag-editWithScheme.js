@@ -20,13 +20,22 @@
             var opts;
 
             opts = allBindingsAccessor().tageditOpts;
-            return opts.scheme.type.join(",");
+            if (Array.isArray(opts.scheme.type)) {
+              return opts.scheme.type.join(",");
+            } else {
+              return opts.scheme.type;
+            }
           }
         };
         _opts.getDefault = function(label) {
-          var opts;
+          var default_type, opts, type;
 
           opts = allBindingsAccessor().tageditOpts;
+          default_type = opts.scheme.default_type;
+          if (!default_type) {
+            type = opts.scheme.type;
+            default_type = Array.isArray(type) ? type[0] : type;
+          }
           return {
             key: label,
             label: label,
@@ -35,7 +44,7 @@
               key: label,
               label: label,
               val: label,
-              type: opts.scheme.default_type
+              type: default_type
             }
           };
         };

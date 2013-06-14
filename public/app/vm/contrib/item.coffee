@@ -26,7 +26,8 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
           message: "Ссылка на источник долна быть заполнена."
         pattern:
           message: 'Ссылка на источник имеет неверный формат.'
-          params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
+          params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w\\,_%\\.-]*)*\\/?$'
+          #params: '^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$'
       @relations = ko.observableArray([]).extend
         minLength:
           params: 1
@@ -92,12 +93,12 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       new ItemVM @resource, @_index
 
     swapFields: ->
-      @name_1(null)
+      #@name_1(null)
       @name_2(null)
       @relations([])
-      @date(null)
-      @dateTo(null)
-      @source(null)
+      #@date(null)
+      #@dateTo(null)
+      #@source(null)
       @scheme(null)
       @setIsModified(false)
       $("[data-default-focus]", $("[data-form-resource='contrib-item']:visible")).focus()

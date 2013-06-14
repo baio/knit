@@ -36,7 +36,7 @@
         var _this = this;
 
         return dataProvider.get("graphs", filter, function(err, data) {
-          var edge, node, pos, _i, _j, _len, _len1, _ref, _ref1;
+          var edge, node, pos, source_edge, target_edge, type, _i, _j, _len, _len1, _ref, _ref1;
 
           if (!err) {
             _this.id = data.id;
@@ -50,24 +50,24 @@
                 return n.id === edge.source_id;
               })[0];
               edge.isType = function(type) {
-                var family, priv, prof;
+                var oo, po, pp;
 
-                family = this.tags.filter(function(t) {
-                  return t.type === "pp-family";
+                pp = this.tags.filter(function(t) {
+                  return t.type.indexOf("pp-") === 0;
                 }).length;
-                priv = this.tags.filter(function(t) {
-                  return t.type === "pp-private";
+                po = this.tags.filter(function(t) {
+                  return t.type.indexOf("po-") === 0;
                 }).length;
-                prof = this.tags.filter(function(t) {
-                  return t.type === "pp-prof";
+                oo = this.tags.filter(function(t) {
+                  return t.type.indexOf("oo-") === 0;
                 }).length;
                 switch (type) {
-                  case "family":
-                    return family;
-                  case "private":
-                    return !family && priv;
-                  case "prof":
-                    return !family && !priv && prof;
+                  case "pp":
+                    return pp;
+                  case "po":
+                    return po;
+                  case "oo":
+                    return oo;
                 }
               };
             }
@@ -81,6 +81,33 @@
               if (pos[1] === -1) {
                 pos[1] = 500;
               }
+              source_edge = data.edges.filter(function(f) {
+                return f.source === node;
+              })[0];
+              target_edge = data.edges.filter(function(f) {
+                return f.target === node;
+              })[0];
+              if (source_edge) {
+                type = source_edge.tags[0].type;
+                if (type.indexOf("pp-") === 0 || type.indexOf("po-") === 0) {
+                  node.type = "person";
+                }
+                if (type.indexOf("oo-") === 0) {
+                  node.type = "org";
+                }
+              }
+              if (target_edge) {
+                type = target_edge.tags[0].type;
+                if (type.indexOf("pp-") === 0) {
+                  node.type = "person";
+                }
+                if (type.indexOf("po-") === 0 || type.indexOf("oo-") === 0) {
+                  node.type = "org";
+                }
+              }
+              node.isType = function(type) {
+                return this.type === type;
+              };
             }
           }
           return done(err, data);
@@ -103,12 +130,12 @@
         */
 
         svg = d3.select("#graph").append("svg").attr("width", 2500).attr("height", 1200);
-        link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("family_rel", function(d) {
-          return d.isType("family");
-        }).classed("private_rel", function(d) {
-          return d.isType("private");
-        }).classed("prof_rel", function(d) {
-          return d.isType("prof");
+        link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("person-person", function(d) {
+          return d.isType("pp");
+        }).classed("person-org", function(d) {
+          return d.isType("po");
+        }).classed("org-org", function(d) {
+          return d.isType("oo");
         }).attr("x1", function(d) {
           return d.source.meta.pos[0];
         }).attr("y1", function(d) {
@@ -129,6 +156,10 @@
           return d.meta.pos[0];
         }).attr("cy", function(d) {
           return d.meta.pos[1];
+        }).classed("org", function(d) {
+          return d.isType("org");
+        }).classed("person", function(d) {
+          return d.isType("person");
         }).call(d3.behavior.drag().origin(function(d) {
           return d;
         }).on("drag", function(d) {

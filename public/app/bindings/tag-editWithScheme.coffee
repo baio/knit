@@ -12,9 +12,13 @@ define ["ural/bindings/tag-edit"], ->
           opts.scheme.index
         type: ->
           opts = allBindingsAccessor().tageditOpts
-          opts.scheme.type.join(",")
+          if Array.isArray(opts.scheme.type) then opts.scheme.type.join(",") else opts.scheme.type
       _opts.getDefault = (label) ->
         opts = allBindingsAccessor().tageditOpts
+        default_type = opts.scheme.default_type
+        if !default_type
+          type = opts.scheme.type
+          default_type = if Array.isArray(type) then type[0] else type
         key: label
         label: label
         value: label
@@ -22,7 +26,7 @@ define ["ural/bindings/tag-edit"], ->
           key: label
           label: label
           val: label
-          type: opts.scheme.default_type
+          type: default_type
 
       ko.bindingHandlers.tagedit.init element, valueAccessor, allBindingsAccessor, viewModel
 
