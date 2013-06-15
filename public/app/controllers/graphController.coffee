@@ -2,9 +2,10 @@ define [
         "app/controllers/controllerBase",
         "app/vm/graph/panel",
         "app/vm/graph/data",
-        "app/vm/graph/toolbox"
+        "app/vm/graph/toolbox",
+        "app/vm/graph/panelToolbox"
 ],
-(controllerBase, Panel, Data, toolbox) ->
+(controllerBase, Panel, Data, toolbox, panelToolbox) ->
 
   class GraphController extends controllerBase.Controller
 
@@ -14,6 +15,7 @@ define [
         _layouts:
           _body: {loader : pl, filter : {graph : graph}}
           _toolbox: new toolbox(@nav, pl)
+          _panelToolbox: new panelToolbox(@nav, pl)
       ,(err) =>
         if !err
           @nav.activeGraph.id pl.data.id

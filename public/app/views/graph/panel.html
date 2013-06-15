@@ -1,5 +1,5 @@
 <div style="margin-left: -20px; margin-top: -12px">
-    <div class="affix graph-panel" id="_toolbox">
+    <div class="affix graph-toolbox-dock" id="_toolbox">
         <!-- ko if : name_src() -->
         <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: moveToConner"><i class="icon-eject"></i></button>
@@ -23,6 +23,44 @@
             <!-- /ko -->
         </ul>
         <!-- /ko -->
+    </div>
+    <div id="_panelToolbox">
+        <div class="affix graph-toolbox" data-bind="visible: isShown">
+            <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: hide"><i class="icon-remove"></i></button>
+                <li><b>Свойства графа</b></li>
+                <li class="divider"></li>
+                <li>
+                    <h6>Цветовая схема</h6>
+                    <select>
+                        <option>Темная</option>
+                        <option>Светлая</option>
+                    </select>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <h6>Метки</h6>
+                    <select>
+                        <option>Маленькие</option>
+                        <option>Большие</option>
+                        <option>Не показвать</option>
+                    </select>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <h6>Расположение</h6>
+                    <select>
+                        <option>Использовать силу связей</option>
+                        <option>Не использовать</option>
+                    </select>
+                    <a href="#" style="color: blue; padding: 0px;">сбросить</a>
+                    <a href="#" style="color: blue; padding: 0px;">сохранить</a>
+                </li>
+            </ul>
+        </div>
+        <div class="affix graph-toolbox" data-bind="visible: !isShown()">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: show"><i class="icon-chevron-right" style="color: white"></i></button>
+        </div>
     </div>
     <div class="graph-container" id="_body">
         <div id="graph" style="width: 2500px; height: 1200px;"></div>

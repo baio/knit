@@ -40,67 +40,31 @@ body {
     fill: lightgreen;
     font-size: 10px;
 }
-/*
-.family_rel
-{
-    stroke: red;
-}
 
-.prof_rel
+.graph-toolbox
 {
-    stroke: #999;
-}
-
-.private_rel
-{
-    stroke: deepskyblue;
-}
-
-line.person-person
-{
-    stroke: red;
-}
-
-line.person-org
-{
-    stroke: #999;
-}
-
-line.org-org
-{
-    stroke: deepskyblue;
-}
-
-circle.person
-{
-    stroke: red;
-}
-
-circle.org
-{
-    stroke: deepskyblue;
-}
-*/
-
-.graph-panel
-{
-    /*background-color: lightgray;*/
     z-index: 1;
-    /*color: #000000;*/
+    /*margin-left: 20px;*/
+    /*margin-top: 20px;*/
+    /*background-color: white;*/
+    /*
+    background-color: rgb(102, 102, 102);
+    color: white;
+    padding: 20px;
+    */
+}
+
+.graph-toolbox-dock
+{
+    z-index: 1;
     margin-left: 20px;
     margin-top: 20px;
-    /*background-color: #fff;*/
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
     -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
     box-shadow: 0 1px 4px rgba(0,0,0,.065);
-    /*
-    width: 200px;
-    padding-left: 50px;
-    padding-top: 10px;
-    */
 }
 
 .mainbar {
