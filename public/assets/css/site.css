@@ -15,6 +15,11 @@ body {
 }
 
 .link {
+    /*
+    stroke: #999;
+    stroke-opacity: .8;
+    cursor: help;
+    */
     stroke: #999;
     stroke-opacity: .8;
     cursor: help;
@@ -22,16 +27,20 @@ body {
 
 
 .node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+    /*
     stroke: #999;
     stroke-width: 1.5px;
     fill: #222;
+    */
 }
 
 .text {
     fill: lightgreen;
     font-size: 15px;
 }
-
+/*
 .family_rel
 {
     stroke: red;
@@ -71,16 +80,16 @@ circle.org
 {
     stroke: deepskyblue;
 }
-
+*/
 
 .graph-panel
 {
-    background-color: lightgray;
+    /*background-color: lightgray;*/
     z-index: 1;
-    color: #000000;
+    /*color: #000000;*/
     margin-left: 20px;
     margin-top: 20px;
-    background-color: #fff;
+    /*background-color: #fff;*/
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;

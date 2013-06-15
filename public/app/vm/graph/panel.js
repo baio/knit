@@ -33,10 +33,58 @@
       };
 
       Panel.prototype.load = function(filter, done) {
-        var _this = this;
+        var getEdgeGroup, getNodeGroup,
+          _this = this;
 
+        getEdgeGroup = function(edge) {
+          var tags;
+
+          tags = edge.tags;
+          if (tags.filter(function(t) {
+            return t.type.indexOf("pp-") === 0;
+          }).length) {
+            return 0;
+          } else if (tags.filter(function(t) {
+            return t.type.indexOf("po-") === 0;
+          }).length) {
+            return 1;
+          } else if (tags.filter(function(t) {
+            return t.type.indexOf("oo-") === 0;
+          }).length) {
+            return 2;
+          } else {
+            return 3;
+          }
+        };
+        getNodeGroup = function(edges, node) {
+          var source_edge, target_edge, type;
+
+          source_edge = edges.filter(function(f) {
+            return f.source === node;
+          })[0];
+          target_edge = edges.filter(function(f) {
+            return f.target === node;
+          })[0];
+          if (source_edge) {
+            type = source_edge.tags[0].type;
+            if (type.indexOf("pp-") === 0 || type.indexOf("po-") === 0) {
+              return 0;
+            } else if (type.indexOf("oo-") === 0) {
+              return 1;
+            }
+          }
+          if (target_edge) {
+            type = target_edge.tags[0].type;
+            if (type.indexOf("pp-") === 0) {
+              return 0;
+            } else if (type.indexOf("po-") === 0 || type.indexOf("oo-") === 0) {
+              return 1;
+            }
+          }
+          return 2;
+        };
         return dataProvider.get("graphs", filter, function(err, data) {
-          var edge, node, pos, source_edge, target_edge, type, _i, _j, _len, _len1, _ref, _ref1;
+          var edge, node, pos, _i, _j, _len, _len1, _ref, _ref1;
 
           if (!err) {
             _this.id = data.id;
@@ -49,27 +97,7 @@
               edge.source = data.nodes.filter(function(n) {
                 return n.id === edge.source_id;
               })[0];
-              edge.isType = function(type) {
-                var oo, po, pp;
-
-                pp = this.tags.filter(function(t) {
-                  return t.type.indexOf("pp-") === 0;
-                }).length;
-                po = this.tags.filter(function(t) {
-                  return t.type.indexOf("po-") === 0;
-                }).length;
-                oo = this.tags.filter(function(t) {
-                  return t.type.indexOf("oo-") === 0;
-                }).length;
-                switch (type) {
-                  case "pp":
-                    return pp;
-                  case "po":
-                    return po;
-                  case "oo":
-                    return oo;
-                }
-              };
+              edge.group = getEdgeGroup(edge);
             }
             _ref1 = data.nodes;
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
@@ -81,33 +109,7 @@
               if (pos[1] === -1) {
                 pos[1] = 500;
               }
-              source_edge = data.edges.filter(function(f) {
-                return f.source === node;
-              })[0];
-              target_edge = data.edges.filter(function(f) {
-                return f.target === node;
-              })[0];
-              if (source_edge) {
-                type = source_edge.tags[0].type;
-                if (type.indexOf("pp-") === 0 || type.indexOf("po-") === 0) {
-                  node.type = "person";
-                }
-                if (type.indexOf("oo-") === 0) {
-                  node.type = "org";
-                }
-              }
-              if (target_edge) {
-                type = target_edge.tags[0].type;
-                if (type.indexOf("pp-") === 0) {
-                  node.type = "person";
-                }
-                if (type.indexOf("po-") === 0 || type.indexOf("oo-") === 0) {
-                  node.type = "org";
-                }
-              }
-              node.isType = function(type) {
-                return this.type === type;
-              };
+              node.group = getNodeGroup(data.edges, node);
             }
           }
           return done(err, data);
@@ -130,12 +132,8 @@
         */
 
         svg = d3.select("#graph").append("svg").attr("width", 2500).attr("height", 1200);
-        link = svg.selectAll("link").data(grp_edges).enter().append("line").classed("link", true).classed("person-person", function(d) {
-          return d.isType("pp");
-        }).classed("person-org", function(d) {
-          return d.isType("po");
-        }).classed("org-org", function(d) {
-          return d.isType("oo");
+        link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").style("stroke", function(d) {
+          return color(d.group);
         }).attr("x1", function(d) {
           return d.source.meta.pos[0];
         }).attr("y1", function(d) {
@@ -152,14 +150,12 @@
         }).attr("y", function(d) {
           return d.meta.pos[1] - 10;
         });
-        node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("class", "node").attr("cx", function(d) {
+        node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("cx", function(d) {
           return d.meta.pos[0];
         }).attr("cy", function(d) {
           return d.meta.pos[1];
-        }).classed("org", function(d) {
-          return d.isType("org");
-        }).classed("person", function(d) {
-          return d.isType("person");
+        }).attr("class", "link").style("fill", function(d) {
+          return color(d.group);
         }).call(d3.behavior.drag().origin(function(d) {
           return d;
         }).on("drag", function(d) {
