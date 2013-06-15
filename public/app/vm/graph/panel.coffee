@@ -171,6 +171,9 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         dx = (width - sw) / 2
         $(document).scrollLeft(dx)
 
+      @grp_nodes = grp_nodes
+      @svg = svg
+
     onHoverEdge: (edge) ->
     onClickEdge: (edge) ->
     onClickSvg: ->
@@ -179,3 +182,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       @data.nodes
 
 
+    updateText: (cls) ->
+      text = @svg.selectAll("text")
+        .data(@grp_nodes)
+        .attr("class", cls)

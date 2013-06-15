@@ -5,9 +5,37 @@
 
     return PanelToolbox = (function() {
       function PanelToolbox(nav, panel) {
+        var _this = this;
+
         this.nav = nav;
         this.panel = panel;
         this.isShown = ko.observable(false);
+        this.colorScheme = ko.observable(0);
+        this.colorSchemesList = ko.observableArray([
+          {
+            key: 0,
+            val: "Темная"
+          }, {
+            key: 1,
+            val: "Светлая"
+          }
+        ]);
+        this.colorScheme.subscribe(function(val) {
+          if (val === 0) {
+            $("#_body").removeClass("light");
+            $("#show_toolbox_panel_button").css({
+              color: "white"
+            });
+            _this.panel.updateText("text");
+          }
+          if (val === 1) {
+            $("#show_toolbox_panel_button").css({
+              color: "black"
+            });
+            $("#_body").addClass("light");
+            return _this.panel.updateText("text light");
+          }
+        });
       }
 
       PanelToolbox.prototype.hide = function() {

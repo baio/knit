@@ -14,6 +14,10 @@ body {
     width: 2500px;
 }
 
+.graph-container.light {
+    background: white;
+}
+
 .link {
     /*
     stroke: #999;
@@ -39,6 +43,10 @@ body {
 .text {
     fill: lightgreen;
     font-size: 10px;
+}
+
+.text.light{
+    fill: black;
 }
 
 .graph-toolbox
@@ -120,3 +128,4 @@ body{
 {
     background-color: #52b9e9;
 }
+

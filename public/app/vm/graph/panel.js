@@ -213,8 +213,10 @@
         }
         if (sw < width) {
           dx = (width - sw) / 2;
-          return $(document).scrollLeft(dx);
+          $(document).scrollLeft(dx);
         }
+        this.grp_nodes = grp_nodes;
+        return this.svg = svg;
       };
 
       Panel.prototype.onHoverEdge = function(edge) {};
@@ -225,6 +227,12 @@
 
       Panel.prototype.toData = function() {
         return this.data.nodes;
+      };
+
+      Panel.prototype.updateText = function(cls) {
+        var text;
+
+        return text = this.svg.selectAll("text").data(this.grp_nodes).attr("class", cls);
       };
 
       return Panel;

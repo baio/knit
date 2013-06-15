@@ -32,10 +32,13 @@
                 <li class="divider"></li>
                 <li>
                     <h6>Цветовая схема</h6>
+                    <select data-bind="options: colorSchemesList, optionsText: 'val', optionsValue: 'key', value: colorScheme"></select>
+                    <!--
                     <select>
                         <option>Темная</option>
                         <option>Светлая</option>
                     </select>
+                    -->
                 </li>
                 <li class="divider"></li>
                 <li>
@@ -59,7 +62,8 @@
             </ul>
         </div>
         <div class="affix graph-toolbox" data-bind="visible: !isShown()">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: show"><i class="icon-chevron-right" style="color: white"></i></button>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: show">
+                <i class="icon-chevron-right" id="show_toolbox_panel_button" style="color: white;"></i></button>
         </div>
     </div>
     <div class="graph-container" id="_body">
