@@ -82,6 +82,10 @@
         return cls;
       };
 
+      PanelToolbox.prototype.reset = function() {
+        return this.panel.resetPositions();
+      };
+
       PanelToolbox.prototype.hide = function() {
         return this.isShown(false);
       };

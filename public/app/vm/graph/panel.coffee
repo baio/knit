@@ -7,11 +7,17 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
     save: ->
       if @id
-        data = @toData().filter((d) -> d.meta.isMoved)
-        dataProvider.ajax "graphs", "patch", {graph: @id, data : data}, (err) ->
-          if err then toastr.error err, "Ошибка сохранения" else toastr.success "Сохранено успешно"
-
-
+        data = @toData().filter((d) -> d.meta.pos[0] != d.x or d.meta.pos[1] != d.y)
+        upd_data = data.map((d) -> id: d.id, x: d.x, y: d.y)
+        if upd_data.length != 0
+          dataProvider.ajax "graphs", "patch", {graph: @id, data : upd_data}, (err) ->
+            if err then toastr.error err, "Ошибка сохранения" else toastr.success "Сохранено успешно"
+            if !err
+              for d in data
+                d.meta.pos[0] = d.x
+                d.meta.pos[1] = d.y
+        else
+          toastr.warning "Нечего сохранять"
 
     load: (filter, done) ->
 
@@ -156,6 +162,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
       @force = force
       @grp_nodes = grp_nodes
+      @grp_edges = grp_edges
       @svg = svg
       @node = node
       @link = link
@@ -170,9 +177,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
 
     updateText: (cls) ->
-      text = @svg.selectAll("text")
-        .data(@grp_nodes)
-        .attr("class", cls)
+      @text.attr("class", cls)
 
     setForceLayout: (isSet) ->
       if isSet
@@ -190,9 +195,44 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
           x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
           y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
           d3.select(@).attr("cx", x).attr("cy", y)
+          d.x = x
+          d.y = y
           _this.link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
           _this.link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
           _this.text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
-          d.meta.pos = [x, y]
-          d.meta.isMoved = true
         )
+
+
+    resetPositions: ->
+
+      @node.attr("cx", (d) -> d.meta.pos[0])
+      @node.attr("cy", (d) -> d.meta.pos[1])
+      @link.attr("x1", (d) -> d.source.meta.pos[0])
+      @link.attr("y1", (d) -> d.source.meta.pos[1])
+      @link.attr("x2", (d) -> d.target.meta.pos[0])
+      @link.attr("y2", (d) -> d.target.meta.pos[1])
+      @text.attr("x", (d) -> d.meta.pos[0])
+      @text.attr("y", (d) -> d.meta.pos[1] - 10)
+
+
+      ###
+      @svg.selectAll("node")
+        .data(@node)
+        .attr("cx", (d) ->
+          console.log "cx"
+          d.meta.pos[0])
+        .attr("cy", (d) -> d.meta.pos[1])
+
+      @svg.selectAll("link")
+        .data(@grp_edges)
+        .attr("x1", (d) -> d.source.meta.pos[0])
+        .attr("y1", (d) -> d.source.meta.pos[1])
+        .attr("x2", (d) -> d.target.meta.pos[0])
+        .attr("y2", (d) -> d.target.meta.pos[1])
+
+      @svg.selectAll("text")
+        .data(@grp_nodes)
+        .attr("x", (d) -> d.meta.pos[0])
+        .attr("y", (d) -> d.meta.pos[1] - 10)
+      ###
+

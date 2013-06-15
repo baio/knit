@@ -45,6 +45,9 @@ define ->
         cls += " hidden"
       cls
 
+    reset: ->
+      @panel.resetPositions()
+
     hide: ->
       @isShown false
 

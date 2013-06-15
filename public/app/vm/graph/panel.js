@@ -13,22 +13,44 @@
       }
 
       Panel.prototype.save = function() {
-        var data;
+        var data, upd_data;
 
         if (this.id) {
           data = this.toData().filter(function(d) {
-            return d.meta.isMoved;
+            return d.meta.pos[0] !== d.x || d.meta.pos[1] !== d.y;
           });
-          return dataProvider.ajax("graphs", "patch", {
-            graph: this.id,
-            data: data
-          }, function(err) {
-            if (err) {
-              return toastr.error(err, "Ошибка сохранения");
-            } else {
-              return toastr.success("Сохранено успешно");
-            }
+          upd_data = data.map(function(d) {
+            return {
+              id: d.id,
+              x: d.x,
+              y: d.y
+            };
           });
+          if (upd_data.length !== 0) {
+            return dataProvider.ajax("graphs", "patch", {
+              graph: this.id,
+              data: upd_data
+            }, function(err) {
+              var d, _i, _len, _results;
+
+              if (err) {
+                toastr.error(err, "Ошибка сохранения");
+              } else {
+                toastr.success("Сохранено успешно");
+              }
+              if (!err) {
+                _results = [];
+                for (_i = 0, _len = data.length; _i < _len; _i++) {
+                  d = data[_i];
+                  d.meta.pos[0] = d.x;
+                  _results.push(d.meta.pos[1] = d.y);
+                }
+                return _results;
+              }
+            });
+          } else {
+            return toastr.warning("Нечего сохранять");
+          }
         }
       };
 
@@ -201,6 +223,7 @@
         }
         this.force = force;
         this.grp_nodes = grp_nodes;
+        this.grp_edges = grp_edges;
         this.svg = svg;
         this.node = node;
         this.link = link;
@@ -218,9 +241,7 @@
       };
 
       Panel.prototype.updateText = function(cls) {
-        var text;
-
-        return text = this.svg.selectAll("text").data(this.grp_nodes).attr("class", cls);
+        return this.text.attr("class", cls);
       };
 
       Panel.prototype.setForceLayout = function(isSet) {
@@ -245,18 +266,66 @@
           x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
           y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
           d3.select(this).attr("cx", x).attr("cy", y);
+          d.x = x;
+          d.y = y;
           _this.link.filter(function(l) {
             return l.source === d;
           }).attr("x1", x).attr("y1", y);
           _this.link.filter(function(l) {
             return l.target === d;
           }).attr("x2", x).attr("y2", y);
-          _this.text.filter(function(t) {
+          return _this.text.filter(function(t) {
             return t.id === d.id;
           }).attr("x", x).attr("y", y - 10);
-          d.meta.pos = [x, y];
-          return d.meta.isMoved = true;
         });
+      };
+
+      Panel.prototype.resetPositions = function() {
+        this.node.attr("cx", function(d) {
+          return d.meta.pos[0];
+        });
+        this.node.attr("cy", function(d) {
+          return d.meta.pos[1];
+        });
+        this.link.attr("x1", function(d) {
+          return d.source.meta.pos[0];
+        });
+        this.link.attr("y1", function(d) {
+          return d.source.meta.pos[1];
+        });
+        this.link.attr("x2", function(d) {
+          return d.target.meta.pos[0];
+        });
+        this.link.attr("y2", function(d) {
+          return d.target.meta.pos[1];
+        });
+        this.text.attr("x", function(d) {
+          return d.meta.pos[0];
+        });
+        return this.text.attr("y", function(d) {
+          return d.meta.pos[1] - 10;
+        });
+        /*
+        @svg.selectAll("node")
+          .data(@node)
+          .attr("cx", (d) ->
+            console.log "cx"
+            d.meta.pos[0])
+          .attr("cy", (d) -> d.meta.pos[1])
+        
+        @svg.selectAll("link")
+          .data(@grp_edges)
+          .attr("x1", (d) -> d.source.meta.pos[0])
+          .attr("y1", (d) -> d.source.meta.pos[1])
+          .attr("x2", (d) -> d.target.meta.pos[0])
+          .attr("y2", (d) -> d.target.meta.pos[1])
+        
+        @svg.selectAll("text")
+          .data(@grp_nodes)
+          .attr("x", (d) -> d.meta.pos[0])
+          .attr("y", (d) -> d.meta.pos[1] - 10)
+        */
+
       };
 
       return Panel;

@@ -43,8 +43,10 @@
                 <li>
                     <h6>Расположение</h6>
                     <select data-bind="options: layoutsList, optionsText: 'val', optionsValue: 'key', value: layout"></select>
-                    <a href="#" style="color: blue; padding: 0px;">сбросить</a>
-                    <a href="#" style="color: blue; padding: 0px;">сохранить</a>
+                    <span data-bind="visible: layout() == 1">
+                        <a href="#" style="color: blue; padding: 0px;" data-bind="click: reset">сбросить</a> &nbsp; &nbsp; &nbsp;
+                        <!--<a href="#" style="color: blue; padding: 0px;">сохранить</a>-->
+                    </span>
                 </li>
             </ul>
         </div>
