@@ -71,10 +71,19 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       yscale = d3.scale.linear()
         .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
       ###
+      width = 2500
+      height = 1200
+
+      force = d3.layout.force()
+        .charge(-500)
+        .linkDistance(30)
+        .linkStrength(0.1)
+        #.friction(0.9)
+        .size([width, height])
 
       svg = d3.select("#graph").append("svg")
-        .attr("width", 2500)
-        .attr("height", 1200)
+        .attr("width", width)
+        .attr("height", height)
 
       link = svg.selectAll("link")
         .data(grp_edges)
@@ -108,6 +117,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("cy", (d) -> d.meta.pos[1])
         .attr("class", "link")
         .style("fill", (d) -> color(d.group))
+        .call(force.drag)
+        ###
         .call(d3.behavior.drag()
           .origin((d) -> d)
           .on("drag", (d) ->
@@ -120,6 +131,26 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             d.meta.pos = [x, y]
             d.meta.isMoved = true
           ))
+        ###
+
+
+      force
+        .nodes(grp_nodes)
+        .links(grp_edges)
+        .start()
+
+      force.on "tick", ->
+        link
+          .attr("x1", (d) -> d.source.x)
+          .attr("y1", (d) -> d.source.y)
+          .attr("x2", (d) -> d.target.x)
+          .attr("y2", (d) -> d.target.y)
+        node
+          .attr("cx", (d) -> d.x)
+          .attr("cy", (d) -> d.y)
+        text
+          .attr("x", (d) -> d.x)
+          .attr("y", (d) -> d.y - 10)
 
       Mousetrap.bind ['ctrl+s'], =>
         if @data.isYours

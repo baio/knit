@@ -117,7 +117,7 @@
       };
 
       Panel.prototype.render = function(data) {
-        var color, grp_edges, grp_nodes, link, node, svg, text,
+        var color, force, grp_edges, grp_nodes, height, link, node, svg, text, width,
           _this = this;
 
         this.data = data;
@@ -131,7 +131,10 @@
           .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
         */
 
-        svg = d3.select("#graph").append("svg").attr("width", 2500).attr("height", 1200);
+        width = 2500;
+        height = 1200;
+        force = d3.layout.force().charge(-500).linkDistance(30).linkStrength(0.1).size([width, height]);
+        svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height);
         link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").style("stroke", function(d) {
           return color(d.group);
         }).attr("x1", function(d) {
@@ -156,26 +159,44 @@
           return d.meta.pos[1];
         }).attr("class", "link").style("fill", function(d) {
           return color(d.group);
-        }).call(d3.behavior.drag().origin(function(d) {
-          return d;
-        }).on("drag", function(d) {
-          var x, y;
+        }).call(force.drag);
+        /*
+          .call(d3.behavior.drag()
+            .origin((d) -> d)
+            .on("drag", (d) ->
+              x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
+              y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
+              d3.select(@).attr("cx", x).attr("cy", y)
+              link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
+              link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
+              text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
+              d.meta.pos = [x, y]
+              d.meta.isMoved = true
+            ))
+        */
 
-          x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
-          y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
-          d3.select(this).attr("cx", x).attr("cy", y);
-          link.filter(function(l) {
-            return l.source === d;
-          }).attr("x1", x).attr("y1", y);
-          link.filter(function(l) {
-            return l.target === d;
-          }).attr("x2", x).attr("y2", y);
-          text.filter(function(t) {
-            return t.id === d.id;
-          }).attr("x", x).attr("y", y - 10);
-          d.meta.pos = [x, y];
-          return d.meta.isMoved = true;
-        }));
+        force.nodes(grp_nodes).links(grp_edges).start();
+        force.on("tick", function() {
+          link.attr("x1", function(d) {
+            return d.source.x;
+          }).attr("y1", function(d) {
+            return d.source.y;
+          }).attr("x2", function(d) {
+            return d.target.x;
+          }).attr("y2", function(d) {
+            return d.target.y;
+          });
+          node.attr("cx", function(d) {
+            return d.x;
+          }).attr("cy", function(d) {
+            return d.y;
+          });
+          return text.attr("x", function(d) {
+            return d.x;
+          }).attr("y", function(d) {
+            return d.y - 10;
+          });
+        });
         return Mousetrap.bind(['ctrl+s'], function() {
           if (_this.data.isYours) {
             _this.save();
