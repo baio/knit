@@ -117,11 +117,12 @@
       };
 
       Panel.prototype.render = function(data) {
-        var color, force, grp_edges, grp_nodes, height, link, node, svg, text, width,
+        var color, dx, dy, force, grp_edges, grp_nodes, height, link, node, sh, svg, sw, text, width,
           _this = this;
 
         this.data = data;
         color = d3.scale.category20();
+        console.log(color(0));
         grp_nodes = data.nodes;
         grp_edges = data.edges;
         /*
@@ -163,7 +164,7 @@
         /*
           .call(d3.behavior.drag()
             .origin((d) -> d)
-            .on("drag", (d) ->
+            .on("dragend", (d) ->
               x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
               y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
               d3.select(@).attr("cx", x).attr("cy", y)
@@ -172,6 +173,7 @@
               text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
               d.meta.pos = [x, y]
               d.meta.isMoved = true
+              console.log "drag"
             ))
         */
 
@@ -197,12 +199,22 @@
             return d.y - 10;
           });
         });
-        return Mousetrap.bind(['ctrl+s'], function() {
+        Mousetrap.bind(['ctrl+s'], function() {
           if (_this.data.isYours) {
             _this.save();
           }
           return false;
         });
+        sh = screen.height;
+        sw = screen.width;
+        if (sh < height) {
+          dy = (height - sh) / 2;
+          $(document).scrollTop(dy);
+        }
+        if (sw < width) {
+          dx = (width - sw) / 2;
+          return $(document).scrollLeft(dx);
+        }
       };
 
       Panel.prototype.onHoverEdge = function(edge) {};

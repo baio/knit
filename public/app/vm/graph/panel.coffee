@@ -61,6 +61,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       @data = data
 
       color = d3.scale.category20()
+      console.log color(0)
 
       grp_nodes = data.nodes
       grp_edges = data.edges
@@ -121,7 +122,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         ###
         .call(d3.behavior.drag()
           .origin((d) -> d)
-          .on("drag", (d) ->
+          .on("dragend", (d) ->
             x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
             y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
             d3.select(@).attr("cx", x).attr("cy", y)
@@ -130,8 +131,10 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
             d.meta.pos = [x, y]
             d.meta.isMoved = true
+            console.log "drag"
           ))
         ###
+
 
 
       force
@@ -156,6 +159,16 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         if @data.isYours
           @save()
         return false
+
+      #scroll to center
+      sh = screen.height
+      sw = screen.width
+      if sh < height
+        dy = (height - sh) / 2
+        $(document).scrollTop(dy)
+      if sw < width
+        dx = (width - sw) / 2
+        $(document).scrollLeft(dx)
 
     onHoverEdge: (edge) ->
     onClickEdge: (edge) ->
