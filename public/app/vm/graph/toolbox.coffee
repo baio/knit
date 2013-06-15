@@ -16,20 +16,25 @@ define ["app/vm/graph/linksCache"], (linksCache) ->
           _u = tag.urls.map (m) -> href : ko.observable(m), title : ko.observable(m)
           _t.push( name : ko.observable(tag.val), urls : ko.observableArray(_u))
         @tags _t
-      @panel.onClickEdge = (edge) ->
+      @panel.onClickSvg = ->
         pos = d3.mouse(@)
-        console.log pos
         offset = $("#_body").offset()
         x = pos[0] - $(document).scrollLeft() - offset.left
         y = pos[1] - $(document).scrollTop() - offset.top
-        console.log x
-        console.log y
         $("#_toolbox").css(left : x, top: y)
-        console.log $("#_toolbox").offset()
+        _this.isShown true
+
+      @isShown = ko.observable(false)
 
     moveToConner: (data, event) ->
       event.preventDefault()
       $("#_toolbox").css(left : '', top: '')
+
+    hide: ->
+      @isShown false
+
+    show: ->
+      @isShown true
 
     linksShown: (data, event) ->
       console.log "links shown"

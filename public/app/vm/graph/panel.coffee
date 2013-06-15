@@ -85,6 +85,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       svg = d3.select("#graph").append("svg")
         .attr("width", width)
         .attr("height", height)
+        .on("click", @onClickSvg)
 
       link = svg.selectAll("link")
         .data(grp_edges)
@@ -172,6 +173,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
     onHoverEdge: (edge) ->
     onClickEdge: (edge) ->
+    onClickSvg: ->
 
     toData: ->
       @data.nodes

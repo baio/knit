@@ -40,22 +40,20 @@
           }
           return _this.tags(_t);
         };
-        this.panel.onClickEdge = function(edge) {
+        this.panel.onClickSvg = function() {
           var offset, pos, x, y;
 
           pos = d3.mouse(this);
-          console.log(pos);
           offset = $("#_body").offset();
           x = pos[0] - $(document).scrollLeft() - offset.left;
           y = pos[1] - $(document).scrollTop() - offset.top;
-          console.log(x);
-          console.log(y);
           $("#_toolbox").css({
             left: x,
             top: y
           });
-          return console.log($("#_toolbox").offset());
+          return _this.isShown(true);
         };
+        this.isShown = ko.observable(false);
       }
 
       Toolbox.prototype.moveToConner = function(data, event) {
@@ -64,6 +62,14 @@
           left: '',
           top: ''
         });
+      };
+
+      Toolbox.prototype.hide = function() {
+        return this.isShown(false);
+      };
+
+      Toolbox.prototype.show = function() {
+        return this.isShown(true);
       };
 
       Toolbox.prototype.linksShown = function(data, event) {

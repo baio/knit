@@ -1,8 +1,8 @@
 <div style="margin-left: -20px; margin-top: -12px">
     <div class="affix graph-toolbox-dock" id="_toolbox">
-        <!-- ko if : name_src() -->
+        <!-- ko if : name_src() && isShown() -->
         <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: moveToConner"><i class="icon-eject"></i></button>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: hide"><i class="icon-remove"></i></button>
             <li><a href="#" data-bind="attr : {href : url_src}, text : name_src" target="_blank"></a></li>
             <li><a href="#" data-bind="attr : {href : url_tgt}, text : name_tgt" target="_blank"></a></li>
             <li class="divider"></li>
