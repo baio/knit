@@ -52,6 +52,19 @@
         this.font.subscribe(function() {
           return _this.panel.updateText(_this._getTextCls());
         });
+        this.layout = ko.observable(0);
+        this.layoutsList = ko.observableArray([
+          {
+            key: 0,
+            val: "Использовать силу связей"
+          }, {
+            key: 1,
+            val: "Не использовать"
+          }
+        ]);
+        this.layout.subscribe(function(val) {
+          return _this.panel.setForceLayout(val === 0);
+        });
       }
 
       PanelToolbox.prototype._getTextCls = function() {

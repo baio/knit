@@ -161,22 +161,6 @@
         }).attr("class", "link").style("fill", function(d) {
           return color(d.group);
         }).call(force.drag);
-        /*
-          .call(d3.behavior.drag()
-            .origin((d) -> d)
-            .on("dragend", (d) ->
-              x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
-              y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
-              d3.select(@).attr("cx", x).attr("cy", y)
-              link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
-              link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
-              text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
-              d.meta.pos = [x, y]
-              d.meta.isMoved = true
-              console.log "drag"
-            ))
-        */
-
         force.nodes(grp_nodes).links(grp_edges).start();
         force.on("tick", function() {
           link.attr("x1", function(d) {
@@ -215,8 +199,12 @@
           dx = (width - sw) / 2;
           $(document).scrollLeft(dx);
         }
+        this.force = force;
         this.grp_nodes = grp_nodes;
-        return this.svg = svg;
+        this.svg = svg;
+        this.node = node;
+        this.link = link;
+        return this.text = text;
       };
 
       Panel.prototype.onHoverEdge = function(edge) {};
@@ -233,6 +221,42 @@
         var text;
 
         return text = this.svg.selectAll("text").data(this.grp_nodes).attr("class", cls);
+      };
+
+      Panel.prototype.setForceLayout = function(isSet) {
+        if (isSet) {
+          this.node.call(this.force.drag);
+          return this.force.start();
+        } else {
+          this.node.call(this._getDrag());
+          return this.force.stop();
+        }
+      };
+
+      Panel.prototype._getDrag = function() {
+        var _this;
+
+        _this = this;
+        return d3.behavior.drag().origin(function(d) {
+          return d;
+        }).on("drag", function(d) {
+          var x, y;
+
+          x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
+          y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
+          d3.select(this).attr("cx", x).attr("cy", y);
+          _this.link.filter(function(l) {
+            return l.source === d;
+          }).attr("x1", x).attr("y1", y);
+          _this.link.filter(function(l) {
+            return l.target === d;
+          }).attr("x2", x).attr("y2", y);
+          _this.text.filter(function(t) {
+            return t.id === d.id;
+          }).attr("x", x).attr("y", y - 10);
+          d.meta.pos = [x, y];
+          return d.meta.isMoved = true;
+        });
       };
 
       return Panel;

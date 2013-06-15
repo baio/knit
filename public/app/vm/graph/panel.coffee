@@ -120,23 +120,6 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("class", "link")
         .style("fill", (d) -> color(d.group))
         .call(force.drag)
-        ###
-        .call(d3.behavior.drag()
-          .origin((d) -> d)
-          .on("dragend", (d) ->
-            x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
-            y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
-            d3.select(@).attr("cx", x).attr("cy", y)
-            link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
-            link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
-            text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
-            d.meta.pos = [x, y]
-            d.meta.isMoved = true
-            console.log "drag"
-          ))
-        ###
-
-
 
       force
         .nodes(grp_nodes)
@@ -171,8 +154,12 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         dx = (width - sw) / 2
         $(document).scrollLeft(dx)
 
+      @force = force
       @grp_nodes = grp_nodes
       @svg = svg
+      @node = node
+      @link = link
+      @text = text
 
     onHoverEdge: (edge) ->
     onClickEdge: (edge) ->
@@ -186,3 +173,26 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       text = @svg.selectAll("text")
         .data(@grp_nodes)
         .attr("class", cls)
+
+    setForceLayout: (isSet) ->
+      if isSet
+        @node.call(@force.drag)
+        @force.start()
+      else
+        @node.call(@_getDrag())
+        @force.stop()
+
+    _getDrag: ->
+      _this = @
+      d3.behavior.drag()
+        .origin((d) -> d)
+        .on("drag", (d) ->
+          x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
+          y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
+          d3.select(@).attr("cx", x).attr("cy", y)
+          _this.link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
+          _this.link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
+          _this.text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
+          d.meta.pos = [x, y]
+          d.meta.isMoved = true
+        )

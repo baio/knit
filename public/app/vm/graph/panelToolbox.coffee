@@ -27,6 +27,13 @@ define ->
       ])
       @font.subscribe =>
         @panel.updateText(@_getTextCls())
+      @layout = ko.observable(0)
+      @layoutsList = ko.observableArray([
+        {key: 0, val: "Использовать силу связей"},
+        {key: 1, val: "Не использовать"}
+      ])
+      @layout.subscribe (val) =>
+        @panel.setForceLayout(val == 0)
 
     _getTextCls: ->
       cls = "text"

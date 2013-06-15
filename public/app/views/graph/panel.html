@@ -42,10 +42,7 @@
                 <li class="divider"></li>
                 <li>
                     <h6>Расположение</h6>
-                    <select>
-                        <option>Использовать силу связей</option>
-                        <option>Не использовать</option>
-                    </select>
+                    <select data-bind="options: layoutsList, optionsText: 'val', optionsValue: 'key', value: layout"></select>
                     <a href="#" style="color: blue; padding: 0px;">сбросить</a>
                     <a href="#" style="color: blue; padding: 0px;">сохранить</a>
                 </li>
