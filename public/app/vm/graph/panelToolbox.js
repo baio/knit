@@ -26,17 +26,48 @@
             $("#show_toolbox_panel_button").css({
               color: "white"
             });
-            _this.panel.updateText("text");
+            _this.panel.updateText(_this._getTextCls());
           }
           if (val === 1) {
             $("#show_toolbox_panel_button").css({
               color: "black"
             });
             $("#_body").addClass("light");
-            return _this.panel.updateText("text light");
+            return _this.panel.updateText(_this._getTextCls());
           }
         });
+        this.font = ko.observable(0);
+        this.fontsList = ko.observableArray([
+          {
+            key: 0,
+            val: "Маленькие"
+          }, {
+            key: 1,
+            val: "Большие"
+          }, {
+            key: 2,
+            val: "Не показывать"
+          }
+        ]);
+        this.font.subscribe(function() {
+          return _this.panel.updateText(_this._getTextCls());
+        });
       }
+
+      PanelToolbox.prototype._getTextCls = function() {
+        var cls;
+
+        cls = "text";
+        if (this.colorScheme() === 1) {
+          cls += " light";
+        }
+        if (this.font() === 1) {
+          cls += " big";
+        } else if (this.font() === 2) {
+          cls += " hidden";
+        }
+        return cls;
+      };
 
       PanelToolbox.prototype.hide = function() {
         return this.isShown(false);

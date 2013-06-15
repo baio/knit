@@ -43,11 +43,21 @@ body {
 .text {
     fill: lightgreen;
     font-size: 10px;
+    visibility: visible;
 }
 
 .text.light{
     fill: black;
 }
+
+.text.big{
+    font-size: 15px;
+}
+
+.text.hidden{
+    visibility: none;
+}
+
 
 .graph-toolbox
 {
