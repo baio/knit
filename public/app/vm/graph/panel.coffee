@@ -90,7 +90,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .linkDistance(30)
         .linkStrength(0.1)
         #.friction(0.9)
-        .size([width - 100, height - 200])
+        .size([width - 100, height - 400])
 
       svg = d3.select("#graph").append("svg")
         .attr("width", width)
