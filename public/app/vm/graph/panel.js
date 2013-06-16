@@ -13,25 +13,31 @@
       }
 
       Panel.prototype.save = function() {
-        var data, upd_data;
+        var d, i, n, nodes_data, upd_data, _i, _len,
+          _this = this;
 
         if (this.id) {
-          data = this.toData().filter(function(d) {
-            return d.meta.pos[0] !== d.x || d.meta.pos[1] !== d.y;
-          });
-          upd_data = data.map(function(d) {
+          upd_data = [];
+          nodes_data = this.node[0].map(function(d) {
             return {
-              id: d.id,
-              x: d.x,
-              y: d.y
+              x: d.cx.baseVal.value,
+              y: d.cy.baseVal.value
             };
           });
+          for (i = _i = 0, _len = nodes_data.length; _i < _len; i = ++_i) {
+            d = nodes_data[i];
+            n = this.grp_nodes[i];
+            if (d.x !== n.meta.pos[0] || d.y !== n.meta.pos[1]) {
+              d.id = n.id;
+              upd_data.push(d);
+            }
+          }
           if (upd_data.length !== 0) {
             return dataProvider.ajax("graphs", "patch", {
               graph: this.id,
               data: upd_data
             }, function(err) {
-              var d, _i, _len, _results;
+              var _j, _len1, _results;
 
               if (err) {
                 toastr.error(err, "Ошибка сохранения");
@@ -40,10 +46,9 @@
               }
               if (!err) {
                 _results = [];
-                for (_i = 0, _len = data.length; _i < _len; _i++) {
-                  d = data[_i];
-                  d.meta.pos[0] = d.x;
-                  _results.push(d.meta.pos[1] = d.y);
+                for (i = _j = 0, _len1 = nodes_data.length; _j < _len1; i = ++_j) {
+                  d = nodes_data[i];
+                  _results.push(_this.grp_nodes[i].meta.pos = [d.x, d.y]);
                 }
                 return _results;
               }
@@ -266,8 +271,6 @@
           x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
           y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
           d3.select(this).attr("cx", x).attr("cy", y);
-          d.x = x;
-          d.y = y;
           _this.link.filter(function(l) {
             return l.source === d;
           }).attr("x1", x).attr("y1", y);

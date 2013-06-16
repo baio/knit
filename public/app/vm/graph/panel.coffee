@@ -7,15 +7,19 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
     save: ->
       if @id
-        data = @toData().filter((d) -> d.meta.pos[0] != d.x or d.meta.pos[1] != d.y)
-        upd_data = data.map((d) -> id: d.id, x: d.x, y: d.y)
+        upd_data = []
+        nodes_data = @node[0].map((d) -> x : d.cx.baseVal.value, y: d.cy.baseVal.value)
+        for d, i in nodes_data
+          n = @grp_nodes[i]
+          if d.x != n.meta.pos[0] or d.y != n.meta.pos[1]
+            d.id = n.id
+            upd_data.push d
         if upd_data.length != 0
-          dataProvider.ajax "graphs", "patch", {graph: @id, data : upd_data}, (err) ->
+          dataProvider.ajax "graphs", "patch", {graph: @id, data : upd_data}, (err) =>
             if err then toastr.error err, "Ошибка сохранения" else toastr.success "Сохранено успешно"
             if !err
-              for d in data
-                d.meta.pos[0] = d.x
-                d.meta.pos[1] = d.y
+              for d, i in nodes_data
+                @grp_nodes[i].meta.pos = [d.x, d.y]
         else
           toastr.warning "Нечего сохранять"
 
@@ -195,8 +199,6 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
           x = parseFloat(d3.select(@).attr("cx")) + d3.event.dx
           y = parseFloat(d3.select(@).attr("cy")) + d3.event.dy
           d3.select(@).attr("cx", x).attr("cy", y)
-          d.x = x
-          d.y = y
           _this.link.filter((l) -> l.source == d).attr("x1", x).attr("y1", y)
           _this.link.filter((l) -> l.target == d).attr("x2", x).attr("y2", y)
           _this.text.filter((t) -> t.id == d.id).attr("x", x).attr("y", y - 10)
