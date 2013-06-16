@@ -161,7 +161,7 @@
 
         width = 2500;
         height = 1200;
-        force = d3.layout.force().charge(-500).linkDistance(30).linkStrength(0.1).size([width - 100, height - 400]);
+        force = d3.layout.force().charge(-500).linkDistance(30).linkStrength(0.1).size([width, height]);
         svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height).on("click", this.onClickSvg);
         link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").style("stroke", function(d) {
           return color(d.group);
