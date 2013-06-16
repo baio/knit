@@ -149,7 +149,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
           .attr("x", (d) -> d.x)
           .attr("y", (d) -> d.y - 10)
 
-      Mousetrap.bind ['ctrl+s'], =>
+      Mousetrap.bindGlobal ['ctrl+s'], =>
         if @data.isYours
           @save()
         return false

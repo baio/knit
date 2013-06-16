@@ -94,6 +94,57 @@
         return this.isShown(true);
       };
 
+      PanelToolbox.prototype.getSettingsName = function() {
+        return "panelToolbox";
+      };
+
+      PanelToolbox.prototype.initializeSettings = function(val, _settingsChangedCallback) {
+        var _this = this;
+
+        this._settingsChangedCallback = _settingsChangedCallback;
+        if (val) {
+          if (val.colorScheme) {
+            this.colorScheme(val.colorScheme);
+          }
+          if (val.font) {
+            this.font(val.font);
+          }
+          if (val.layout) {
+            this.layout(val.layout);
+          }
+          if (val.isShown != null) {
+            this.isShown(val.isShown);
+          }
+        }
+        this.isShown.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+        this.colorScheme.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+        this.font.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+        return this.layout.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+      };
+
+      PanelToolbox.prototype._getSettings = function() {
+        return {
+          colorScheme: this.colorScheme(),
+          font: this.font(),
+          layout: this.layout(),
+          isShown: this.isShown()
+        };
+      };
+
+      PanelToolbox.prototype.onSettingsChanged = function() {
+        if (this._settingsChangedCallback) {
+          return this._settingsChangedCallback(this._getSettings());
+        }
+      };
+
       return PanelToolbox;
 
     })();

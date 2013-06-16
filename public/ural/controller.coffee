@@ -133,13 +133,23 @@ define ["ural/viewEngine",
               layoutModelsData = res[1]
               viewEngine.applyData(html, layoutModelsData, @viewBag, isApply)
               for lmd in layoutModelsData
-                if lmd.lm and $.isFunction(lmd.lm.render)
-                  lmd.lm.render lmd.data
+                if lmd.lm
+                  if $.isFunction(lmd.lm.render)
+                    lmd.lm.render lmd.data
+                  if $.isFunction(lmd.lm.getSettingsName)
+                    @restoreLayout lmd.lm
               @_setFocus()
             if done then done err
 
     #Shortcut for view(path, model, `True`, done)
     view_apply: (path, model, done) ->
       @view path, model, true, done
+
+    restoreLayout:(l) ->
+      name = "layout_settings." + l.getSettingsName()
+      val = $.jStorage.get(name)
+      l.initializeSettings val, (val) ->
+        $.jStorage.set(name, val)
+
 
   Controller : Controller

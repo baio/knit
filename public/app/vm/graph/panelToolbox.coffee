@@ -53,3 +53,37 @@ define ->
 
     show: ->
       @isShown true
+
+    getSettingsName : -> "panelToolbox"
+
+    initializeSettings: (val, @_settingsChangedCallback) ->
+
+      if val
+        if val.colorScheme
+          @colorScheme(val.colorScheme)
+        if val.font
+          @font(val.font)
+        if val.layout
+          @layout(val.layout)
+        if val.isShown?
+          @isShown(val.isShown)
+
+      @isShown.subscribe =>
+        @onSettingsChanged()
+      @colorScheme.subscribe =>
+        @onSettingsChanged()
+      @font.subscribe =>
+        @onSettingsChanged()
+      @layout.subscribe =>
+        @onSettingsChanged()
+
+    _getSettings: ->
+      colorScheme : @colorScheme()
+      font : @font()
+      layout : @layout()
+      isShown : @isShown()
+
+    onSettingsChanged: ->
+      if @_settingsChangedCallback
+        @_settingsChangedCallback @_getSettings()
+

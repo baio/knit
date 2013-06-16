@@ -186,8 +186,13 @@
             viewEngine.applyData(html, layoutModelsData, _this.viewBag, isApply);
             for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
               lmd = layoutModelsData[_i];
-              if (lmd.lm && $.isFunction(lmd.lm.render)) {
-                lmd.lm.render(lmd.data);
+              if (lmd.lm) {
+                if ($.isFunction(lmd.lm.render)) {
+                  lmd.lm.render(lmd.data);
+                }
+                if ($.isFunction(lmd.lm.getSettingsName)) {
+                  _this.restoreLayout(lmd.lm);
+                }
               }
             }
             _this._setFocus();
@@ -200,6 +205,16 @@
 
       Controller.prototype.view_apply = function(path, model, done) {
         return this.view(path, model, true, done);
+      };
+
+      Controller.prototype.restoreLayout = function(l) {
+        var name, val;
+
+        name = "layout_settings." + l.getSettingsName();
+        val = $.jStorage.get(name);
+        return l.initializeSettings(val, function(val) {
+          return $.jStorage.set(name, val);
+        });
       };
 
       return Controller;

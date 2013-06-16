@@ -210,7 +210,7 @@
             return d.y - 10;
           });
         });
-        Mousetrap.bind(['ctrl+s'], function() {
+        Mousetrap.bindGlobal(['ctrl+s'], function() {
           if (_this.data.isYours) {
             _this.save();
           }
