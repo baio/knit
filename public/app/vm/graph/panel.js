@@ -207,7 +207,7 @@
           return text.attr("x", function(d) {
             return _this._getX(d.x);
           }).attr("y", function(d) {
-            return _this._getY(d.y - 10);
+            return _this._getY(d.y) - 10;
           });
         });
         Mousetrap.bindGlobal(['ctrl+s'], function() {

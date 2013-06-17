@@ -147,7 +147,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
           .attr("cy", (d) => @_getY d.y)
         text
           .attr("x", (d) => @_getX d.x)
-          .attr("y", (d) => @_getY d.y - 10)
+          .attr("y", (d) => @_getY(d.y) - 10)
 
       Mousetrap.bindGlobal ['ctrl+s'], =>
         if @data.isYours
