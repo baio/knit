@@ -184,7 +184,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       return Math.max(r, Math.min(height - r, y))
 
 
-onHoverEdge: (edge) ->
+    onHoverEdge: (edge) ->
     onClickEdge: (edge) ->
     onClickSvg: ->
 

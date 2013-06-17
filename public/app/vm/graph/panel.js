@@ -251,103 +251,105 @@
         return Math.max(r, Math.min(height - r, y));
       };
 
+      Panel.prototype.onHoverEdge = function(edge) {};
+
+      Panel.prototype.onClickEdge = function(edge) {};
+
+      Panel.prototype.onClickSvg = function() {};
+
+      Panel.prototype.toData = function() {
+        return this.data.nodes;
+      };
+
+      Panel.prototype.updateText = function(cls) {
+        return this.text.attr("class", cls);
+      };
+
+      Panel.prototype.setForceLayout = function(isSet) {
+        if (isSet) {
+          this.node.call(this.force.drag);
+          return this.force.start();
+        } else {
+          this.node.call(this._getDrag());
+          return this.force.stop();
+        }
+      };
+
+      Panel.prototype._getDrag = function() {
+        var _this;
+
+        _this = this;
+        return d3.behavior.drag().origin(function(d) {
+          return d;
+        }).on("drag", function(d) {
+          var x, y;
+
+          x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
+          y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
+          d3.select(this).attr("cx", x).attr("cy", y);
+          _this.link.filter(function(l) {
+            return l.source === d;
+          }).attr("x1", x).attr("y1", y);
+          _this.link.filter(function(l) {
+            return l.target === d;
+          }).attr("x2", x).attr("y2", y);
+          return _this.text.filter(function(t) {
+            return t.id === d.id;
+          }).attr("x", x).attr("y", y - 10);
+        });
+      };
+
+      Panel.prototype.resetPositions = function() {
+        this.node.attr("cx", function(d) {
+          return d.meta.pos[0];
+        });
+        this.node.attr("cy", function(d) {
+          return d.meta.pos[1];
+        });
+        this.link.attr("x1", function(d) {
+          return d.source.meta.pos[0];
+        });
+        this.link.attr("y1", function(d) {
+          return d.source.meta.pos[1];
+        });
+        this.link.attr("x2", function(d) {
+          return d.target.meta.pos[0];
+        });
+        this.link.attr("y2", function(d) {
+          return d.target.meta.pos[1];
+        });
+        this.text.attr("x", function(d) {
+          return d.meta.pos[0];
+        });
+        return this.text.attr("y", function(d) {
+          return d.meta.pos[1] - 10;
+        });
+        /*
+        @svg.selectAll("node")
+          .data(@node)
+          .attr("cx", (d) ->
+            console.log "cx"
+            d.meta.pos[0])
+          .attr("cy", (d) -> d.meta.pos[1])
+        
+        @svg.selectAll("link")
+          .data(@grp_edges)
+          .attr("x1", (d) -> d.source.meta.pos[0])
+          .attr("y1", (d) -> d.source.meta.pos[1])
+          .attr("x2", (d) -> d.target.meta.pos[0])
+          .attr("y2", (d) -> d.target.meta.pos[1])
+        
+        @svg.selectAll("text")
+          .data(@grp_nodes)
+          .attr("x", (d) -> d.meta.pos[0])
+          .attr("y", (d) -> d.meta.pos[1] - 10)
+        */
+
+      };
+
       return Panel;
 
     })();
-  });
-
-  ({
-    onHoverEdge: function(edge) {
-      return {
-        onClickEdge: function(edge) {},
-        onClickSvg: function() {},
-        toData: function() {
-          return this.data.nodes;
-        },
-        updateText: function(cls) {
-          return this.text.attr("class", cls);
-        },
-        setForceLayout: function(isSet) {
-          if (isSet) {
-            this.node.call(this.force.drag);
-            return this.force.start();
-          } else {
-            this.node.call(this._getDrag());
-            return this.force.stop();
-          }
-        },
-        _getDrag: function() {
-          var _this;
-
-          _this = this;
-          return d3.behavior.drag().origin(function(d) {
-            return d;
-          }).on("drag", function(d) {
-            var x, y;
-
-            x = parseFloat(d3.select(this).attr("cx")) + d3.event.dx;
-            y = parseFloat(d3.select(this).attr("cy")) + d3.event.dy;
-            d3.select(this).attr("cx", x).attr("cy", y);
-            _this.link.filter(function(l) {
-              return l.source === d;
-            }).attr("x1", x).attr("y1", y);
-            _this.link.filter(function(l) {
-              return l.target === d;
-            }).attr("x2", x).attr("y2", y);
-            return _this.text.filter(function(t) {
-              return t.id === d.id;
-            }).attr("x", x).attr("y", y - 10);
-          });
-        },
-        resetPositions: function() {
-          this.node.attr("cx", function(d) {
-            return d.meta.pos[0];
-          });
-          this.node.attr("cy", function(d) {
-            return d.meta.pos[1];
-          });
-          this.link.attr("x1", function(d) {
-            return d.source.meta.pos[0];
-          });
-          this.link.attr("y1", function(d) {
-            return d.source.meta.pos[1];
-          });
-          this.link.attr("x2", function(d) {
-            return d.target.meta.pos[0];
-          });
-          this.link.attr("y2", function(d) {
-            return d.target.meta.pos[1];
-          });
-          this.text.attr("x", function(d) {
-            return d.meta.pos[0];
-          });
-          return this.text.attr("y", function(d) {
-            return d.meta.pos[1] - 10;
-          });
-          /*
-          @svg.selectAll("node")
-            .data(@node)
-            .attr("cx", (d) ->
-              console.log "cx"
-              d.meta.pos[0])
-            .attr("cy", (d) -> d.meta.pos[1])
-          
-          @svg.selectAll("link")
-            .data(@grp_edges)
-            .attr("x1", (d) -> d.source.meta.pos[0])
-            .attr("y1", (d) -> d.source.meta.pos[1])
-            .attr("x2", (d) -> d.target.meta.pos[0])
-            .attr("y2", (d) -> d.target.meta.pos[1])
-          
-          @svg.selectAll("text")
-            .data(@grp_nodes)
-            .attr("x", (d) -> d.meta.pos[0])
-            .attr("y", (d) -> d.meta.pos[1] - 10)
-          */
-
-        }
-      };
-    }
   });
 
 }).call(this);
