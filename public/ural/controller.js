@@ -87,6 +87,21 @@
         return $focused.focus();
       };
 
+      Controller.prototype._initFormHotKeys = function() {
+        return Mousetrap.bindGlobal('enter', function(e) {
+          console.log("enter");
+          if ($(e.target).is(":input")) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+      };
+
+      Controller.prototype._uninitFormHotKeys = function() {
+        return Mousetrap.unbind('enter');
+      };
+
       Controller.prototype.showForm = function(resource, formType, item) {
         var form,
           _this = this;
@@ -97,10 +112,12 @@
         }
         ko.applyBindings(item, form[0]);
         form.modal("show").on("shown", function() {
-          return _this._setFormFocus(_this);
+          _this._setFormFocus(this);
+          return _this._initFormHotKeys();
         }).on("hidden", function() {
           ko.cleanNode(form[0]);
           $("[data-view-engine-clean]", form[0]).empty();
+          _this._uninitFormHotKeys();
           return _this._setFocus();
         });
         return this._setFormFocus(form);
