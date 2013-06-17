@@ -10,7 +10,6 @@
         this.resource = resource;
         this._index = _index;
         this.init();
-        this.initHotKeys();
       }
 
       ViewModel.KeyFieldName = null;
@@ -461,15 +460,6 @@
 
       ViewModel.prototype.onLoad = function(filter, done) {
         return done(null, []);
-      };
-
-      ViewModel.prototype.initHotKeys = function() {
-        var _this = this;
-
-        return Mousetrap.bindGlobal('ctrl+s', function() {
-          _this.save();
-          return false;
-        });
       };
 
       return ViewModel;

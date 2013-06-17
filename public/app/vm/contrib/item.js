@@ -153,6 +153,7 @@
       };
 
       ItemVM.prototype.swapFields = function() {
+        this._id(null);
         this.name_2(null);
         this.relations([]);
         this.scheme(null);
@@ -176,6 +177,19 @@
           return this.swapFields();
         } else {
           return ItemVM.__super__.onSaved.call(this, err, status);
+        }
+      };
+
+      ItemVM.prototype.setHotKeys = function(f) {
+        var _this = this;
+
+        if (f) {
+          return Mousetrap.bindGlobal("ctrl+s", function() {
+            _this.save();
+            return false;
+          });
+        } else {
+          return Mousetrap.unbind("ctrl+s");
         }
       };
 

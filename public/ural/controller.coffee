@@ -56,15 +56,21 @@ define ["ural/viewEngine",
       $focused = $("[data-default-focus]:visible")
       $focused.focus()
 
-    _initFormHotKeys: ->
-      Mousetrap.bindGlobal 'enter', (e) ->
-        console.log "enter"
-        if $(e.target).is(":input")
-          return false
-        else
-          return true
+    _initFormHotKeys: (item) ->
+      f = true
+      if $.isFunction item.setHotKeys
+        f = item.setHotKeys(true)
+      if f != false
+        Mousetrap.bindGlobal 'enter', (e) ->
+          console.log "enter"
+          if $(e.target).is(":input")
+            return false
+          else
+            return true
 
-    _uninitFormHotKeys: ->
+    _uninitFormHotKeys: (item) ->
+      if $.isFunction item.setHotKeys
+        item.setHotKeys(false)
       Mousetrap.unbind 'enter'
 
     showForm: (resource, formType, item) ->
@@ -74,15 +80,15 @@ define ["ural/viewEngine",
       form.modal("show")
         .on("shown", ->
           _this._setFormFocus(@)
-          _this._initFormHotKeys()
         )
         .on("hidden", =>
           ko.cleanNode form[0]
           $("[data-view-engine-clean]", form[0]).empty()
-          @_uninitFormHotKeys()
+          @_uninitFormHotKeys(item)
           @_setFocus()
         )
       @_setFormFocus form
+      @_initFormHotKeys(item)
 
     hideForm: (resource, formType) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
