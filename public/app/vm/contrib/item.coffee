@@ -93,6 +93,7 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
       new ItemVM @resource, @_index
 
     swapFields: ->
+      @_id(null)
       #@name_1(null)
       @name_2(null)
       @relations([])
@@ -114,3 +115,11 @@ define ["ural/vm/itemVM", "app/dataProvider", "ural/modules/pubSub"], (itemVM, d
         @swapFields()
       else
         super err, status
+
+    setHotKeys: (f) ->
+      if f
+        Mousetrap.bindGlobal "ctrl+s", =>
+          @save()
+          false
+      else
+        Mousetrap.unbind "ctrl+s"

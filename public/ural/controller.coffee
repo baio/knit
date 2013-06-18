@@ -46,6 +46,7 @@ define ["ural/viewEngine",
       toastr[type] msg, caption
 
     _setFormFocus: (form) ->
+      #remove old focus
       $focused = $("[data-default-focus]", form)
       if (!$focused.length)
         $focused = $("input:visible:first", form)
@@ -55,18 +56,39 @@ define ["ural/viewEngine",
       $focused = $("[data-default-focus]:visible")
       $focused.focus()
 
+    _initFormHotKeys: (item) ->
+      f = true
+      if $.isFunction item.setHotKeys
+        f = item.setHotKeys(true)
+      if f != false
+        Mousetrap.bindGlobal 'enter', (e) ->
+          console.log "enter"
+          if $(e.target).is(":input")
+            return false
+          else
+            return true
+
+    _uninitFormHotKeys: (item) ->
+      if $.isFunction item.setHotKeys
+        item.setHotKeys(false)
+      Mousetrap.unbind 'enter'
+
     showForm: (resource, formType, item) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")
       if !form[0] then throw "Required form not implemented"
       ko.applyBindings item, form[0]
       form.modal("show")
-        .on("shown", => @_setFormFocus(this))
+        .on("shown", ->
+          _this._setFormFocus(@)
+        )
         .on("hidden", =>
           ko.cleanNode form[0]
           $("[data-view-engine-clean]", form[0]).empty()
+          @_uninitFormHotKeys(item)
           @_setFocus()
         )
       @_setFormFocus form
+      @_initFormHotKeys(item)
 
     hideForm: (resource, formType) ->
       form = $("[data-form-type='"+formType+"'][data-form-resource='"+resource+"']")

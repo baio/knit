@@ -136,18 +136,18 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .links(grp_edges)
         .start()
 
-      force.on "tick", ->
+      force.on "tick", =>
         link
-          .attr("x1", (d) -> d.source.x)
-          .attr("y1", (d) -> d.source.y)
-          .attr("x2", (d) -> d.target.x)
-          .attr("y2", (d) -> d.target.y)
+          .attr("x1", (d) => @_getX d.source.x)
+          .attr("y1", (d) => @_getY d.source.y)
+          .attr("x2", (d) => @_getX d.target.x)
+          .attr("y2", (d) => @_getY d.target.y)
         node
-          .attr("cx", (d) -> d.x)
-          .attr("cy", (d) -> d.y)
+          .attr("cx", (d) => @_getX d.x)
+          .attr("cy", (d) => @_getY d.y)
         text
-          .attr("x", (d) -> d.x)
-          .attr("y", (d) -> d.y - 10)
+          .attr("x", (d) => @_getX d.x)
+          .attr("y", (d) => @_getY(d.y) - 10)
 
       Mousetrap.bindGlobal ['ctrl+s'], =>
         if @data.isYours
@@ -171,6 +171,18 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       @node = node
       @link = link
       @text = text
+
+
+    _getX: (x) ->
+      width = 2500
+      r = 20
+      return Math.max(r, Math.min(width - r, x))
+
+    _getY: (y) ->
+      height = 1200
+      r = 20
+      return Math.max(r, Math.min(height - r, y))
+
 
     onHoverEdge: (edge) ->
     onClickEdge: (edge) ->

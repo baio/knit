@@ -191,23 +191,23 @@
         force.nodes(grp_nodes).links(grp_edges).start();
         force.on("tick", function() {
           link.attr("x1", function(d) {
-            return d.source.x;
+            return _this._getX(d.source.x);
           }).attr("y1", function(d) {
-            return d.source.y;
+            return _this._getY(d.source.y);
           }).attr("x2", function(d) {
-            return d.target.x;
+            return _this._getX(d.target.x);
           }).attr("y2", function(d) {
-            return d.target.y;
+            return _this._getY(d.target.y);
           });
           node.attr("cx", function(d) {
-            return d.x;
+            return _this._getX(d.x);
           }).attr("cy", function(d) {
-            return d.y;
+            return _this._getY(d.y);
           });
           return text.attr("x", function(d) {
-            return d.x;
+            return _this._getX(d.x);
           }).attr("y", function(d) {
-            return d.y - 10;
+            return _this._getY(d.y) - 10;
           });
         });
         Mousetrap.bindGlobal(['ctrl+s'], function() {
@@ -233,6 +233,22 @@
         this.node = node;
         this.link = link;
         return this.text = text;
+      };
+
+      Panel.prototype._getX = function(x) {
+        var r, width;
+
+        width = 2500;
+        r = 20;
+        return Math.max(r, Math.min(width - r, x));
+      };
+
+      Panel.prototype._getY = function(y) {
+        var height, r;
+
+        height = 1200;
+        r = 20;
+        return Math.max(r, Math.min(height - r, y));
       };
 
       Panel.prototype.onHoverEdge = function(edge) {};

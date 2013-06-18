@@ -87,6 +87,32 @@
         return $focused.focus();
       };
 
+      Controller.prototype._initFormHotKeys = function(item) {
+        var f;
+
+        f = true;
+        if ($.isFunction(item.setHotKeys)) {
+          f = item.setHotKeys(true);
+        }
+        if (f !== false) {
+          return Mousetrap.bindGlobal('enter', function(e) {
+            console.log("enter");
+            if ($(e.target).is(":input")) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+        }
+      };
+
+      Controller.prototype._uninitFormHotKeys = function(item) {
+        if ($.isFunction(item.setHotKeys)) {
+          item.setHotKeys(false);
+        }
+        return Mousetrap.unbind('enter');
+      };
+
       Controller.prototype.showForm = function(resource, formType, item) {
         var form,
           _this = this;
@@ -97,13 +123,15 @@
         }
         ko.applyBindings(item, form[0]);
         form.modal("show").on("shown", function() {
-          return _this._setFormFocus(_this);
+          return _this._setFormFocus(this);
         }).on("hidden", function() {
           ko.cleanNode(form[0]);
           $("[data-view-engine-clean]", form[0]).empty();
+          _this._uninitFormHotKeys(item);
           return _this._setFocus();
         });
-        return this._setFormFocus(form);
+        this._setFormFocus(form);
+        return this._initFormHotKeys(item);
       };
 
       Controller.prototype.hideForm = function(resource, formType) {
