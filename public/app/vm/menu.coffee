@@ -16,7 +16,6 @@ define ["ural/modules/pubSub", "app/vm/curUser"], (pubSub, curUser) ->
     constructor: ->
       @active = ko.observable()
       @activeGraph = new ActiveGraph()
-
       pubSub.sub "href", "changed", (data) =>
         @active "/" + data.controller + "/" + data.action
 

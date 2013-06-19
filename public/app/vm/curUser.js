@@ -10,11 +10,25 @@
       __extends(User, _super);
 
       function User() {
+        var _this = this;
+
         this._id = ko.observable();
         this.name = ko.observable();
         this.img = ko.observable();
         this.graphs = ko.observableArray();
         this.popular = ko.observableArray();
+        pubSub.sub("graph", "added", function(data) {
+          var item;
+
+          item = {};
+          ko.mapping.fromJS(data, {}, item);
+          return _this.graphs.push(item);
+        });
+        pubSub.sub("graph", "removed", function(data) {
+          return _this.graphs.remove(function(d) {
+            return d.ref() === data.ref;
+          });
+        });
       }
 
       User.prototype.open = function(data, event) {

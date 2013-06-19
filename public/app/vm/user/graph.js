@@ -85,14 +85,15 @@
         return dataProvider.ajax("graphs", "put", data, done);
       };
 
-      /*
-      create: (done) ->
-        super (err) =>
-          done err
-          if !err
-            @openGraph()
-      */
+      Graph.prototype.completeCreate = function(data) {
+        pubSub.pub("graph", "added", data);
+        return Graph.__super__.completeCreate.call(this, data);
+      };
 
+      Graph.prototype.completeRemove = function() {
+        pubSub.pub("graph", "removed", this.toData());
+        return Graph.__super__.completeRemove.call(this);
+      };
 
       Graph.prototype.open = function(data, event) {
         event.preventDefault();

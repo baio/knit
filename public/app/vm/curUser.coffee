@@ -13,6 +13,14 @@ define ["ural/vm/itemVM"
       @graphs = ko.observableArray()
       @popular = ko.observableArray()
 
+      pubSub.sub "graph", "added", (data) =>
+        item = {}
+        ko.mapping.fromJS data, {}, item
+        @graphs.push item
+
+      pubSub.sub "graph", "removed", (data) =>
+        @graphs.remove (d) -> d.ref() == data.ref
+
     open: (data, event) ->
       event.preventDefault()
       pubSub.pub "href", "change", href: "/graph/panel/#{data.ref()}"
@@ -25,4 +33,3 @@ define ["ural/vm/itemVM"
           err = null
           data = null
         done err, data
-
