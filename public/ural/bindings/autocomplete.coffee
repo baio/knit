@@ -25,7 +25,9 @@ define ->
   _filterParams = (filterParams) ->
     data = {}
     for own field of filterParams
-      data[field] = filterParams[field]()
+      prm = filterParams[field]
+      prm = prm() if $.isFunction(prm)
+      data[field] = prm
     data
 
 

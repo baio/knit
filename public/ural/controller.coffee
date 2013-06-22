@@ -16,8 +16,20 @@ define ["ural/viewEngine",
         pubSub.sub "crud", "start", (params) => @crudStart params
         pubSub.sub "crud", "end", (params) => @crudEnd params
         pubSub.sub "crud", "before", (params) => @crudBefore params
+        pubSub.sub "crud", "reload", (params) => @crudReload params
 
     @IsSubscribed: false
+
+    crudReload: (params) ->
+      console.log params
+      layoutModels = {}
+      for own prop of params
+        layoutModels[prop] = @_layoutModels[prop]
+        layoutModels[prop].filter = params[prop]
+      @_loadLayoutModels layoutModels, (err, res) =>
+        console.log "loaded"
+        viewEngine.applyBinding(res)
+        @renderLayout(res, false)
 
     msgShow: (params) ->
       if params.err
@@ -148,20 +160,24 @@ define ["ural/viewEngine",
             ck null
         (ck) =>
           layoutModels = if model._layouts then model._layouts else _body : model
+          @_layoutModels = layoutModels
           @_loadLayoutModels layoutModels, ck
         ], (err, res) =>
             if !err
               html = res[0]
               layoutModelsData = res[1]
               viewEngine.applyData(html, layoutModelsData, @viewBag, isApply)
-              for lmd in layoutModelsData
-                if lmd.lm
-                  if $.isFunction(lmd.lm.render)
-                    lmd.lm.render lmd.data
-                  if $.isFunction(lmd.lm.getSettingsName)
-                    @restoreLayout lmd.lm
+              @renderLayout(layoutModelsData, true)
               @_setFocus()
             if done then done err
+
+    renderLayout: (layoutModelsData, isRestore) ->
+      for lmd in layoutModelsData
+        if lmd.lm
+          if $.isFunction(lmd.lm.render)
+            lmd.lm.render lmd.data
+          if isRestore and $.isFunction(lmd.lm.getSettingsName)
+            @restoreLayout lmd.lm
 
     #Shortcut for view(path, model, `True`, done)
     view_apply: (path, model, done) ->

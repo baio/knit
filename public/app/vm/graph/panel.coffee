@@ -71,7 +71,6 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       @data = data
 
       color = d3.scale.category20()
-      console.log color(0)
 
       grp_nodes = data.nodes
       grp_edges = data.edges
@@ -89,13 +88,44 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .charge(-500)
         .linkDistance(30)
         .linkStrength(0.1)
-        #.friction(0.9)
         .size([width, height])
+
+      d3.select("svg")
+        .remove();
 
       svg = d3.select("#graph").append("svg")
         .attr("width", width)
         .attr("height", height)
         .on("click", @onClickSvg)
+
+      force.on "tick", =>
+        link
+          .attr("x1", (d) => @_getX d.source.x)
+          .attr("y1", (d) => @_getY d.source.y)
+          .attr("x2", (d) => @_getX d.target.x)
+          .attr("y2", (d) => @_getY d.target.y)
+        node
+          .attr("cx", (d) => @_getX d.x)
+          .attr("cy", (d) => @_getY d.y)
+        text
+          .attr("x", (d) => @_getX d.x)
+          .attr("y", (d) => @_getY(d.y) - 10)
+
+      Mousetrap.bindGlobal ['ctrl+s'], =>
+        if @data.isYours
+          @save()
+        return false
+
+      #scroll to center
+      sh = screen.height
+      sw = screen.width
+      if sh < height
+        dy = (height - sh) / 2
+        $(document).scrollTop(dy)
+      if sw < width
+        dx = (width - sw) / 2
+        $(document).scrollLeft(dx)
+
 
       link = svg.selectAll("link")
         .data(grp_edges)
@@ -135,34 +165,6 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .nodes(grp_nodes)
         .links(grp_edges)
         .start()
-
-      force.on "tick", =>
-        link
-          .attr("x1", (d) => @_getX d.source.x)
-          .attr("y1", (d) => @_getY d.source.y)
-          .attr("x2", (d) => @_getX d.target.x)
-          .attr("y2", (d) => @_getY d.target.y)
-        node
-          .attr("cx", (d) => @_getX d.x)
-          .attr("cy", (d) => @_getY d.y)
-        text
-          .attr("x", (d) => @_getX d.x)
-          .attr("y", (d) => @_getY(d.y) - 10)
-
-      Mousetrap.bindGlobal ['ctrl+s'], =>
-        if @data.isYours
-          @save()
-        return false
-
-      #scroll to center
-      sh = screen.height
-      sw = screen.width
-      if sh < height
-        dy = (height - sh) / 2
-        $(document).scrollTop(dy)
-      if sw < width
-        dx = (width - sw) / 2
-        $(document).scrollLeft(dx)
 
       @force = force
       @grp_nodes = grp_nodes

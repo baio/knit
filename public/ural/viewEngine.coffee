@@ -37,15 +37,25 @@ define ["ural/viewRender"], (viewRender) ->
     $("#_layout").append layoutHtml
 
     if isApply
+      ###
       for lmd in layoutModelsData
         lt = $("#" + lmd.layout)[0]
         if !lt then throw "Layout [#{lmd.layout}] to apply bindings not found"
         ko.applyBindings lmd.data, lt
+      ###
+      applyBinding(layoutModelsData)
       _layoutModelsData = layoutModelsData
 
       if $("#layout_loading").is(":visible")
         $("#layout_loading").hide()
         $("#layout_content").show()
 
+  applyBinding = (layoutModelsData) ->
+    for lmd in layoutModelsData
+      lt = $("#" + lmd.layout)[0]
+      if !lt then throw "Layout [#{lmd.layout}] to apply bindings not found"
+      ko.applyBindings lmd.data, lt
+
   render : render
   applyData : applyData
+  applyBinding : applyBinding

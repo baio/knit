@@ -26,28 +26,50 @@
     </div>
     <div id="_panelToolbox">
         <div class="affix graph-toolbox" data-bind="visible: isShown">
-            <ul class="dropdown-menu" style="display: block; padding: 10px 10px;">
+            <ul class="dropdown-menu" style="display: block; padding: 10px 10px; width: 250px;">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-bind="click: hide"><i class="icon-remove"></i></button>
-                <li><b>Свойства графа</b></li>
-                <li class="divider"></li>
                 <li>
-                    <h6>Цветовая схема</h6>
-                    <select data-bind="options: colorSchemesList, optionsText: 'val', optionsValue: 'key', value: colorScheme"></select>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#_panel_toolbox_filter" data-bind="click: switchActive">Поиск</a></li>
+                        <li><a href="#_panel_toolbox_props" data-bind="click: switchActive">Свойства</a></li>
+                    </ul>
                 </li>
-                <li class="divider"></li>
-                <li>
-                    <h6>Метки</h6>
-                    <select data-bind="options: fontsList, optionsText: 'val', optionsValue: 'key', value: font"></select>
-                </li>
-                <li class="divider"></li>
-                <li>
-                    <h6>Расположение</h6>
-                    <select data-bind="options: layoutsList, optionsText: 'val', optionsValue: 'key', value: layout"></select>
-                    <span data-bind="visible: layout() == 1">
-                        <a href="#" style="color: blue; padding: 0px;" data-bind="click: reset">сбросить</a> &nbsp; &nbsp; &nbsp;
-                        <!--<a href="#" style="color: blue; padding: 0px;">сохранить</a>-->
+                <span class="tab-content">
+                    <span class="tab-pane active" id="_panel_toolbox_filter">
+                        <li>
+                            <input placeholder="узел А" class="input search-query" style="margin-bottom: 5px;"
+                                   data-bind="autocomplete : from, autocompleteOpts : {url : '/index',  filterParams : { index : 'person-names.ru', type : 'politic-rus' } }">
+                        </li>
+                        <li>
+                            <input placeholder="узел Б" class="input search-query" style="margin-bottom: 5px;"
+                                   data-bind="autocomplete : to, autocompleteOpts : {url : '/index',  filterParams : { index : 'person-names.ru', type : 'politic-rus' } }">
+                        </li>
+                        <li>
+                            <a href="#" class="btn btn-small btn-info" data-bind="click: find">поиск</a>
+                        </li>
                     </span>
-                </li>
+                    <span class="tab-pane" id="_panel_toolbox_props">
+                        <li>
+                            <h6>Цветовая схема</h6>
+                            <select data-bind="options: colorSchemesList, optionsText: 'val', optionsValue: 'key', value: colorScheme"></select>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <h6>Метки</h6>
+                            <select data-bind="options: fontsList, optionsText: 'val', optionsValue: 'key', value: font"></select>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <h6>Расположение</h6>
+                            <select data-bind="options: layoutsList, optionsText: 'val', optionsValue: 'key', value: layout"></select>
+                            <span data-bind="visible: layout() == 1">
+                                <a href="#" style="color: blue; padding: 0px;" data-bind="click: reset">сбросить</a> &nbsp; &nbsp; &nbsp;
+                                <!--<a href="#" style="color: blue; padding: 0px;">сохранить</a>-->
+                            </span>
+                        </li>
+                    </span>
+
+                </span>
             </ul>
         </div>
         <div class="affix graph-toolbox" data-bind="visible: !isShown()">

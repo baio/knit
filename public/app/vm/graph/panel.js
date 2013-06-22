@@ -149,7 +149,6 @@
 
         this.data = data;
         color = d3.scale.category20();
-        console.log(color(0));
         grp_nodes = data.nodes;
         grp_edges = data.edges;
         /*
@@ -162,33 +161,8 @@
         width = 2500;
         height = 1200;
         force = d3.layout.force().charge(-500).linkDistance(30).linkStrength(0.1).size([width, height]);
+        d3.select("svg").remove();
         svg = d3.select("#graph").append("svg").attr("width", width).attr("height", height).on("click", this.onClickSvg);
-        link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").style("stroke", function(d) {
-          return color(d.group);
-        }).attr("x1", function(d) {
-          return d.source.meta.pos[0];
-        }).attr("y1", function(d) {
-          return d.source.meta.pos[1];
-        }).attr("x2", function(d) {
-          return d.target.meta.pos[0];
-        }).attr("y2", function(d) {
-          return d.target.meta.pos[1];
-        }).on("mouseover", this.onHoverEdge).on("click", this.onClickEdge);
-        text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
-          return d.name;
-        }).attr("x", function(d) {
-          return d.meta.pos[0];
-        }).attr("y", function(d) {
-          return d.meta.pos[1] - 10;
-        });
-        node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("cx", function(d) {
-          return d.meta.pos[0];
-        }).attr("cy", function(d) {
-          return d.meta.pos[1];
-        }).attr("class", "link").style("fill", function(d) {
-          return color(d.group);
-        }).call(force.drag);
-        force.nodes(grp_nodes).links(grp_edges).start();
         force.on("tick", function() {
           link.attr("x1", function(d) {
             return _this._getX(d.source.x);
@@ -226,6 +200,32 @@
           dx = (width - sw) / 2;
           $(document).scrollLeft(dx);
         }
+        link = svg.selectAll("link").data(grp_edges).enter().append("line").attr("class", "link").style("stroke", function(d) {
+          return color(d.group);
+        }).attr("x1", function(d) {
+          return d.source.meta.pos[0];
+        }).attr("y1", function(d) {
+          return d.source.meta.pos[1];
+        }).attr("x2", function(d) {
+          return d.target.meta.pos[0];
+        }).attr("y2", function(d) {
+          return d.target.meta.pos[1];
+        }).on("mouseover", this.onHoverEdge).on("click", this.onClickEdge);
+        text = svg.selectAll("text").data(grp_nodes).enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
+          return d.name;
+        }).attr("x", function(d) {
+          return d.meta.pos[0];
+        }).attr("y", function(d) {
+          return d.meta.pos[1] - 10;
+        });
+        node = svg.selectAll("node").data(grp_nodes).enter().append("circle").attr("r", 5).attr("cx", function(d) {
+          return d.meta.pos[0];
+        }).attr("cy", function(d) {
+          return d.meta.pos[1];
+        }).attr("class", "link").style("fill", function(d) {
+          return color(d.group);
+        }).call(force.drag);
+        force.nodes(grp_nodes).links(grp_edges).start();
         this.force = force;
         this.grp_nodes = grp_nodes;
         this.grp_edges = grp_edges;

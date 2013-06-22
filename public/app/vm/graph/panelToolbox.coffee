@@ -1,4 +1,4 @@
-define ->
+define ["ural/modules/pubSub"], (pubSub) ->
 
   class PanelToolbox
 
@@ -34,6 +34,11 @@ define ->
       ])
       @layout.subscribe (val) =>
         @panel.setForceLayout(val == 0)
+
+      ####
+      @active = ko.observable("find")
+      @from = ko.observable()
+      @to = ko.observable()
 
     _getTextCls: ->
       cls = "text"
@@ -87,3 +92,11 @@ define ->
       if @_settingsChangedCallback
         @_settingsChangedCallback @_getSettings()
 
+    find: (data, event)->
+      event.preventDefault()
+      pubSub.pub "crud", "reload", _body: {from: @from(), to: @to()}
+
+
+    switchActive: (data, event) ->
+      event.preventDefault()
+      $(event.currentTarget).tab('show')

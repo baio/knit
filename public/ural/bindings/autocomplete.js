@@ -49,12 +49,16 @@
       return data;
     };
     _filterParams = function(filterParams) {
-      var data, field;
+      var data, field, prm;
 
       data = {};
       for (field in filterParams) {
         if (!__hasProp.call(filterParams, field)) continue;
-        data[field] = filterParams[field]();
+        prm = filterParams[field];
+        if ($.isFunction(prm)) {
+          prm = prm();
+        }
+        data[field] = prm;
       }
       return data;
     };

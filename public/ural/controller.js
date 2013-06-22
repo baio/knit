@@ -27,10 +27,31 @@
           pubSub.sub("crud", "before", function(params) {
             return _this.crudBefore(params);
           });
+          pubSub.sub("crud", "reload", function(params) {
+            return _this.crudReload(params);
+          });
         }
       }
 
       Controller.IsSubscribed = false;
+
+      Controller.prototype.crudReload = function(params) {
+        var layoutModels, prop,
+          _this = this;
+
+        console.log(params);
+        layoutModels = {};
+        for (prop in params) {
+          if (!__hasProp.call(params, prop)) continue;
+          layoutModels[prop] = this._layoutModels[prop];
+          layoutModels[prop].filter = params[prop];
+        }
+        return this._loadLayoutModels(layoutModels, function(err, res) {
+          console.log("loaded");
+          viewEngine.applyBinding(res);
+          return _this.renderLayout(res, false);
+        });
+      };
 
       Controller.prototype.msgShow = function(params) {
         var msg, notifyType;
@@ -203,32 +224,45 @@
             layoutModels = model._layouts ? model._layouts : {
               _body: model
             };
+            _this._layoutModels = layoutModels;
             return _this._loadLayoutModels(layoutModels, ck);
           }
         ], function(err, res) {
-          var html, layoutModelsData, lmd, _i, _len;
+          var html, layoutModelsData;
 
           if (!err) {
             html = res[0];
             layoutModelsData = res[1];
             viewEngine.applyData(html, layoutModelsData, _this.viewBag, isApply);
-            for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
-              lmd = layoutModelsData[_i];
-              if (lmd.lm) {
-                if ($.isFunction(lmd.lm.render)) {
-                  lmd.lm.render(lmd.data);
-                }
-                if ($.isFunction(lmd.lm.getSettingsName)) {
-                  _this.restoreLayout(lmd.lm);
-                }
-              }
-            }
+            _this.renderLayout(layoutModelsData, true);
             _this._setFocus();
           }
           if (done) {
             return done(err);
           }
         });
+      };
+
+      Controller.prototype.renderLayout = function(layoutModelsData, isRestore) {
+        var lmd, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = layoutModelsData.length; _i < _len; _i++) {
+          lmd = layoutModelsData[_i];
+          if (lmd.lm) {
+            if ($.isFunction(lmd.lm.render)) {
+              lmd.lm.render(lmd.data);
+            }
+            if (isRestore && $.isFunction(lmd.lm.getSettingsName)) {
+              _results.push(this.restoreLayout(lmd.lm));
+            } else {
+              _results.push(void 0);
+            }
+          } else {
+            _results.push(void 0);
+          }
+        }
+        return _results;
       };
 
       Controller.prototype.view_apply = function(path, model, done) {
