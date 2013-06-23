@@ -11,16 +11,18 @@ define [
 
     panel: (graph) ->
       pl = new Panel()
+      pl.onLoaded = (data) =>
+        if data.name
+          @nav.activeGraph.id data.id
+          @nav.activeGraph.name data.name
+          @nav.activeGraph.isYours data.isYours
+
       @view_apply_user_important "app/views/graph/panel.html",
         _layouts:
           _body: {loader : pl, filter : {graph : graph}}
           _toolbox: new toolbox(@nav, pl)
           _panelToolbox: new panelToolbox(@nav, pl)
       ,(err) =>
-        if !err
-          @nav.activeGraph.id pl.data.id
-          @nav.activeGraph.name pl.data.name
-          @nav.activeGraph.isYours pl.data.isYours
 
     data: (graph) ->
       d = new Data()

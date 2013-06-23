@@ -19,6 +19,13 @@
           _this = this;
 
         pl = new Panel();
+        pl.onLoaded = function(data) {
+          if (data.name) {
+            _this.nav.activeGraph.id(data.id);
+            _this.nav.activeGraph.name(data.name);
+            return _this.nav.activeGraph.isYours(data.isYours);
+          }
+        };
         return this.view_apply_user_important("app/views/graph/panel.html", {
           _layouts: {
             _body: {
@@ -30,13 +37,7 @@
             _toolbox: new toolbox(this.nav, pl),
             _panelToolbox: new panelToolbox(this.nav, pl)
           }
-        }, function(err) {
-          if (!err) {
-            _this.nav.activeGraph.id(pl.data.id);
-            _this.nav.activeGraph.name(pl.data.name);
-            return _this.nav.activeGraph.isYours(pl.data.isYours);
-          }
-        });
+        }, function(err) {});
       };
 
       GraphController.prototype.data = function(graph) {

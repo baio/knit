@@ -40,7 +40,7 @@
           }
           return _this.tags(_t);
         };
-        this.panel.onClickSvg = function() {
+        this.panel.onDblClickSvg = function() {
           var offset, pos, x, y;
 
           pos = d3.mouse(this);

@@ -16,7 +16,7 @@ define ["app/vm/graph/linksCache"], (linksCache) ->
           _u = tag.urls.map (m) -> href : ko.observable(m), title : ko.observable(m)
           _t.push( name : ko.observable(tag.val), urls : ko.observableArray(_u))
         @tags _t
-      @panel.onClickSvg = ->
+      @panel.onDblClickSvg = ->
         pos = d3.mouse(@)
         offset = $("#_body").offset()
         x = pos[0] - $(document).scrollLeft() - offset.left

@@ -1,4 +1,4 @@
 request = require("./request")
 
 exports.get = (req, res) ->
-  request.req(req, res, "index", false)
+  request.req(req, res, "index", true)

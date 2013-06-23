@@ -65,56 +65,13 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
             if pos[0] == -1 then pos[0] = 500
             if pos[1] == -1 then pos[1] = 500
             node.group = getNodeGroup data.edges, node
+          @onLoaded data
         done err, data
 
     render: (data) ->
-      @data = data
 
-      color = d3.scale.category20()
-
-      grp_nodes = data.nodes
-      grp_edges = data.edges
-
-      ###
-      xscale = d3.scale.linear()
-        .domain([d3.min(grp_nodes, (d) -> d.meta.pos[0]), d3.max(grp_nodes, (d) -> d.meta.pos[0])]).range([400, 900])
-      yscale = d3.scale.linear()
-        .domain([d3.min(grp_nodes, (d) -> d.meta.pos[1]), d3.max(grp_nodes, (d) -> d.meta.pos[1])]).range([200, 500])
-      ###
       width = 2500
       height = 1200
-
-      force = d3.layout.force()
-        .charge(-500)
-        .linkDistance(30)
-        .linkStrength(0.1)
-        .size([width, height])
-
-      d3.select("svg")
-        .remove();
-
-      svg = d3.select("#graph").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .on("click", @onClickSvg)
-
-      force.on "tick", =>
-        link
-          .attr("x1", (d) => @_getX d.source.x)
-          .attr("y1", (d) => @_getY d.source.y)
-          .attr("x2", (d) => @_getX d.target.x)
-          .attr("y2", (d) => @_getY d.target.y)
-        node
-          .attr("cx", (d) => @_getX d.x)
-          .attr("cy", (d) => @_getY d.y)
-        text
-          .attr("x", (d) => @_getX d.x)
-          .attr("y", (d) => @_getY(d.y) - 10)
-
-      Mousetrap.bindGlobal ['ctrl+s'], =>
-        if @data.isYours
-          @save()
-        return false
 
       #scroll to center
       sh = screen.height
@@ -126,10 +83,44 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         dx = (width - sw) / 2
         $(document).scrollLeft(dx)
 
+      Mousetrap.bindGlobal ['ctrl+s'], =>
+        if @data.isYours
+          @save()
+        return false
 
-      link = svg.selectAll("link")
-        .data(grp_edges)
-        .enter()
+      @force = d3.layout.force()
+        .charge(-500)
+        .linkDistance(30)
+        .linkStrength(0.1)
+        .size([width, height])
+        .nodes(data.nodes)
+        .links(data.edges)
+        .on "tick", @_tick
+
+      d3.select("svg")
+        .remove();
+
+      svg = d3.select("#graph").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", @onClickSvg)
+        .on("dblclick", @onDblClickSvg)
+
+      @nodes = @force.nodes()
+      @links = @force.links()
+      @node = svg.selectAll("node")
+      @link = svg.selectAll("link")
+      @text = svg.selectAll("text")
+
+      @_restart()
+
+    _restart: ->
+
+      color = d3.scale.category20()
+
+      @link = @link.data(@links)
+
+      @link.enter()
         .append("line")
         .attr("class", "link")
         .style("stroke", (d) -> color(d.group))
@@ -140,9 +131,9 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .on("mouseover", @onHoverEdge)
         .on("click", @onClickEdge)
 
-      text = svg.selectAll("text")
-        .data(grp_nodes)
-        .enter()
+      @text = @text.data(@nodes)
+
+      @text.enter()
         .append("text")
         .attr("class", "text")
         .attr("text-anchor", "middle")
@@ -150,8 +141,9 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("x", (d) -> d.meta.pos[0])
         .attr("y", (d) -> d.meta.pos[1] - 10)
 
-      node = svg.selectAll("node")
-        .data(grp_nodes)
+      @node = @node.data(@nodes)
+
+      @node
         .enter()
         .append("circle")
         .attr("r", 5)
@@ -159,20 +151,23 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("cy", (d) -> d.meta.pos[1])
         .attr("class", "link")
         .style("fill", (d) -> color(d.group))
-        .call(force.drag)
+        .on("click", @onClickNode)
+        .call(@force.drag)
 
-      force
-        .nodes(grp_nodes)
-        .links(grp_edges)
-        .start()
+      @force.start()
 
-      @force = force
-      @grp_nodes = grp_nodes
-      @grp_edges = grp_edges
-      @svg = svg
-      @node = node
-      @link = link
-      @text = text
+    _tick: =>
+      @link
+        .attr("x1", (d) => @_getX d.source.x)
+        .attr("y1", (d) => @_getY d.source.y)
+        .attr("x2", (d) => @_getX d.target.x)
+        .attr("y2", (d) => @_getY d.target.y)
+      @node
+        .attr("cx", (d) => @_getX d.x)
+        .attr("cy", (d) => @_getY d.y)
+      @text
+        .attr("x", (d) => @_getX d.x)
+        .attr("y", (d) => @_getY(d.y) - 10)
 
 
     _getX: (x) ->
@@ -189,10 +184,30 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
     onHoverEdge: (edge) ->
     onClickEdge: (edge) ->
     onClickSvg: ->
+    onDblClickSvg: ->
+
+    onClickNode: (node) =>
+      console.log "onclick node"
+      @load src: node.id, (err, data) =>
+        if !err
+          @data = data
+          new_nodes = data.nodes.filter((f) => !@nodes.filter((g) -> f.id == g.id)[0])
+          new_edges = data.edges.filter((f) => !@links.filter((g) -> f.id == g.id)[0])
+          if new_nodes.length or new_edges.length
+            for n in new_nodes
+              @nodes.push n
+            for e in new_edges
+              t = @nodes.filter((f) -> f.id == e.target.id)[0]
+              if t then e.target = t
+              s = @nodes.filter((f) -> f.id == e.source.id)[0]
+              if s then e.source = s
+              @links.push e
+            @_restart()
+
+    onLoaded: (data) ->
 
     toData: ->
       @data.nodes
-
 
     updateText: (cls) ->
       @text.attr("class", cls)
@@ -229,26 +244,4 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
       @link.attr("y2", (d) -> d.target.meta.pos[1])
       @text.attr("x", (d) -> d.meta.pos[0])
       @text.attr("y", (d) -> d.meta.pos[1] - 10)
-
-
-      ###
-      @svg.selectAll("node")
-        .data(@node)
-        .attr("cx", (d) ->
-          console.log "cx"
-          d.meta.pos[0])
-        .attr("cy", (d) -> d.meta.pos[1])
-
-      @svg.selectAll("link")
-        .data(@grp_edges)
-        .attr("x1", (d) -> d.source.meta.pos[0])
-        .attr("y1", (d) -> d.source.meta.pos[1])
-        .attr("x2", (d) -> d.target.meta.pos[0])
-        .attr("y2", (d) -> d.target.meta.pos[1])
-
-      @svg.selectAll("text")
-        .data(@grp_nodes)
-        .attr("x", (d) -> d.meta.pos[0])
-        .attr("y", (d) -> d.meta.pos[1] - 10)
-      ###
 
