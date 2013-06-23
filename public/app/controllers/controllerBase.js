@@ -4,37 +4,38 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(["ural/controller", "app/vm/menu", "app/cache/manager"], function(controller, menu, cache) {
-    var GraphController;
+    var ControllerBase, _nav;
 
-    GraphController = (function(_super) {
-      __extends(GraphController, _super);
+    _nav = new menu();
+    ControllerBase = (function(_super) {
+      __extends(ControllerBase, _super);
 
-      function GraphController() {
-        this.nav = new menu();
-        GraphController.__super__.constructor.apply(this, arguments);
+      function ControllerBase() {
+        this.nav = _nav;
+        ControllerBase.__super__.constructor.apply(this, arguments);
       }
 
-      GraphController.prototype.view_apply_user_important = function(path, model, done) {
+      ControllerBase.prototype.view_apply_user_important = function(path, model, done) {
         var _this = this;
 
         return this.nav.load(null, function(err, data) {
           model._layouts._nav = {
             data: (!err ? data : {})
           };
-          return GraphController.__super__.view_apply.call(_this, path, model, done);
+          return ControllerBase.__super__.view_apply.call(_this, path, model, done);
         });
       };
 
-      GraphController.prototype.view_apply = function(path, model, done) {
+      ControllerBase.prototype.view_apply = function(path, model, done) {
         model._layouts._nav = this.nav;
-        return GraphController.__super__.view_apply.call(this, path, model, done);
+        return ControllerBase.__super__.view_apply.call(this, path, model, done);
       };
 
-      return GraphController;
+      return ControllerBase;
 
     })(controller.Controller);
     return {
-      Controller: GraphController
+      Controller: ControllerBase
     };
   });
 

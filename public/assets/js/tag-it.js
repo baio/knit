@@ -270,7 +270,9 @@
                             that.createTag(that._cleanedInput());
                         }
                         */
+
                         that.createTag(that._cleanedInput());
+
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus.
@@ -284,7 +286,7 @@
             if (this.options.availableTags || this.options.tagSource || this.options.autocomplete.source) {
                 var autocompleteOptions = {
                     select: function(event, ui) {
-                        if (that.assignedTags().indexOf(ui.item.value) === -1){
+                        if (that.assignedTags().indexOf(ui.item.value) === -1 && !that.tagInput.data('autocomplete-open')){
                             that.createTag(ui.item.value);
                         }
                         // Preventing the tag input to be updated with the chosen value.

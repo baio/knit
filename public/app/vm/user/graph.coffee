@@ -55,13 +55,13 @@ define [
       data = id: @ref(), name: @name(), contribs: @contribs().map((m) -> m.ref())
       dataProvider.ajax "graphs", "put", data, done
 
-    ###
-    create: (done) ->
-      super (err) =>
-        done err
-        if !err
-          @openGraph()
-    ###
+    completeCreate: (data) ->
+      pubSub.pub "graph", "added", data
+      super data
+
+    completeRemove: () ->
+      pubSub.pub "graph", "removed", @toData()
+      super()
 
     open: (data, event)->
       event.preventDefault()
