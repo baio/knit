@@ -36,7 +36,10 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @panel.setForceLayout(val == 0)
 
       ####
-      @active = ko.observable("find")
+      @activeTab = ko.observable("find")
+      @activeTab.subscribe((val) =>
+        $("a[href=#_panel_toolbox_#{val}]").tab("show")
+      )
       @from = ko.observable()
       @to = ko.observable()
 
@@ -72,6 +75,12 @@ define ["ural/modules/pubSub"], (pubSub) ->
           @layout(val.layout)
         if val.isShown?
           @isShown(val.isShown)
+        if val.from
+          @from(val.from)
+        if val.to
+          @to(val.to)
+        if val.activeTab
+          @activeTab(val.activeTab)
 
       @isShown.subscribe =>
         @onSettingsChanged()
@@ -81,12 +90,21 @@ define ["ural/modules/pubSub"], (pubSub) ->
         @onSettingsChanged()
       @layout.subscribe =>
         @onSettingsChanged()
+      @activeTab.subscribe =>
+        @onSettingsChanged()
+      @from.subscribe =>
+        @onSettingsChanged()
+      @to.subscribe =>
+        @onSettingsChanged()
 
     _getSettings: ->
       colorScheme : @colorScheme()
       font : @font()
       layout : @layout()
       isShown : @isShown()
+      from : @from()
+      to : @to()
+      activeTab : @activeTab()
 
     onSettingsChanged: ->
       if @_settingsChangedCallback
@@ -99,4 +117,6 @@ define ["ural/modules/pubSub"], (pubSub) ->
 
     switchActive: (data, event) ->
       event.preventDefault()
-      $(event.currentTarget).tab('show')
+      #$(event.currentTarget).tab('show')
+      r = $(event.currentTarget).attr("href").match /#_panel_toolbox_(\w+)/
+      @activeTab r[1]

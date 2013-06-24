@@ -65,7 +65,10 @@
         this.layout.subscribe(function(val) {
           return _this.panel.setForceLayout(val === 0);
         });
-        this.active = ko.observable("find");
+        this.activeTab = ko.observable("find");
+        this.activeTab.subscribe(function(val) {
+          return $("a[href=#_panel_toolbox_" + val + "]").tab("show");
+        });
         this.from = ko.observable();
         this.to = ko.observable();
       }
@@ -118,6 +121,15 @@
           if (val.isShown != null) {
             this.isShown(val.isShown);
           }
+          if (val.from) {
+            this.from(val.from);
+          }
+          if (val.to) {
+            this.to(val.to);
+          }
+          if (val.activeTab) {
+            this.activeTab(val.activeTab);
+          }
         }
         this.isShown.subscribe(function() {
           return _this.onSettingsChanged();
@@ -128,7 +140,16 @@
         this.font.subscribe(function() {
           return _this.onSettingsChanged();
         });
-        return this.layout.subscribe(function() {
+        this.layout.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+        this.activeTab.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+        this.from.subscribe(function() {
+          return _this.onSettingsChanged();
+        });
+        return this.to.subscribe(function() {
           return _this.onSettingsChanged();
         });
       };
@@ -138,7 +159,10 @@
           colorScheme: this.colorScheme(),
           font: this.font(),
           layout: this.layout(),
-          isShown: this.isShown()
+          isShown: this.isShown(),
+          from: this.from(),
+          to: this.to(),
+          activeTab: this.activeTab()
         };
       };
 
@@ -159,8 +183,11 @@
       };
 
       PanelToolbox.prototype.switchActive = function(data, event) {
+        var r;
+
         event.preventDefault();
-        return $(event.currentTarget).tab('show');
+        r = $(event.currentTarget).attr("href").match(/#_panel_toolbox_(\w+)/);
+        return this.activeTab(r[1]);
       };
 
       return PanelToolbox;

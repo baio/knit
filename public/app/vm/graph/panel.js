@@ -14,6 +14,8 @@
         pubSub.sub("graph", "save", function() {
           return _this.save();
         });
+        this.isForceLayout = true;
+        this.textCls = "text";
       }
 
       Panel.prototype.save = function() {
@@ -78,11 +80,11 @@
           } else if (tags.filter(function(t) {
             return t.type.indexOf("po-") === 0;
           }).length) {
-            return 1;
+            return 2;
           } else if (tags.filter(function(t) {
             return t.type.indexOf("oo-") === 0;
           }).length) {
-            return 2;
+            return 1;
           } else {
             return 3;
           }
@@ -184,7 +186,7 @@
       Panel.prototype._restart = function() {
         var color;
 
-        color = d3.scale.category20();
+        color = d3.scale.category10();
         this.link = this.link.data(this.links);
         this.link.enter().append("line").attr("class", "link").style("stroke", function(d) {
           return color(d.group);
@@ -198,7 +200,7 @@
           return d.target.meta.pos[1];
         }).on("mouseover", this.onHoverEdge).on("click", this.onClickEdge);
         this.text = this.text.data(this.nodes);
-        this.text.enter().append("text").attr("class", "text").attr("text-anchor", "middle").text(function(d) {
+        this.text.enter().append("text").attr("class", this.textCls).attr("text-anchor", "middle").text(function(d) {
           return d.name;
         }).attr("x", function(d) {
           return d.meta.pos[0];
@@ -212,8 +214,8 @@
           return d.meta.pos[1];
         }).attr("class", "link").style("fill", function(d) {
           return color(d.group);
-        }).on("click", this.onClickNode).call(this.force.drag);
-        return this.force.start();
+        }).on("click", this.onClickNode);
+        return this.setForceLayout(this.isForceLayout);
       };
 
       Panel.prototype._tick = function() {
@@ -318,12 +320,14 @@
         return this.data.nodes;
       };
 
-      Panel.prototype.updateText = function(cls) {
-        return this.text.attr("class", cls);
+      Panel.prototype.updateText = function(textCls) {
+        this.textCls = textCls;
+        return this.text.attr("class", textCls);
       };
 
-      Panel.prototype.setForceLayout = function(isSet) {
-        if (isSet) {
+      Panel.prototype.setForceLayout = function(isForceLayout) {
+        this.isForceLayout = isForceLayout;
+        if (isForceLayout) {
           this.node.call(this.force.drag);
           return this.force.start();
         } else {

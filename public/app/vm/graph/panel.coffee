@@ -4,6 +4,8 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
     constructor: ->
       pubSub.sub "graph", "save", => @save()
+      @isForceLayout = true
+      @textCls = "text"
 
     save: ->
       if @id
@@ -30,9 +32,9 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         if tags.filter((t) -> t.type.indexOf("pp-") == 0).length
           return 0
         else if tags.filter((t) -> t.type.indexOf("po-") == 0).length
-          return 1
-        else if tags.filter((t) -> t.type.indexOf("oo-") == 0).length
           return 2
+        else if tags.filter((t) -> t.type.indexOf("oo-") == 0).length
+          return 1
         else
           return 3
 
@@ -116,14 +118,18 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
     _restart: ->
 
-      color = d3.scale.category20()
+      color = d3.scale.category10()
 
       @link = @link.data(@links)
 
       @link.enter()
         .append("line")
         .attr("class", "link")
-        .style("stroke", (d) -> color(d.group))
+        .style("stroke", (d) ->
+          #console.log d.group
+          #console.log color(d.group)
+          color(d.group)
+        )
         .attr("x1", (d) -> d.source.meta.pos[0])
         .attr("y1", (d) -> d.source.meta.pos[1])
         .attr("x2", (d) -> d.target.meta.pos[0])
@@ -135,7 +141,7 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
 
       @text.enter()
         .append("text")
-        .attr("class", "text")
+        .attr("class", @textCls)
         .attr("text-anchor", "middle")
         .text((d) -> d.name)
         .attr("x", (d) -> d.meta.pos[0])
@@ -152,9 +158,10 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
         .attr("class", "link")
         .style("fill", (d) -> color(d.group))
         .on("click", @onClickNode)
-        .call(@force.drag)
+        #.call(@force.drag)
 
-      @force.start()
+      #@force.start()
+      @setForceLayout(@isForceLayout)
 
     _tick: =>
       @link
@@ -209,11 +216,11 @@ define ["app/dataProvider", "ural/modules/pubSub"], (dataProvider, pubSub) ->
     toData: ->
       @data.nodes
 
-    updateText: (cls) ->
-      @text.attr("class", cls)
+    updateText: (@textCls) ->
+      @text.attr("class", textCls)
 
-    setForceLayout: (isSet) ->
-      if isSet
+    setForceLayout: (@isForceLayout) ->
+      if isForceLayout
         @node.call(@force.drag)
         @force.start()
       else
